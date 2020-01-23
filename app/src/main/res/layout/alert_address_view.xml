@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linrlay_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingLeft="21.1dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:text="Home"
+            android:textColor="#ec5a31"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_addrs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8.3dp"
+            android:layout_marginRight="20dp"
+            android:text="-"
+            android:textColor="#7c7b7b"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_marginTop="0dp"
+        android:background="#dfe0e2" />
+
+    <LinearLayout
+        android:id="@+id/linrlay_ofc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        android:paddingLeft="21.1dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:text="Office"
+            android:textColor="#ec5a31"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_adds_ofc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8.3dp"
+            android:layout_marginRight="20dp"
+            android:text="-"
+            android:textColor="#7c7b7b"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

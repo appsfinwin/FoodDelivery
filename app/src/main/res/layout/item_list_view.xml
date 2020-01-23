@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="#f5f5f5"
+        android:orientation="horizontal"
+        app:cardCornerRadius="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient_login">
+
+                <ImageView
+                    android:id="@+id/img_bg"
+                    android:layout_width="190dp"
+                    android:layout_height="150dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/black_shadow" />
+
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/black_shadow"
+                    android:gravity="bottom" />
+
+                <ImageView
+                    android:id="@+id/img_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_like_uncheck" />
+
+                <TextView
+                    android:id="@+id/tv_offer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|bottom"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="-2dp"
+                    android:background="@drawable/rect_orng"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="6dp"
+                    android:text="25%"
+                    android:textColor="#ffffff" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginTop="5dp"
+                android:text="Item Description"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/rupees_symbol"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textcutprice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cutprice" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/rupees_symbol"
+                            android:textColor="@color/orange"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="120"
+                            android:textColor="@color/orange"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rel_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="false"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="5dp">
+
+                    <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+                        android:id="@+id/btn_elgnt_count_ofr"
+                        android:layout_width="90dp"
+                        android:layout_height="32dp"
+                        app:backGroundColor="@color/green"
+                        app:initialNumber="0"
+                        app:textColor="@color/white"
+                        app:textSize="8sp" />
+
+                    <TextView
+                        android:id="@+id/btn_add_ofr"
+                        android:layout_width="90dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="false"
+                        android:layout_centerHorizontal="false"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/green_rect"
+                        android:gravity="center"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
+                        android:text="ADD"
+                        android:textColor="#ffffff"
+                        android:textSize="13sp" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content">-->
+
+    <!--    <android.support.v7.widget.CardView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="5dp"-->
+    <!--        android:background="#f5f5f5"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        app:cardCornerRadius="5dp">-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:background="#ffffff"-->
+    <!--            android:orientation="vertical"-->
+    <!--            android:paddingBottom="5dp">-->
+
+    <!--            <FrameLayout-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content">-->
+    <!--                &lt;!&ndash;                android:background="@drawable/light_gray_rect"&ndash;&gt;-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/image2"-->
+    <!--                    android:layout_width="190dp"-->
+    <!--                    android:layout_height="150dp"-->
+    <!--                    android:adjustViewBounds="true"-->
+    <!--                    android:scaleType="fitXY"-->
+    <!--                    android:src="@drawable/black_rect" />-->
+
+    <!--                <ImageView-->
+    <!--                    android:id="@+id/image1"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="end"-->
+    <!--                    android:layout_marginTop="10dp"-->
+    <!--                    android:layout_marginRight="15dp"-->
+    <!--                    android:src="@drawable/ic_like_uncheck" />-->
+
+    <!--&lt;!&ndash;                <TextView&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:id="@+id/textoffer"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:layout_marginTop="30dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:background="@drawable/rect_orng"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:padding="4dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:text="25%"&ndash;&gt;-->
+    <!--&lt;!&ndash;                    android:textColor="#ffffff" />&ndash;&gt;-->
+    <!--            </FrameLayout>-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textshoes"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginStart="5dp"-->
+    <!--                android:layout_marginTop="5dp"-->
+    <!--                android:layout_marginEnd="5dp"-->
+    <!--                android:text="Item description"-->
+    <!--                android:textColor="#000000"-->
+    <!--                android:textSize="15sp" />-->
+
+    <!--            <RelativeLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginTop="5dp">-->
+
+    <!--                <RelativeLayout-->
+    <!--                    android:id="@+id/rel_top"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginStart="5dp"-->
+    <!--                    android:layout_marginTop="5dp"-->
+    <!--                    android:layout_marginEnd="5dp">-->
+
+
+    <!--                    <LinearLayout-->
+    <!--                        android:id="@+id/lin_top"-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:background="#ffffff"-->
+    <!--                        android:orientation="horizontal"-->
+    <!--                        android:paddingBottom="5dp">-->
+
+    <!--                        <TextView-->
+    <!--                            android:id="@+id/textoffer"-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_marginEnd="10dp"-->
+    <!--                            android:background="@drawable/rect_orng"-->
+    <!--                            android:padding="4dp"-->
+    <!--                            android:text="25%"-->
+    <!--                            android:textColor="#ffffff" />-->
+
+    <!--                        <TextView-->
+    <!--                            android:id="@+id/tv_rupcut"-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_marginEnd="5dp"-->
+    <!--                            android:text="@string/rupees_symbol"-->
+    <!--                            android:textSize="14sp" />-->
+
+    <!--                        <TextView-->
+    <!--                            android:id="@+id/tv_cutprice"-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_centerVertical="true"-->
+    <!--                            android:layout_marginEnd="15dp"-->
+    <!--                            android:text="@string/cutprice" />-->
+
+    <!--                        <LinearLayout-->
+    <!--                            android:id="@+id/lin_bot"-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_below="@+id/lin_top"-->
+    <!--                            android:background="#ffffff"-->
+    <!--                            android:orientation="horizontal"-->
+    <!--                            android:paddingBottom="5dp">-->
+
+    <!--                            <TextView-->
+    <!--                                android:id="@+id/tv_rup"-->
+    <!--                                android:layout_width="wrap_content"-->
+    <!--                                android:layout_height="wrap_content"-->
+    <!--                                android:layout_marginEnd="5dp"-->
+    <!--                                android:text="@string/rupees_symbol"-->
+    <!--                                android:textColor="#ef4e33"-->
+    <!--                                android:textSize="20sp"-->
+    <!--                                android:textStyle="bold" />-->
+
+    <!--                            <TextView-->
+    <!--                                android:id="@+id/tv_price"-->
+    <!--                                android:layout_width="wrap_content"-->
+    <!--                                android:layout_height="wrap_content"-->
+    <!--                                android:text="120"-->
+    <!--                                android:textColor="#ef4e33"-->
+    <!--                                android:textSize="20sp"-->
+    <!--                                android:textStyle="bold" />-->
+
+    <!--                        </LinearLayout>-->
+
+    <!--                    </LinearLayout>-->
+
+    <!--                </RelativeLayout>-->
+
+    <!--                <RelativeLayout-->
+    <!--                    android:id="@+id/rel_lay"-->
+    <!--                    android:layout_below="@+id/rel_top"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_alignParentEnd="true"-->
+    <!--                    android:layout_centerVertical="false"-->
+    <!--                    android:layout_marginStart="20dp"-->
+    <!--                    android:layout_marginEnd="5dp">-->
+
+    <!--                    <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton-->
+    <!--                        android:id="@+id/btn_elgnt_count"-->
+    <!--                        android:layout_width="90dp"-->
+    <!--                        android:layout_height="32dp"-->
+    <!--                        app:backGroundColor="@color/green"-->
+    <!--                        app:initialNumber="0"-->
+    <!--                        app:textColor="@color/white"-->
+    <!--                        app:textSize="8sp" />-->
+    <!--                    &lt;!&ndash;                app:finalNumber="20"&ndash;&gt;-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/btn_add"-->
+    <!--                        android:layout_width="90dp"-->
+    <!--                        android:layout_height="32dp"-->
+    <!--                        android:layout_centerInParent="false"-->
+    <!--                        android:layout_centerHorizontal="false"-->
+    <!--                        android:layout_centerVertical="true"-->
+    <!--                        android:background="@drawable/green_rect"-->
+    <!--                        android:gravity="center"-->
+    <!--                        android:paddingTop="3dp"-->
+    <!--                        android:paddingBottom="3dp"-->
+    <!--                        android:text="ADD"-->
+    <!--                        android:textColor="#ffffff"-->
+    <!--                        android:textSize="13sp" />-->
+
+    <!--                </RelativeLayout>-->
+
+    <!--            </RelativeLayout>-->
+
+
+    <!--        </LinearLayout>-->
+    <!--    </android.support.v7.widget.CardView>-->
+    <!--</LinearLayout>-->

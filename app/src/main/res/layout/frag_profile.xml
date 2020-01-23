@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#222129"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ibtn_back_prof"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_back_white"
+            android:orientation="horizontal"
+            android:padding="20dp" />
+
+        <TextView
+            android:id="@+id/blnched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Profile"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15.7sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingTop="17dp"
+        android:paddingBottom="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="21dp"
+            android:text="Your Name"
+            android:textColor="#7c7b7b"
+            android:textSize="11.3sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:paddingLeft="21dp"
+            android:paddingBottom="15dp"
+            android:text="Arun"
+            android:textColor="@color/textColor"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingTop="11.5dp"
+        android:paddingBottom="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="21dp"
+            android:text="Mobile Number"
+            android:textColor="#7c7b7b"
+            android:textSize="11.3sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="21dp"
+                android:paddingBottom="15dp"
+                android:text="9998456123"
+                android:textColor="@color/textColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="21dp"
+                android:paddingRight="13.5dp"
+                android:text="Verified"
+                android:textColor="#0ca21a"
+                android:textSize="11.3sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingTop="11.5dp"
+        android:paddingBottom="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="21dp"
+            android:text="Email"
+            android:textColor="@color/greyText"
+            android:textSize="11.3sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="21dp"
+                android:paddingBottom="15dp"
+                android:text="example@g.com"
+                android:textColor="@color/textColor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="21dp"
+                android:paddingRight="13.5dp"
+                android:text="Verified"
+                android:textColor="#0ca21a"
+                android:textSize="11.3sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:layout_marginTop="8dp"
+        android:background="#cdd9d9" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="22dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Your Saved Addresses"
+            android:textColor="@color/textColor"
+            android:textSize="13.3sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="22dp">
+
+            <TextView
+                android:id="@+id/addressName1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:text="Home"
+                android:textColor="#ec5a31"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/address1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8.3dp"
+                android:layout_marginRight="20dp"
+                android:text="54/E Radhakrishna Soc. Opposite RK Bunglows, Near
+Punch pulla, Vadodara, 390011"
+                android:textColor="#7c7b7b"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:id="@+id/imgv_home"
+                android:layout_width="85dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_pencil_edit_button" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="22dp">
+
+            <TextView
+                android:id="@+id/addressName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:text="Office"
+                android:textColor="#ec5a31"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8.3dp"
+                android:layout_marginRight="20dp"
+                android:text="S02, India bulls mega mall, near dinesh mill, Jetalpur
+Road, Vadodara, 390020"
+                android:textColor="#7c7b7b"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:id="@+id/imgv_ofc"
+                android:layout_width="85dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_pencil_edit_button" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cdd9d9" />
+
+    </LinearLayout>
+
+</LinearLayout>

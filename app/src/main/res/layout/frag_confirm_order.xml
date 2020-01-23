@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--    tools:context=".ConfirmOrderActivity"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f9f9f9"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#222129"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <ImageButton
+                android:id="@+id/ibtn_back_co"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_back_white"
+                android:orientation="horizontal"
+                android:padding="20dp" />
+
+            <TextView
+                android:id="@+id/blnched"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp"
+                android:text="Confirm Order"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="15.7sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="#2e2e34"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:paddingTop="15dp"-->
+        <!--            android:paddingBottom="15dp">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="Shipping"-->
+        <!--                android:textColor="#a9aaac"-->
+        <!--                android:textSize="14dp" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="Payment"-->
+        <!--                android:textColor="#a9aaac"-->
+        <!--                android:textSize="14dp" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:gravity="center"-->
+        <!--                android:text="Confirm"-->
+        <!--                android:textColor="#ffffff"-->
+        <!--                android:textSize="14dp" />-->
+        <!--        </LinearLayout>-->
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:paddingLeft="22dp"
+                    android:paddingTop="16dp"
+                    android:text="Confirm Order"
+                    android:textColor="@color/textColor" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/menuRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="22dp"
+                        android:layout_weight="1"
+                        android:text="Payable Amount (Delivery Charges + GST)"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="Rs :"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_total_co"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="18dp"
+                        android:text="-"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#dfe0e2" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_marginTop="9.2dp"
+                    android:background="#dfe0e2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="vertical"
+                    android:paddingLeft="21.1dp"
+                    android:paddingTop="10.7dp"
+                    android:paddingBottom="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Payment"
+                        android:textColor="@color/textColor"
+                        android:textSize="13.3sp" />
+
+                    <LinearLayout
+                        android:id="@+id/linr_chng_pymnt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/img_chng_pymnt"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/cash" />
+
+                        <TextView
+                            android:id="@+id/tv_chng_pymnt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="26dp"
+                            android:paddingEnd="26dp"
+                            android:text="Cash On Delivery"
+                            android:textColor="@color/textColor"
+                            android:textSize="13.3sp" />
+
+                        <TextView
+                            android:id="@+id/tv_edit_pymnt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="end"
+                            android:paddingStart="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="20dp"
+                            android:paddingBottom="10dp"
+                            android:text="Change Payment"
+                            android:textColor="#999999"
+                            android:textSize="12.7sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#dfe0e2" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_marginTop="9.2dp"
+                    android:background="#dfe0e2" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="vertical"
+                    android:paddingLeft="21.1dp"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="17.7dp"
+                        android:text="Delivery Address"
+                        android:textColor="@color/textColor"
+                        android:textSize="13.3sp" />
+
+                    <TextView
+                        android:id="@+id/tv_addressName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:text="Office"
+                        android:textColor="#ec5a31"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8.3dp"
+                        android:layout_marginRight="20dp"
+                        android:text="S02, India bulls mega mall, near dinesh mill, Jetalpur
+Road, Vadodara, 390020"
+                        android:textColor="#7c7b7b"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tv_edit_addrs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:paddingStart="30dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="30dp"
+                        android:paddingBottom="10dp"
+                        android:text="Change Address"
+                        android:textColor="#999999"
+                        android:textSize="12.7sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="70dp"
+                    android:background="#dfe0e2" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/green_rect"
+        android:gravity="center_horizontal"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:text="Confirm and Checkout >"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

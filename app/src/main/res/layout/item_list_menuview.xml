@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#222129"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ibtn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_back_white"
+            android:orientation="horizontal"
+            android:padding="20dp" />
+
+        <TextView
+            android:id="@+id/blnched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="MENU"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15.7sp" />
+
+<!--        <ImageView-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:src="@drawable/ic_left_arrow" />-->
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingLeft="27dp"-->
+<!--            android:text="Menu"-->
+<!--            android:textColor="#FFFFFF" />-->
+
+    </LinearLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab"
+        android:layout_below="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#222129"
+        app:tabGravity="fill"
+        app:tabSelectedTextColor="#ffffff"
+        app:tabTextColor="#7c7b7b" />
+    <!--    app:tabTextAppearance="@style/MyCustomTextAppearance"-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pgr"
+        android:layout_below="@+id/tab"
+        android:layout_above="@+id/tv_tocart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_tocart"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/green_rect"
+        android:gravity="center_horizontal"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:text="VIEW CART >"
+        android:textColor="#ffffff" />
+
+</RelativeLayout>

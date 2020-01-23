@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingTop="15dp">
+
+<!--            android:gravity="center"-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="48dp"-->
+<!--                android:layout_marginBottom="18dp"-->
+<!--                android:fontFamily="sans-serif"-->
+<!--                android:text="Change Address"-->
+<!--                android:textColor="@color/greyText"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="normal" />-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Address"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:gravity="top"
+                    android:maxLines="10"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:singleLine="false"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="PIN"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
