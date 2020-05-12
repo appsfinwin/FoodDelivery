@@ -1,4 +1,9 @@
 package com.finwin.brahmagiri.fooddelivery.interfaces;
 
-public class showhide {
+public interface showhide {
+    void clicked(int value,String code);
+    void show(String show);
+    void delete(String code);
+
+
 }

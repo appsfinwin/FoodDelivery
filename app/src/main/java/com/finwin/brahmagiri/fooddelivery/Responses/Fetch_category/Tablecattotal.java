@@ -1,9 +1,9 @@
-package com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting;
+package com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Table1 {
+public class Tablecattotal {
     @SerializedName("TotalNo")
     @Expose
     private Integer totalNo;

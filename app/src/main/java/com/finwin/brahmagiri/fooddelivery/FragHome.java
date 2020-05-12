@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,17 +23,35 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll;
+import com.finwin.brahmagiri.fooddelivery.Adapter.BestSellingAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.FoodForYouModel;
-import com.finwin.brahmagiri.fooddelivery.Adapter.FoodForYouRecyAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemModel;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemRecyAdapter;
+import com.finwin.brahmagiri.fooddelivery.Adapter.TopSellingAdapter;
+import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.Cat_data;
+import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
+import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ResponseFetchCategory;
+import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomePageCat;
+import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomeTopselling;
+import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
+import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
+import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
+import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class FragHome extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class FragHome extends Fragment implements NavigationView.OnNavigationItemSelectedListener, showhide {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
@@ -46,7 +66,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     private ArrayList<FoodForYouModel> homeListModelClassArrayList2;
     private RecyclerView recyclerView1;
-    private FoodForYouRecyAdapter rAdapter;
+    private BestSellingAdapter rAdapter;
 
     public static Integer image[] = {R.drawable.food2, R.drawable.food1, R.drawable.food3, R.drawable.food4};
     public static String foodName[] = {"Beef items", "Mutton items", "Chicken items", "Meat products"};
@@ -100,38 +120,44 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         actionBarDrawerToggle.syncState();
         actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
         Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+
+        //doFetchBestSelling();
+        doFetchCactegory();
+
         ///==========================================================================
 
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView);
         homeListModelClassArrayList = new ArrayList<>();
         for (int i = 0; i < image.length; i++) {
-            MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i),image[i], foodName[i], totalRest[i]);
+            MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i), image[i], foodName[i], totalRest[i]);
             homeListModelClassArrayList.add(menuItem_Model);
         }
-        mAdapter = new MenuItemRecyAdapter(getContext(), homeListModelClassArrayList);
+        /*mAdapter = new MenuItemRecyAdapter(getContext(), homeListModelClassArrayList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);*/
 
         tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
         tvViewall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
+                startActivity(new Intent(getActivity(), CategoryListAll.class));
+                /*Bundle bundle = new Bundle();
                 bundle.putString(ConstantClass.MENU_TPYE, ConstantClass.VIEW_ALL);
 
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Fragment myFragment = new FragMenuTab();
                 myFragment.setArguments(bundle);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
-                        myFragment).addToBackStack(null).commit();
+                        myFragment).addToBackStack(null).commit();*/
             }
         });
 
         ///===============
 
         recyclerView1 = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
+        recyclerView1.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         homeListModelClassArrayList2 = new ArrayList<>();
         for (int i = 0; i < image.length; i++) {
             FoodForYouModel beanClassForRecyclerView_contacts = new FoodForYouModel(ratings[i], restaurantName[i],
@@ -139,12 +165,43 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
         }
-        rAdapter = new FoodForYouRecyAdapter(getContext(), homeListModelClassArrayList2);
-        RecyclerView.LayoutManager rLayoutManager = new LinearLayoutManager(getContext());
+      /*  rAdapter = new BestSellingAdapter(getContext());
+        RecyclerView.LayoutManager rLayoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView1.setLayoutManager(rLayoutManager);
         recyclerView1.setItemAnimator(new DefaultItemAnimator());
-        recyclerView1.setAdapter(rAdapter);
+        recyclerView1.setAdapter(rAdapter);*/
 
+    }
+
+    private void doFetchCactegory() {
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseHomePage> call = apiService.doFetchhomePage("", "", "HOME_VALUES", 0, "", "", "", "44402", "");
+        call.enqueue(new Callback<ResponseHomePage>() {
+            @Override
+            public void onResponse(Call<ResponseHomePage> call, Response<ResponseHomePage> response) {
+                Log.d("catresponse", "onResponse: " + new Gson().toJson(response.body()));
+                if (response.body() != null && response.code() == 200) {
+                    List<HomePageCat> dataset = response.body().getData().getTable2();
+                    List<HomeTopselling> datasettopselling = response.body().getData().getTable1();
+                    recyclerView1.setAdapter(new TopSellingAdapter(getActivity(), datasettopselling, FragHome.this));
+
+
+                    mAdapter = new MenuItemRecyAdapter(getContext(), dataset);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(mAdapter);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseHomePage> call, Throwable t) {
+                Log.d("catresponse", "onResponse: " +t.getMessage());
+
+            }
+        });
     }
 
     ///==========================================================================
@@ -172,6 +229,21 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    @Override
+    public void clicked(int value, String code) {
+
+    }
+
+    @Override
+    public void show(String show) {
+
+    }
+
+    @Override
+    public void delete(String code) {
+
     }
 
     ///==========================================================================

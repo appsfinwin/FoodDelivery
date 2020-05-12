@@ -1,4 +1,4 @@
-package com.finwintechnologies.brahmagirioutlet.Utilities;
+package com.finwin.brahmagiri.fooddelivery.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;

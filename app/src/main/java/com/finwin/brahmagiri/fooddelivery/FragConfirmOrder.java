@@ -236,7 +236,7 @@ public class FragConfirmOrder extends Fragment {
 
         alertDialog.show();
 
-//        final String[] types = {"By Zip", "By Category"};
+//        final String[] types = {"By Zip", "By Table"};
 //        b.setItems(types, new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {

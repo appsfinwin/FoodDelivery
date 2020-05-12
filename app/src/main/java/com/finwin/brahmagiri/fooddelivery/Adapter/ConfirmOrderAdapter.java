@@ -29,7 +29,7 @@ public class ConfirmOrderAdapter extends RecyclerView.Adapter<ConfirmOrderAdapte
 
     @Override
     public int getItemCount() {
-        return OfferList.size();
+        return 5;
     }
 
     public ConfirmOrderAdapter(Context mainActivityContacts, List<ConfirmOrderModel> offerList) {
@@ -46,10 +46,10 @@ public class ConfirmOrderAdapter extends RecyclerView.Adapter<ConfirmOrderAdapte
 
     @Override
     public void onBindViewHolder(ConfirmOrderAdapter.MyViewHolder holder, int position) {
-        ConfirmOrderModel lists = OfferList.get(position);
+      /*  ConfirmOrderModel lists = OfferList.get(position);
         holder.dishName.setText(lists.getDishName());
         holder.quantity.setText(lists.getQuantity());
-        holder.rupees.setText(lists.getRupees());
+        holder.rupees.setText(lists.getRupees());*/
     }
 
 

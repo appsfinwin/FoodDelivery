@@ -83,7 +83,7 @@ public class FragCart extends Fragment implements ToCartButtonListener {
             }
         }
 
-        mAdapter = new CartAdapter(getActivity(), homeListModelClassArrayList, this);
+     //   mAdapter = new CartAdapter(getActivity(), homeListModelClassArrayList, this);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         cartRecycler.setLayoutManager(mLayoutManager);
@@ -96,7 +96,6 @@ public class FragCart extends Fragment implements ToCartButtonListener {
             public void onClick(View view) {
                 Bundle bndl = new Bundle();
                 bndl.putString(TOTAL_AMNT, String.valueOf(gTotal));
-
                 Fragment fr = new FragConfirmOrder();
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction fragmentTransaction = Objects.requireNonNull(fm).beginTransaction();
@@ -148,6 +147,7 @@ public class FragCart extends Fragment implements ToCartButtonListener {
 
     @Override
     public void calcSubTotal() {
+
         setSubtotalAmount();
     }
 

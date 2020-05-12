@@ -1,9 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.CartActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--    tools:context=".CartActivity"-->
+
+
+        <include
+            android:id="@+id/toolbar_layout"
+            layout="@layout/custom_toolbar">
+
+        </include>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/lnrlay_confmpay"
+            android:layout_below="@id/toolbar_layout"
+            android:layout_marginTop="5dp"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/parent"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cartRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false">
+
+                </android.support.v7.widget.RecyclerView>
+
+
+                <View
+                    android:id="@+id/v_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.7dp"
+                    android:layout_above="@+id/linear"
+                    android:layout_marginTop="10dp"
+                    android:background="#cdd9d9" />
+
+                <LinearLayout
+                    android:id="@+id/linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+
+                    <TableLayout
+                        android:id="@+id/tbl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingTop="18dp"
+                        android:stretchColumns="0">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="22dp"
+                                android:layout_weight="1"
+                                android:text="Sub Total"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="5dp"
+                                android:text="@string/rupee"
+                                android:textColor="@color/textColor"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_cart_subtotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="18dp"
+                                android:text="0.00"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="22dp"
+                                android:layout_weight="1"
+                                android:text="Delivery Charges"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:text="@string/rupee"
+                                android:textColor="@color/textColor"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_cart_chrg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="18dp"
+                                android:text="0.00"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="22dp"
+                                android:layout_weight="1"
+                                android:text="GST(18%)"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:text="@string/rupee"
+                                android:textColor="@color/textColor"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_cart_gst"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="18dp"
+                                android:text="0.00"
+                                android:textColor="@color/textColor"
+                                android:textSize="12dp" />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:background="#cdd9d9" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:paddingLeft="22dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:text="Have a Promocode?"
+                        android:textColor="#ec5a31"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <LinearLayout
+            android:onClick="GotoPayment"
+            android:id="@+id/lnrlay_confmpay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/green"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="17.5dp"
+            android:paddingBottom="17.5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:gravity="center_vertical"
+                android:text="Confirm and Pay : "
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_cart_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="0.00"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <include
+            android:visibility="gone"
+            android:id="@+id/empty_cart"
+            layout="@layout/empty_cart">
+
+        </include>
+    </RelativeLayout>
+</layout>

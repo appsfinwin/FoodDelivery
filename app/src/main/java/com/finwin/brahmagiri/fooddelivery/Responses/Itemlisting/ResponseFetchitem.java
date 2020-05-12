@@ -1,7 +1,9 @@
-package com.finwin.brahmagiri.fooddelivery.Responses;
+package com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class ResponseFetchitem {
     @SerializedName("data")

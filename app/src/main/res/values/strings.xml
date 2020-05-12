@@ -12,5 +12,12 @@
     <string name="cutprice"><strike>150</strike></string>
 
     <string name="s_paytm">PayTm</string>
+    <string name="rupee">₹</string>
     <string name="s_cod">Cash On Delivery</string>
+    <string name="Roboto_Bold">Roboto-Bold</string>
+    <string name="Roboto_Medium">Roboto-Medium</string>
+    <string name="Roboto_Light">Roboto-Light</string>
+    <string name="Roboto_Regular">Roboto-Regular</string>
+    <string name="Roboto_Thin">Roboto-Thin</string>
+    <string name="Roboto_Italic">Roboto-Italic</string>
 </resources>

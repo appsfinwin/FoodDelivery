@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import java.util.Objects;
@@ -77,12 +78,13 @@ public class ActivityMain extends AppCompatActivity {
                 break;
 
             case R.id.tv_nav_cart:
-                Fragment frCart = new FragCart();
+                /*Fragment frCart = new FragCart();
                 FragmentManager fmCart = getSupportFragmentManager();
                 FragmentTransaction fragTransCart = fmCart.beginTransaction();
                 fragTransCart.replace(R.id.frame_layout, frCart);
                 fragTransCart.addToBackStack(null);
-                fragTransCart.commit();
+                fragTransCart.commit();*/
+                startActivity(new Intent(getApplicationContext(),CartActivity.class));
 
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);

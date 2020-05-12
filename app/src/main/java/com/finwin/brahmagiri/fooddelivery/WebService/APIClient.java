@@ -1,4 +1,4 @@
-package com.finwintechnologies.brahmagirioutlet.WebService;
+package com.finwin.brahmagiri.fooddelivery.WebService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,7 +17,7 @@ public class APIClient {
 
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://45.114.245.117:7059/")
+                .baseUrl("http://192.168.0.221:212/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

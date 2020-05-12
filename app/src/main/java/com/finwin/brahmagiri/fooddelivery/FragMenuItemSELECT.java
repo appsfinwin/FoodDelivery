@@ -61,7 +61,6 @@ public class FragMenuItemSELECT extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
-
         homeListModelClassArrayList1 = new ArrayList<>();
 
         int idd = 0;

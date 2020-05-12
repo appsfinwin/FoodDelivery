@@ -3,7 +3,6 @@ package com.finwin.brahmagiri.fooddelivery.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +14,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.finwin.brahmagiri.fooddelivery.FragForYouItemView;
+import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
+import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
 import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
@@ -24,28 +24,28 @@ import java.util.List;
 
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.hMapCartItem;
 
-public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AllCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
  public static final int ITEM = 0;
     public static final int LOADING = 1;
     Context context;
-    private List<Table> dataset;
+    private List<ItemCat> dataset;
     boolean showingFirst = false;
     private boolean isLoadingAdded = false;
 
 
-    public BestSellingAdapter(Context context, ArrayList<Table> dataset) {
+    public AllCategoryAdapter(Context context, ArrayList<ItemCat> dataset) {
         this.context = context;
         this.dataset = dataset;
     }
-    public BestSellingAdapter(Context context) {
+    public AllCategoryAdapter(Context context) {
         this.context = context;
         dataset=new ArrayList<>();
 
     }
-    public List<Table> getItem() {
+    public List<ItemCat> getItem() {
         return dataset;
     }
-    public void setItem(List<Table> datasets) {
+    public void setItem(List<ItemCat> datasets) {
         this.dataset = datasets;
     }
 
@@ -70,53 +70,36 @@ public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     private RecyclerView.ViewHolder getViewHolder(ViewGroup parent, LayoutInflater inflater) {
         RecyclerView.ViewHolder viewHolder;
-        View v1 = inflater.inflate(R.layout.item_list_view, parent, false);
+        View v1 = inflater.inflate(R.layout.food_item_recycler, parent, false);
         viewHolder = new ViewHolder(v1);
         return viewHolder;
     }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Table result = dataset.get(position); // Movie
+        final ItemCat result = dataset.get(position); // Movie
 
         switch (getItemViewType(position)) {
             case ITEM:
                 final ViewHolder itemVH = (ViewHolder) holder;
-           //  holder1.image.setImageResource(result.get(position).getImage());
-                Glide.with(context).load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500").into(itemVH.image);
-              //  itemVH.imageLike.setImageResource(result.get(position).getImageLike());
-              //  itemVH.tvOffer.setText(itemListModelArrayList.get(position).getItemoffer());
-                itemVH.tvPrice.setText(""+result.getSellingRate());
-                itemVH.tvName.setText(result.getItemName());
-                itemVH.tv_description.setText(result.getImageDescription());
-
-                itemVH.btnAdd.setOnClickListener(new View.OnClickListener() {
+                itemVH.foodName.setText(result.getCatName());
+                itemVH.totalRest.setText(result.getDecrip());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        itemVH.btnAdd.setVisibility(View.INVISIBLE);
-                        itemVH.btnElgntCount.setNumber("1", true);
-                    }
-                });
-                itemVH.btnElgntCount.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-                        Log.e("Count", "onValueChange: "+newValue );
 
-                        if (newValue < 1) {
-                            itemVH.btnAdd.setVisibility(View.VISIBLE);
-                            //FragForYouItemView.removeFromCart(lists.getItemID());
-                        } else {
-                            // FragForYouItemView.addToCart(lists.getItemID(), lists.getItemName(), lists.getItemPrice(), newValue);
-                        }
+               /* String itemId = lists.getItemID();
+//                Log.e("MenuItemRecyAdapter:",itemId);
+                Bundle bundle = new Bundle();
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-                        Intent intent = new Intent("tocart_data");
-                        if (hMapCartItem == null || hMapCartItem.isEmpty()) {
-                            intent.putExtra("data", "hide_btn");
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                        } else {
-                            intent.putExtra("data", "show_btn");
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                        }
+                Fragment myFragment = new FragMenuTab();
+                bundle.putString(ConstantClass.MENU_TPYE,itemId);
+                myFragment.setArguments(bundle);
+                activity.getSupportFragmentManager().beginTransaction().replace(
+                        R.id.frame_layout, myFragment).addToBackStack(null).commit();*/
+                        context.startActivity(new Intent(context, ItemListingActivity.class).putExtra("cat_id",result.getCatId().toString()));
+
                     }
                 });
 
@@ -156,22 +139,14 @@ public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image, imageLike;
-        TextView tvOffer, tvPrice, tvName,cutprice,tv_description;
-        TextView btnAdd;
-        ElegantNumberButton btnElgntCount;
+       ImageView image;
+       TextView foodName, totalRest;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.img_bg);
-            imageLike = itemView.findViewById(R.id.img_like);
-            tvOffer = itemView.findViewById(R.id.tv_offer);
-            tvPrice = itemView.findViewById(R.id.tv_price);
-            tvName = itemView.findViewById(R.id.tvName);
-            tv_description=itemView.findViewById(R.id.tvdesc);
-            cutprice=itemView.findViewById(R.id.textcutprice);
-            btnAdd = (TextView) itemView.findViewById(R.id.btn_add_ofr);
-            btnElgntCount = (ElegantNumberButton) itemView.findViewById(R.id.btn_elgnt_count_ofr);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            foodName = (TextView) itemView.findViewById(R.id.foodName);
+            totalRest = (TextView) itemView.findViewById(R.id.restNo);
         }
     }
 
@@ -232,18 +207,18 @@ public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }*/
 
-    public void add(Table r) {
+    public void add(ItemCat r) {
         dataset.add(r);
         notifyItemInserted(dataset.size() - 1);
     }
 
 
-    public void addAll(List<Table> moveResults) {
-        for (Table result : moveResults) {
+    public void addAll(List<ItemCat> moveResults) {
+        for (ItemCat result : moveResults) {
             add(result);
         }
     }
-    public void remove(Table r) {
+    public void remove(ItemCat r) {
         int position = dataset.indexOf(r);
         if (position > -1) {
             dataset.remove(position);
@@ -261,13 +236,13 @@ public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new Table());
+        add(new ItemCat());
     }
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
         int position = dataset.size() - 1;
-        Table result = getItem(position);
+        ItemCat result = getItem(position);
 
         if (result != null) {
             dataset.remove(position);
@@ -275,7 +250,7 @@ public class BestSellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public Table getItem(int position) {
+    public ItemCat getItem(int position) {
         return dataset.get(position);
     }
     protected class LoadingVH extends RecyclerView.ViewHolder {
