@@ -38,6 +38,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_cart);
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        binding.toolbarLayout.toolbartext.setText("Cart");
         dofetchcartSummary(0,"","CART_SUMMARY");
 
     }

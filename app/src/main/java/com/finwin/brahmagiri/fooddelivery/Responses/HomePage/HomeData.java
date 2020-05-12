@@ -17,6 +17,10 @@ public class HomeData {
     @Expose
     private List<HomePageCat> table2 = null;
 
+    @SerializedName("Table3")
+    @Expose
+    private List<BannerData> table3 = null;
+
     public List<CustDetails> getTable() {
         return table;
     }
@@ -39,5 +43,13 @@ public class HomeData {
 
     public void setTable2(List<HomePageCat> table2) {
         this.table2 = table2;
+    }
+
+    public List<BannerData> getTable3() {
+        return table3;
+    }
+
+    public void setTable3(List<BannerData> table3) {
+        this.table3 = table3;
     }
 }

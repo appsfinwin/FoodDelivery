@@ -47,6 +47,8 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
     private int currentPage = PAGE_START;
     RelativeLayout msummarylayout;
     TextView mtotalcount, mrupee;
+    String searchkey,Flag;
+
 
 
     @Override
@@ -55,11 +57,22 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
         setContentView(R.layout.activity_item_listing);
         Intent is = getIntent();
-        final String catid = is.getStringExtra("cat_id").toString();
+      String catid = is.getStringExtra("cat_id");
+        if (catid==null){
+            catid="";
+        }
         Log.e("onCreate", "onCreate: " + catid);
         recyclerView = findViewById(R.id.item_listing);
         mtotalcount = findViewById(R.id.tv_itemcount);
         mrupee = findViewById(R.id.totalamt);
+        searchkey=getIntent().getStringExtra("key");
+        if (searchkey!=null){
+            Flag="ITEM_SEARCH";
+
+        }else{
+            Flag="SELECT_ITEM_BYCATEGORY";
+        }
+
         progressBar = (ProgressBar) findViewById(R.id.main_progress);
         msummarylayout = (RelativeLayout) findViewById(R.id.summary_layout);
         adapter = new BestSellingAdapter(this, this);
@@ -85,6 +98,7 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
         // recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
 
+        final String finalCatid = catid;
         recyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -95,7 +109,7 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        doFetchListingNextPage(catid);
+                        doFetchListingNextPage(finalCatid,Flag);
                     }
                 }, 1000);
             }
@@ -117,12 +131,12 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
 
         });
-        doFetchListingFirstPage(catid);
+        doFetchListingFirstPage(catid,Flag);
     }
 
-    private void doFetchListingNextPage(String cat_id) {
+    private void doFetchListingNextPage(String cat_id,String Flag) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchitem> call = apiService.doFetchItembyCategory("0", "", "SELECT_ITEM_BYCATEGORY", cat_id, currentPage, "44402");
+        Call<ResponseFetchitem> call = apiService.doFetchItembyCategory("0", "", Flag, cat_id, currentPage, "44402",searchkey);
         call.enqueue(new Callback<ResponseFetchitem>() {
             @Override
             public void onResponse(Call<ResponseFetchitem> call, Response<ResponseFetchitem> response) {
@@ -155,9 +169,9 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
     }
 
-    private void doFetchListingFirstPage(String catid) {
+    private void doFetchListingFirstPage(String catid,String Flag) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchitem> call = apiService.doFetchItembyCategory("0", "", "SELECT_ITEM_BYCATEGORY", catid, currentPage, "44402");
+        Call<ResponseFetchitem> call = apiService.doFetchItembyCategory("0", "", Flag, catid, currentPage, "44402",searchkey);
         call.enqueue(new Callback<ResponseFetchitem>() {
             @Override
             public void onResponse(Call<ResponseFetchitem> call, Response<ResponseFetchitem> response) {

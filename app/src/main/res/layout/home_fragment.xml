@@ -41,13 +41,18 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:orientation="vertical">
-                        <ImageView
-                            android:scaleType="fitXY"
-                            android:layout_width="match_parent"
-                            android:src="@drawable/dummy_banner"
-                            android:layout_height="150dp">
+                        <RelativeLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content" >
 
-                        </ImageView>
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/pager"
+                                android:layout_width="fill_parent"
+                                android:layout_height="200dp"
+                                android:layout_alignParentTop="true" />
+
+
+                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_marginTop="5dp"
@@ -160,16 +165,21 @@
                             android:src="@drawable/ic_search" />
 
                         <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:id="@+id/ed_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="0dp"
                             android:background="#00000000"
-                            android:text="Search"
+                            android:hint="Search here"
                             android:textColor="#95989a"
                             android:textSize="12dp" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:id="@+id/liner"
                         android:layout_width="50dp"
                         android:layout_height="50dp"

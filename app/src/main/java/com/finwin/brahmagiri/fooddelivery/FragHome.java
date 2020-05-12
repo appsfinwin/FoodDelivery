@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,14 +17,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll;
+import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
 import com.finwin.brahmagiri.fooddelivery.Adapter.BestSellingAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.FoodForYouModel;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemModel;
@@ -59,6 +64,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private Toolbar toolbar;
     TextView tvViewall;
     View rootview;
+    EditText msearch_edit;
 
     private ArrayList<MenuItemModel> homeListModelClassArrayList;
     private RecyclerView recyclerView;
@@ -67,6 +73,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private ArrayList<FoodForYouModel> homeListModelClassArrayList2;
     private RecyclerView recyclerView1;
     private BestSellingAdapter rAdapter;
+    ViewPager mPager;
 
     public static Integer image[] = {R.drawable.food2, R.drawable.food1, R.drawable.food3, R.drawable.food4};
     public static String foodName[] = {"Beef items", "Mutton items", "Chicken items", "Meat products"};
@@ -98,6 +105,20 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         ///==========================================================================
         drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
         navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
+        mPager = (ViewPager)rootview. findViewById(R.id.pager);
+        msearch_edit=rootview.findViewById(R.id.ed_search);
+        msearch_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchkey=msearch_edit.getText().toString();
+                    performSearch(searchkey);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         setToolbar();
         actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -171,6 +192,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         recyclerView1.setItemAnimator(new DefaultItemAnimator());
         recyclerView1.setAdapter(rAdapter);*/
 
+    }
+
+    private void performSearch(String searchkey) {
+        startActivity(new Intent(getActivity(), ItemListingActivity.class).putExtra("key",searchkey).putExtra("flag",""));
     }
 
     private void doFetchCactegory() {

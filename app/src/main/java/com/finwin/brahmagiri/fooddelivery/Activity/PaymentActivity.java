@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -50,6 +51,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     private ConfirmOrderAdapter bAdapter;
     ActivityPaymentBinding binding;
     View rootview;
+    Double totalamt;
     TextView tvTotal_co, tvCheckout, tvEditAddrs, tvAddressName, tvAddress, tvChngPymnt;
     ImageButton ibtn_back;
     ImageView imgChngPymnt;
@@ -125,13 +127,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             /*   Fragment fr = new FragMyOrder();
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction fragmentTransaction = Objects.requireNonNull(fm).beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout, fr);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();*/
-            }
+                Intent is =new Intent(getApplicationContext(),PayMentGateWay.class);
+                is.putExtra("total",totalamt.toString());
+                startActivity(is);}
         });
 
         ibtn_back.setOnClickListener(new View.OnClickListener() {
@@ -277,6 +275,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                     menuRecycler.setAdapter(mCartAdapter);
                     Log.d("cartsummary", "onFailure: "+mCartAdapter.getItemCount());
                     tvTotal_co.setText(""+dataset.get(0).getGrandTotal());
+                    totalamt=dataset.get(0).getGrandTotal();
                    /* if (mCartAdapter.getItemCount()==0){
                         binding.emptyCart.setVisibility(View.VISIBLE);
                         binding.parent.setVisibility(View.GONE);

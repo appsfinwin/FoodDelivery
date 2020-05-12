@@ -17,7 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentSuccessActivity"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity" />
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PayMentGateWay" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CartActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity" />
