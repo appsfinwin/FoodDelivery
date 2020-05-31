@@ -16,13 +16,16 @@ import com.finwin.brahmagiri.fooddelivery.Responses.AddtoCart.TableCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
+import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityCartBinding;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,20 +35,43 @@ import retrofit2.Response;
 public class CartActivity extends AppCompatActivity implements showhide {
     ActivityCartBinding binding;
     CartAdapter mCartAdapter;
+    DatabaseHandler db;
+    List<ProductEntryModel> datasetcartlist;
+    List<ProductEntryModel> totallist;
+    double totalsum = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_cart);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         binding.toolbarLayout.toolbartext.setText("Cart");
-        dofetchcartSummary(0,"","CART_SUMMARY");
+        // dofetchcartSummary(0,"","CART_SUMMARY");
+        datasetcartlist = new ArrayList<>();
+        db = new DatabaseHandler(getApplicationContext());
+        //db.getquantity("11");
+        Log.d("fetchquantity", ": "+ db.getFromDb("11"));
+        fetchCart();
+
+        calculatetotal();
+
+
+    }
+
+    private void fetchCart() {
+        datasetcartlist = db.getAllContacts();
+        totallist = new ArrayList<>();
+        mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, CartActivity.this, false);
+
+        binding.cartRecycler.setAdapter(mCartAdapter);
+
 
     }
 
     public void GotoPayment(View view) {
-        startActivity(new Intent(getApplicationContext(),PaymentActivity.class));
+        startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("total",Double.toString(totalsum)));
     }
+
     private void dofetchcartSummary(int value, String code, String flag) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchCart> call = apiService.doCartSummary("", "", flag, 0, "string", code, String.valueOf(value), "44402");
@@ -56,41 +82,35 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
                     ResponseFetchCart responseAddtoCart = response.body();
                     List<TableSummaryCart> dataset = responseAddtoCart.getData().getTable1();
-                    List<TableFetchCart>datasetcartlist=responseAddtoCart.getData().getTable();
-                    mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, CartActivity.this,true);
+                    List<TableFetchCart> datasetcartlist = responseAddtoCart.getData().getTable();
+                    //  mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, CartActivity.this,true);
 
-                        binding.cartRecycler.setAdapter(mCartAdapter);
-                    Log.d("cartsummary", "onFailure: "+mCartAdapter.getItemCount());
-                    if (mCartAdapter.getItemCount()==0){
+                    binding.cartRecycler.setAdapter(mCartAdapter);
+                    Log.d("cartsummary", "onFailure: " + mCartAdapter.getItemCount());
+                    if (mCartAdapter.getItemCount() == 0) {
                         binding.emptyCart.setVisibility(View.VISIBLE);
                         binding.parent.setVisibility(View.GONE);
                         binding.lnrlayConfmpay.setVisibility(View.GONE);
 
 
-                    }else{
+                    } else {
                         binding.emptyCart.setVisibility(View.GONE);
                         binding.parent.setVisibility(View.VISIBLE);
                         binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
                     }
 
                     binding.tvCartChrg.setText("" + dataset.get(0).getDeliveryCharge());
-                        binding.tvCartGst.setText("" + dataset.get(0).getTax());
-                        binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
-                        binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
+                    binding.tvCartGst.setText("" + dataset.get(0).getTax());
+                    binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
+                    binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
                        /* binding.parent.setVisibility(View.GONE);
                         binding.lnrlayConfmpay.setVisibility(View.GONE);
                         Toast.makeText(CartActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();*/
 
 
-
-
-
-
                     //Double total = dataset.get(0).getTotal();
                     // int count=dataset.get(0).getQuantity();
                     //   Log.d("cartsummary", "onFailure: "+count);
-
-
 
 
                 }
@@ -103,9 +123,10 @@ public class CartActivity extends AppCompatActivity implements showhide {
             }
         });
     }
+
     private void doUpdateCart(int value, String code, String flag) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddtoCart> call = apiService.doCartManagment("", "", flag, 0, "", code, String.valueOf(value), "44402","");
+        Call<ResponseAddtoCart> call = apiService.doCartManagment("", "", flag, 0, "", code, String.valueOf(value), "44402", "");
         call.enqueue(new Callback<ResponseAddtoCart>() {
             @Override
             public void onResponse(Call<ResponseAddtoCart> call, Response<ResponseAddtoCart> response) {
@@ -114,13 +135,13 @@ public class CartActivity extends AppCompatActivity implements showhide {
                     List<TableCart> dataset = responseAddtoCart.getData().getTable1();
                     String status = dataset.get(0).getReturnStatus();
                     Toast.makeText(CartActivity.this, "" + dataset.get(0).getReturnMessage(), Toast.LENGTH_SHORT).show();
-                    dofetchcartSummary(0,"","CART_SUMMARY");
+                    dofetchcartSummary(0, "", "CART_SUMMARY");
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseAddtoCart> call, Throwable t) {
-                Log.d("cartsummary", "onFailure: "+t.getMessage());
+                Log.d("cartsummary", "onFailure: " + t.getMessage());
 
             }
         });
@@ -128,7 +149,16 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
     @Override
     public void clicked(int value, String code) {
-        doUpdateCart(value, code, "INSERT");
+
+        //doUpdateCart(value, code, "INSERT");
+        db.updateContact(value, Integer.parseInt(code));
+        calculatetotal();
+
+
+    }
+
+    @Override
+    public void clickedpdct(int value, String code, String pname, String price) {
 
 
     }
@@ -140,7 +170,38 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
     @Override
     public void delete(String code) {
-        doUpdateCart(0, code, "DELETE");
+        //   doUpdateCart(0, code, "DELETE");
+        db.deleteEntry(Integer.parseInt(code));
+        mCartAdapter.notifyDataSetChanged();
+        calculatetotal();
+        Log.e("delete", "delete: "+mCartAdapter.getItemCount());
+        if (datasetcartlist.size() == 0) {
+            binding.emptyCart.setVisibility(View.VISIBLE);
+            binding.parent.setVisibility(View.GONE);
+            binding.lnrlayConfmpay.setVisibility(View.GONE);
+
+
+        } else {
+            binding.emptyCart.setVisibility(View.GONE);
+            binding.parent.setVisibility(View.VISIBLE);
+            binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    public void calculatetotal() {
+        double sum = 0.0;
+        totallist.clear();
+        totallist = db.getAllContacts();
+        for (int i = 0; i < totallist.size(); i++) {
+            double price = totallist.get(i).getPrice() * totallist.get(i).getQuantity();
+            sum = sum + price;
+            Log.d("calculatetotal", "calculatetotal: " + sum);
+            binding.tvCartSubtotal.setText("" + sum);
+            binding.tvCartTotal.setText("₹ " + sum);
+        }
+        totalsum=sum;
 
 
     }

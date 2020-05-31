@@ -38,6 +38,7 @@
                     android:gravity="bottom" />
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/img_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
                     android:background="@drawable/ic_like_uncheck" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tv_offer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,7 +88,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Item"
-                android:textStyle="bold"
+
 
                 android:textColor="#2d2d2d"
                 android:textSize="15sp" />
@@ -104,6 +106,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

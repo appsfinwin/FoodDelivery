@@ -39,6 +39,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/linr_lay1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -141,6 +142,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f9f9f9"
@@ -218,6 +220,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f9f9f9"
@@ -266,6 +269,7 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f9f9f9"
@@ -295,6 +299,7 @@
                 android:background="#dfe0e2" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
@@ -344,6 +349,7 @@
                 android:background="#dfe0e2" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
@@ -403,6 +409,7 @@ Road, Vadodara, 390020"
                 android:background="#dfe0e2" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -524,6 +531,7 @@ Road, Vadodara, 390020"
     </android.support.v4.widget.NestedScrollView>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tv_myorder_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

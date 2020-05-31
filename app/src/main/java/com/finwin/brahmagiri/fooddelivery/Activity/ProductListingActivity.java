@@ -1,15 +1,22 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
-
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,13 +28,9 @@ import com.finwin.brahmagiri.fooddelivery.Responses.AddtoCart.ResponseAddtoCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.AddtoCart.TableCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table1;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
-import com.finwin.brahmagiri.fooddelivery.Utilities.PaginationScrollListener;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
@@ -36,16 +39,21 @@ import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemListingActivity extends AppCompatActivity implements showhide {
+public class ProductListingActivity extends Fragment implements showhide, NavigationView.OnNavigationItemSelectedListener {
     RecyclerView recyclerView;
     BestSellingAdapter adapter;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    NavigationView navigationView;
+    private DrawerLayout drawer;
+    private Toolbar toolbar;
     GridLayoutManager gridLayoutManager;
-    ProgressBar progressBar;
+    ProgressBar pbardialog;
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -53,40 +61,56 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
     private int currentPage = PAGE_START;
     RelativeLayout msummarylayout;
     TextView mtotalcount, mrupee;
-    String searchkey,Flag;
+    String searchkey, Flag;
     DatabaseHandler db;
+    View rootview;
     ProductEntryModel productEntryModel;
 
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        rootview = inflater.inflate(R.layout.activity_item_listing, container, false);
 
-        setContentView(R.layout.activity_item_listing);
-        productEntryModel=new ProductEntryModel();
-        db=new DatabaseHandler(getApplicationContext());
-        Intent is = getIntent();
-      String catid = is.getStringExtra("cat_id");
-        if (catid==null){
-            catid="";
-        }
-        Log.e("onCreate", "onCreate: " + catid);
-        recyclerView = findViewById(R.id.item_listing);
-        mtotalcount = findViewById(R.id.tv_itemcount);
-        mrupee = findViewById(R.id.totalamt);
-        searchkey=getIntent().getStringExtra("key");
-        if (searchkey!=null){
-            Flag="ITEM_SEARCH";
 
-        }else{
-            Flag="SELECT_ITEM_BYCATEGORY";
-        }
+        productEntryModel = new ProductEntryModel();
+        db = new DatabaseHandler(getActivity());
+        drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
+        navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
 
-        progressBar = (ProgressBar) findViewById(R.id.main_progress);
-        msummarylayout = (RelativeLayout) findViewById(R.id.summary_layout);
-     //   adapter = new BestSellingAdapter(this, this);
-        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        setToolbar();
+       // Log.e("onCreate", "onCreate: " + catid);
+        recyclerView = rootview.findViewById(R.id.item_listing);
+        mtotalcount =  rootview.findViewById(R.id.tv_itemcount);
+        mrupee =  rootview.findViewById(R.id.totalamt);
+
+
+        pbardialog = (ProgressBar) rootview. findViewById(R.id.main_progress);
+        msummarylayout = (RelativeLayout)  rootview.findViewById(R.id.summary_layout);
+        //   adapter = new BestSellingAdapter(this, this);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawer.setDrawerListener(actionBarDrawerToggle);
+        //calling sync state is necessary or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+        doFetchProducts();
    /*     gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -103,12 +127,12 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
         //dofetchcartSummary(0, "", "CART_SUMMARY");
 
         recyclerView.setLayoutManager(gridLayoutManager);
-       // recyclerView.setAdapter(adapter);
+        // recyclerView.setAdapter(adapter);
 
 
         // recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
 
-        final String finalCatid = catid;
+
     /*    recyclerView.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -141,7 +165,8 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
 
         });*/
-       // doFetchListingFirstPage(catid,Flag);
+        // doFetchListingFirstPage(catid,Flag);
+        return rootview;
     }
 
     /*private void doFetchListingNextPage(String cat_id,String Flag) {
@@ -211,24 +236,24 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
     }*/
 
     @Override
-    public void clickedpdct(int value, String code, String pname, String price){
+    public void clickedpdct(int value, String code, String pname, String price) {
         msummarylayout.setVisibility(View.VISIBLE);
 
         if (value > 0) {
 
-            if (!db.rowIdExists(Integer.parseInt(code))){
+            if (!db.rowIdExists(Integer.parseInt(code))) {
                 productEntryModel.setId(Integer.parseInt(code));
-                  productEntryModel.setProductname(pname);
+                productEntryModel.setProductname(pname);
                 productEntryModel.setPrice(Double.valueOf(price));
-                 productEntryModel.setQuantity(value);
+                productEntryModel.setQuantity(value);
                 db.addContact(productEntryModel);
-            }else{
+            } else {
                 Log.d("clicked", "update: " + code);
-                db.updateContact(value,Integer.parseInt(code));
+                db.updateContact(value, Integer.parseInt(code));
 
             }
 
-          //  db.rowIdExists(Integer.parseInt(code));
+            //  db.rowIdExists(Integer.parseInt(code));
             Log.d("clicked", "clicked: " + db.rowIdExists(Integer.parseInt(code)));
             Log.d("clicked", "clicked: " + code);
 
@@ -237,7 +262,7 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
         } else {
             msummarylayout.setVisibility(View.GONE);
-           // doUpdateCart(0, code, "DELETE");
+            // doUpdateCart(0, code, "DELETE");
         }
 
     }
@@ -246,7 +271,6 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
     public void clicked(int value, String code) {
 
     }
-
 
 
     @Override
@@ -285,7 +309,7 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
                         }
 
 
-                    }else{
+                    } else {
                         msummarylayout.setVisibility(View.GONE);
 
                     }
@@ -306,43 +330,22 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
         });
     }
 
-    private void doUpdateCart(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddtoCart> call = apiService.doCartManagment("", "", flag, 0, "", code, String.valueOf(value), "44402", "");
-        call.enqueue(new Callback<ResponseAddtoCart>() {
-            @Override
-            public void onResponse(Call<ResponseAddtoCart> call, Response<ResponseAddtoCart> response) {
-                if (response.body() != null && response.code() == 200) {
-                    ResponseAddtoCart responseAddtoCart = response.body();
-                    List<TableCart> dataset = responseAddtoCart.getData().getTable1();
-                    String status = dataset.get(0).getReturnStatus();
-                    Toast.makeText(ItemListingActivity.this, "" + dataset.get(0).getReturnMessage(), Toast.LENGTH_SHORT).show();
-                    //dofetchcartSummary(0, "", "CART_SUMMARY");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseAddtoCart> call, Throwable t) {
-                Log.d("cartsummary", "onFailure: " + t.getMessage());
-
-            }
-        });
-    }
 
     public void gotocart(View view) {
-        startActivity(new Intent(getApplicationContext(), CartActivity.class));
+        startActivity(new Intent(getActivity(), CartActivity.class));
 
     }
 
-    @Override
+   /* @Override
     protected void onResume() {
         super.onResume();
-       // dofetchcartSummary(0, "", "CART_SUMMARY");
+        // dofetchcartSummary(0, "", "CART_SUMMARY");
         doFetchProducts();
 
-    }
-    private  void doFetchProducts() {
-        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+    }*/
+
+    private void doFetchProducts() {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchProducts> call = apiService.fetchproducts("319", mAccesstoken, "test");
         call.enqueue(new Callback<ResponseFetchProducts>() {
@@ -352,10 +355,10 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
                     ResponseFetchProducts responseFetchProducts = response.body();
 
                     // dataSet=response.body().getProducts();
-               List<Product>     dataSet = responseFetchProducts.getProducts();
+                    List<Product> dataSet = responseFetchProducts.getProducts();
 
-                ItemlistingBrahmaAdapter adapter = new ItemlistingBrahmaAdapter(ItemListingActivity.this,  dataSet,ItemListingActivity.this);
-                  recyclerView.setAdapter(adapter);
+                    ItemlistingBrahmaAdapter adapter = new ItemlistingBrahmaAdapter(getActivity(), dataSet, ProductListingActivity.this);
+                    recyclerView.setAdapter(adapter);
 
 
                 }
@@ -368,4 +371,29 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
         });
 
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+    private void setToolbar() {
+        toolbar = (Toolbar) rootview.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(false);
+//        actionBar.setTitle("");
+
+        toolbar.findViewById(R.id.btn_drwmenu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("Click", "setToolbar menu");
+                if (drawer.isDrawerOpen(navigationView)) {
+                    drawer.closeDrawer(navigationView);
+                } else {
+                    drawer.openDrawer(navigationView);
+                }
+            }
+        });
+    }
 }
+

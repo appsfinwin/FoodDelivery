@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -35,24 +35,57 @@
                 android:textSize="11dp" />
             <!--South-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-4dp"
                 android:orientation="horizontal">
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:layout_margin="5dp"
+                    android:id="@+id/spinner"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:ms_multiline="false"
+                    app:ms_hint="Select Zone"
+                    app:ms_enableFloatingLabel="false"
+                    app:ms_enableErrorLabel="false"
+                    app:ms_baseColor="@color/white"
+                    app:ms_highlightColor="@color/white"
+                    app:ms_errorColor="@color/white"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Ernakulam"
-                    android:textColor="#ffffff"
-                    android:textSize="18dp" />
 
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_down" />
+                    app:ms_hintColor="@color/white"
+                    app:ms_arrowColor="@color/white"
+                    app:ms_arrowSize="16dp"
+                    app:ms_alignLabels="false"
+                    app:ms_floatingLabelColor="@color/white"/>
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:layout_margin="5dp"
+                    android:id="@+id/spinner2"
+
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:ms_multiline="false"
+                    app:ms_hint="Select Outlet"
+                    app:ms_enableFloatingLabel="false"
+                    app:ms_enableErrorLabel="false"
+
+                    app:ms_baseColor="@color/white"
+                    app:ms_highlightColor="@color/white"
+                    app:ms_errorColor="@color/white"
+
+
+
+
+                    app:ms_hintColor="@color/white"
+                    app:ms_arrowColor="@color/white"
+                    app:ms_arrowSize="16dp"
+                    app:ms_alignLabels="false"
+                    app:ms_floatingLabelColor="@color/white"/>
+
+
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -7,6 +7,7 @@
     android:gravity="center">
 
     <ImageView
+        android:visibility="visible"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginLeft="15dp"
@@ -14,5 +15,11 @@
         android:src="@drawable/payment">
 
     </ImageView>
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/imv"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"></ImageView>
+
 
 </LinearLayout>

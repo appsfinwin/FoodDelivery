@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ToCartButtonListener;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
@@ -25,19 +26,18 @@ import java.util.Objects;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> {
     Context context;
-    private List<TableFetchCart> dataset;
+    private List<ProductEntryModel> dataset;
     showhide mshowhide;
 
     ToCartButtonListener toCartBtnLstnr;
     boolean showquantityupdate;
 
 
-
-    public CartAdapter(Context mainActivityContacts, List<TableFetchCart> dataset, showhide mshowhide,boolean showquantityupdate) {
+    public CartAdapter(Context mainActivityContacts, List<ProductEntryModel> dataset, showhide mshowhide, boolean showquantityupdate) {
         this.mshowhide = mshowhide;
         this.context = mainActivityContacts;
         this.dataset = dataset;
-        this.showquantityupdate=showquantityupdate;
+        this.showquantityupdate = showquantityupdate;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -57,11 +57,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             imgAdd = (ImageView) view.findViewById(R.id.img_cart_add);
             imgDelete = (ImageView) view.findViewById(R.id.img_delete);
             ItemImage = view.findViewById(R.id.product_image);
-            if (!showquantityupdate){
+            if (!showquantityupdate) {
+                imgMinus.setVisibility(View.GONE);
+                imgAdd.setVisibility(View.GONE);
+                imgDelete.setVisibility(View.VISIBLE);
+
+            }else{
                 imgMinus.setVisibility(View.GONE);
                 imgAdd.setVisibility(View.GONE);
                 imgDelete.setVisibility(View.GONE);
-
             }
 
         }
@@ -81,14 +85,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(final CartAdapter.MyViewHolder holder, final int position) {
-        final TableFetchCart lists = dataset.get(position);
-        holder.tvItemName.setText(lists.getItemName());
+        final ProductEntryModel lists = dataset.get(position);
+        holder.tvItemName.setText(lists.getProductname());
 
         int cnt = lists.getQuantity();
-        holder.tvItemCount.setText(String.valueOf(cnt));
-        Glide.with(context).load(lists.getImageUrl()).into(holder.ItemImage);
+        holder.tvItemCount.setText("Qty : "+String.valueOf(cnt));
+        // Glide.with(context).load(lists.getImageUrl()).into(holder.ItemImage);
 
-        holder.tvItemAmount.setText("₹ " + lists.getTotal());
+        holder.tvItemAmount.setText("₹ " + lists.getPrice());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +111,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 //                Log.e("setTotalItemAmount: ", String.valueOf(setTotalItemAmount()));
             }
         });
+       // int avq=(int) Math.round(dataset.get(position).getAv);  ;
 
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +120,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 ConstantClass.hMapCartItem.remove(lists.getItemID());
                 toCartBtnLstnr.calcSubTotal();
                 notifyDataSetChanged();*/
-                mshowhide.delete(dataset.get(position).getItemCode());
+                mshowhide.delete(String.valueOf(dataset.get(position).getId()));
+                dataset.remove(position);
             }
         });
 
@@ -125,7 +131,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 int count = Integer.parseInt(holder.tvItemCount.getText().toString());
                 count = count + 1;
                 holder.tvItemCount.setText(String.valueOf(count));
-                mshowhide.clicked(count, dataset.get(position).getItemCode());
+                mshowhide.clicked(count, String.valueOf(dataset.get(position).getId()));
 
 
                /* lists.setItemCount(String.valueOf(Integer.parseInt(lists.getItemCount()) + 1));
@@ -153,11 +159,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 int count = Integer.parseInt(holder.tvItemCount.getText().toString());
                 if (count >= 1) {
                     count = count - 1;
+
                     if (count > 0) {
                         holder.tvItemCount.setText(String.valueOf(count));
-                        mshowhide.clicked(count, dataset.get(position).getItemCode());
+                        mshowhide.clicked(count, String.valueOf(dataset.get(position).getId()));
                     } else {
-                        mshowhide.delete(dataset.get(position).getItemCode());
+                        mshowhide.delete(String .valueOf(dataset.get(position).getId()));
 
                     }
 

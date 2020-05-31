@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +22,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
+import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import org.json.JSONArray;
@@ -30,12 +37,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class FragLogin extends Fragment {
 
     View rootview;
     LinearLayout linSignup;
     Button btnLogin;
     RequestQueue requestQueue;
+    EditText edUsername,edPass;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,13 +58,27 @@ public class FragLogin extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
+        edUsername=rootview.findViewById(R.id.ed_username);
+        edPass=rootview.findViewById(R.id.ed_passwd);
+
+
         btnLogin = rootview.findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                getPendingLoanList();
-                startActivity(new Intent(getContext(), ActivityMain.class));
-                Objects.requireNonNull(getActivity()).finish();
+
+
+                String username=edUsername.getText().toString().trim();
+                String password=edPass.getText().toString().trim();
+                if (username.equals("")){
+                 edUsername.setError("This field is empty");
+                }else if (password.equals("")){
+                    edPass.setError("This field is empty");
+                }else{
+                    doLogin(username,password);
+                }
+
             }
         });
 
@@ -75,37 +100,35 @@ public class FragLogin extends Fragment {
         });
     }
 
-    private void getPendingLoanList() {
-//        String api_url = "http://35.196.223.10:911/EncryptDecrypt_Api";
-        String api_url = "http://35.196.223.10:911/EncryptDecrypt_Api";
-//        proDialog.setTitleText("Please wait..");
-//        proDialog.show();
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, api_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("response=>", response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        Log.d("ERROR", "error => " + error.toString());
-                    }
-                }
-        ) {
+    private void doLogin(String username, String password) {
+        ApiService apiService= APIClient.getClient().create(ApiService.class);
+        Call<ResponseLogin> call=apiService.dologinoutlet("test",username,password);
+        call.enqueue(new Callback<ResponseLogin>() {
             @Override
-            protected Map<String, String> getParams() {
-                // the POST parameters:
-                Map<String, String> hashMap = new HashMap<>();
-                hashMap.put("Type", "Encrypt");
-                hashMap.put("Input", "Encrypt");
-                return hashMap;
+            public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {
+                if (response!=null&&response.code()==200){
+                    String mAccesstoken=response.body().getAccessToken();
+                    if (mAccesstoken!=null){
+                        LocalPreferences.storeStringPreference(getActivity(),"Accesstoken",mAccesstoken);
+                        LocalPreferences.storeBooleanPreference(getActivity(),"isLoggedin",true);
+                        startActivity(new Intent(getContext(), ActivityMain.class));
+                        Objects.requireNonNull(getActivity()).finish();
+
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
+                }
+
             }
-        };
-        requestQueue.add(postRequest);
+
+            @Override
+            public void onFailure(Call<ResponseLogin> call, Throwable t) {
+                Toast.makeText(getActivity(), "Login Failed"+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
     }
 
 }

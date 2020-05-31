@@ -26,12 +26,19 @@ import com.finwin.brahmagiri.fooddelivery.FragMyOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
+import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
+import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
-import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityPaymentBinding;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.worldline.in.constant.Param;
+import com.worldline.in.ipg.PaymentStandard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +53,13 @@ import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.COD;
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.PAYTM;
 
 public class PaymentActivity extends AppCompatActivity implements showhide {
-    private ArrayList<ConfirmOrderModel> homeListModelClassArrayList;
+    private List<ConfirmOrderModel> homeListModelClassArrayList;
+    List<ProductEntryModel> datasetcartlist;
+    DatabaseHandler db;
+    boolean cod = true;
     private RecyclerView menuRecycler;
     private ConfirmOrderAdapter bAdapter;
-    ActivityPaymentBinding binding;
+
     View rootview;
     Double totalamt;
     TextView tvTotal_co, tvCheckout, tvEditAddrs, tvAddressName, tvAddress, tvChngPymnt;
@@ -57,13 +67,15 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     ImageView imgChngPymnt;
     LinearLayout linrChngPymnt;
     CartAdapter mCartAdapter;
+    String total;
 
     String itemArryId, itemArryName, itemArryCount, itemArryAmount,
             StrBndlTotal = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_payments);
         tvTotal_co = findViewById(R.id.tv_total_co);
         tvAddressName = findViewById(R.id.tv_addressName);
         tvAddress = findViewById(R.id.tv_address);
@@ -75,17 +87,27 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         linrChngPymnt = findViewById(R.id.linr_chng_pymnt);
         imgChngPymnt = findViewById(R.id.img_chng_pymnt);
         tvChngPymnt = findViewById(R.id.tv_chng_pymnt);
+        total = getIntent().getStringExtra("total");
+        datasetcartlist = new ArrayList<>();
+        db = new DatabaseHandler(getApplicationContext());
 
        /* Bundle bundle = this.getArguments();
         if (bundle != null) {
             StrBndlTotal = bundle.getString(ConstantClass.TOTAL_AMNT, "");
         }*/
-        dofetchcartSummary(0,"","CART_SUMMARY");
+        //dofetchcartSummary(0, "", "CART_SUMMARY");
 
         menuRecycler = (RecyclerView) findViewById(R.id.menuRecycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
+        if (cod){
+            tvCheckout.setText("Place Order");
+
+        }else{
+
+        }
+        fetchCart();
 
         homeListModelClassArrayList = new ArrayList<>();
 
@@ -122,14 +144,31 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         if (TextUtils.isEmpty(StrBndlTotal)) {
             StrBndlTotal = "";
         }
-        tvTotal_co.setText(StrBndlTotal);
+        tvTotal_co.setText(total);
 
         tvCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent is =new Intent(getApplicationContext(),PayMentGateWay.class);
-                is.putExtra("total",totalamt.toString());
-                startActivity(is);}
+                if (cod){
+                    Load(datasetcartlist,0);
+
+                }else{
+
+
+                    Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
+                    /*   */
+                    intent.putExtra(Param.ORDER_ID, "88993265");
+                    intent.putExtra(Param.TRANSACTION_AMOUNT,"2000" );
+                    intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
+                    intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
+                    intent.putExtra(Param.TRANSACTION_TYPE, "S");
+                    startActivityForResult(intent, 101);
+                   /* Intent is = new Intent(getApplicationContext(), PayMentGateWay.class);
+                    is.putExtra("total", total);
+                    startActivity(is);*/
+                }
+
+            }
         });
 
         ibtn_back.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +193,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             }
         });
 
+    }
+
+    private void fetchCart() {
+        datasetcartlist = db.getAllContacts();
+        // totallist = new ArrayList<>();
+        mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
+
+        menuRecycler.setAdapter(mCartAdapter);
     }
     //========
 
@@ -190,9 +237,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         if (type.equals(PAYTM)) {
             imgChngPymnt.setImageResource(R.drawable.paytm);
             tvChngPymnt.setText(R.string.s_paytm);
+            cod = false;
         } else if (type.equals(COD)) {
             imgChngPymnt.setImageResource(R.drawable.cash);
             tvChngPymnt.setText(R.string.s_cod);
+            cod = true;
         }
     }
 
@@ -259,6 +308,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvAddressName.setText(head);
         tvAddress.setText(address);
     }
+
     private void dofetchcartSummary(int value, String code, String flag) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchCart> call = apiService.doCartSummary("", "", flag, 0, "string", code, String.valueOf(value), "44402");
@@ -269,13 +319,13 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                     ResponseFetchCart responseAddtoCart = response.body();
                     List<TableSummaryCart> dataset = responseAddtoCart.getData().getTable1();
-                    List<TableFetchCart>datasetcartlist=responseAddtoCart.getData().getTable();
-                    mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this,false);
+                    List<TableFetchCart> datasetcartlist = responseAddtoCart.getData().getTable();
+//                    mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this,false);
 
                     menuRecycler.setAdapter(mCartAdapter);
-                    Log.d("cartsummary", "onFailure: "+mCartAdapter.getItemCount());
-                    tvTotal_co.setText(""+dataset.get(0).getGrandTotal());
-                    totalamt=dataset.get(0).getGrandTotal();
+                    Log.d("cartsummary", "onFailure: " + mCartAdapter.getItemCount());
+                    tvTotal_co.setText("" + dataset.get(0).getGrandTotal());
+                    totalamt = dataset.get(0).getGrandTotal();
                    /* if (mCartAdapter.getItemCount()==0){
                         binding.emptyCart.setVisibility(View.VISIBLE);
                         binding.parent.setVisibility(View.GONE);
@@ -288,24 +338,18 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
                     }
 */
-                 //   binding.tvCartChrg.setText("" + dataset.get(0).getDeliveryCharge());
-                 //   binding.tvCartGst.setText("" + dataset.get(0).getTax());
-                 //   binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
-                  //  binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
+                    //   binding.tvCartChrg.setText("" + dataset.get(0).getDeliveryCharge());
+                    //   binding.tvCartGst.setText("" + dataset.get(0).getTax());
+                    //   binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
+                    //  binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
                        /* binding.parent.setVisibility(View.GONE);
                         binding.lnrlayConfmpay.setVisibility(View.GONE);
                         Toast.makeText(CartActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();*/
 
 
-
-
-
-
                     //Double total = dataset.get(0).getTotal();
                     // int count=dataset.get(0).getQuantity();
                     //   Log.d("cartsummary", "onFailure: "+count);
-
-
 
 
                 }
@@ -326,6 +370,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     @Override
+    public void clickedpdct(int value, String code, String pname, String price) {
+
+    }
+
+    @Override
     public void show(String show) {
 
     }
@@ -334,4 +383,113 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     public void delete(String code) {
 
     }
+    private void Load(List<ProductEntryModel> datasetAdd, int billid) {
+        String json = "{\"outlet_id\":" + "319" +
+                ",\"bill_id\":" + billid +
+                " ,\"productlist\": [";
+
+        for (int i = 0; i < datasetAdd.size(); i++) {
+            json += "{ \"Product\": " + datasetAdd.get(i).getId() + ", \"Price\": " +
+                    datasetAdd.get(i).getPrice() + " ,\"Quantity\": " + datasetAdd.get(i).getQuantity() + "}";
+            if (i != datasetAdd.size() - 1) json += ",";
+        }
+
+        json += "]}";
+        try {
+            JsonParser parser = new JsonParser();
+
+            JsonObject jsonObject = (JsonObject) parser.parse(json);
+            doGenerateBill(jsonObject);
+            // adapter.update();
+
+            Log.d("jsons", "Load: " + jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    private void doGenerateBill(JsonObject jsonObject) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseCreateBill> call = apiService.postRawJSON(mAccesstoken, "test", jsonObject);
+        call.enqueue(new Callback<ResponseCreateBill>() {
+            @Override
+            public void onResponse(Call<ResponseCreateBill> call, Response<ResponseCreateBill> response) {
+                if (response.body() != null && response.code() == 200) {
+
+                    if (response.body().getBillId().toString() != null) {
+                        String mbillid = response.body().getBillId().toString();
+
+                        LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
+                        startActivity(new Intent(getApplicationContext(),PaymentSuccess.class));
+                        // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
+                    }
+
+
+                }
+
+            }
+
+
+
+            @Override
+            public void onFailure(Call<ResponseCreateBill> call, Throwable t) {
+
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            Log.e("Payment", "onActivityResult: " + data);
+
+            if (resultCode == RESULT_OK) {
+                String orderId = data.getStringExtra(Param.ORDER_ID);
+                String transactionRefNo = data.getStringExtra(Param.TRANSACTION_REFERENCE_NUMBER);
+                String rrn = data.getStringExtra(Param.RRN);
+                String statusCode = data.getStringExtra(Param.STATUS_CODE);
+                String statusDescription = data.getStringExtra(Param.STATUS_DESCRIPTION);
+                String transactionAmount = data.getStringExtra(Param.TRANSACTION_AMOUNT);
+                String requestDate = data.getStringExtra(Param.TRANSACTION_REQUEST_DATE);
+                String authNStatus = data.getStringExtra(Param.AUTH_N_STATUS);
+                String authZstatus = data.getStringExtra(Param.AUTH_Z_STATUS);
+                String captureStatus = data.getStringExtra(Param.CAPTURE_STATUS);
+                String pgRefCancelReqId = data.getStringExtra(Param.PG_REF_CANCEL_REQ_ID);
+                String refundAmount = data.getStringExtra(Param.REFUND_AMOUNT);
+                String addField1 = data.getStringExtra(Param.ADDL_FIELD_1);
+                String addField2 = data.getStringExtra(Param.ADDL_FIELD_2);
+                String addField3 = data.getStringExtra(Param.ADDL_FIELD_3);
+                String addField4 = data.getStringExtra(Param.ADDL_FIELD_4);
+                String addField5 = data.getStringExtra(Param.ADDL_FIELD_5);
+                String addField6 = data.getStringExtra(Param.ADDL_FIELD_6);
+                String addField7 = data.getStringExtra(Param.ADDL_FIELD_7);
+                String addField8 = data.getStringExtra(Param.ADDL_FIELD_8);
+                String addField9 = data.getStringExtra(Param.ADDL_FIELD_9);
+
+                String msg = "Status transactionAmount: " + statusCode + "\nRef No: " + statusDescription + "\nOrder id: " + orderId;
+                Log.e("Payment", "onActivityResult: " + msg);
+                if (statusCode.equals("S")){
+                 //   doConfirmOrder(transactionAmount,orderId);
+
+
+                }else{
+                   // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
+                   // finishAffinity();
+                }
+                // Utility.showAlertDialog(this, msg);
+
+                // Use data as per your need         }     } }
+            }else{
+                Log.e("Payment", "cancelled: " + data);
+                // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
+                //  finishAffinity();
+
+            }
+        }
+    }
+
 }
