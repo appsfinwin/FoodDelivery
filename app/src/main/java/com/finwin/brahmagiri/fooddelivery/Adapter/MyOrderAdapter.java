@@ -21,12 +21,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
 
         public MyViewHolder(View view) {
             super(view);
-            dishName = (TextView) view.findViewById(R.id.dishName);
-            rupees = (TextView) view.findViewById(R.id.rupees);
-            quantity = (TextView) view.findViewById(R.id.quantity);
+
         }
     }
-
+    public MyOrderAdapter(Context context) {
+        this.context = context;
+    }
     public MyOrderAdapter(Context mainActivityContacts, List<MyOrderModel> offerList) {
         this.OfferList = offerList;
         this.context = mainActivityContacts;
@@ -41,15 +41,15 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyOrderAdapter.MyViewHolder holder, int position) {
-        MyOrderModel lists = OfferList.get(position);
+      /*  MyOrderModel lists = OfferList.get(position);
         holder.dishName.setText(lists.getDishName());
         holder.quantity.setText(lists.getQuantity());
-        holder.rupees.setText(lists.getRupees());
+        holder.rupees.setText(lists.getRupees());*/
     }
 
     @Override
     public int getItemCount() {
-        return OfferList.size();
+        return 5;
     }
 
 }

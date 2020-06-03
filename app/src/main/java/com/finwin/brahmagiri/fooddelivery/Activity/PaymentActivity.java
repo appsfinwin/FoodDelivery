@@ -105,7 +105,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             tvCheckout.setText("Place Order");
 
         }else{
-
+            tvCheckout.setText("Confirm & Checkout");
         }
         fetchCart();
 

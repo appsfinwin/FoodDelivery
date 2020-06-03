@@ -9,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;import android.support.annotation.NonNull;
+import android.view.WindowManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -77,7 +78,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private DrawerLayout drawer;
     private Toolbar toolbar;
     TextView tvViewall;
-   View rootview;
+    View rootview;
     ArrayAdapter<Zone> adapters;
     EditText msearch_edit;
     RelativeLayout msummarylayout;
@@ -91,7 +92,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private BestSellingAdapter rAdapter;
     ViewPager mPager;
     DatabaseHandler db;
-    TextView total,count;
+    TextView total, count;
     ItemlistingBrahmaAdapter adapter;
 
 
@@ -109,143 +110,137 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     String deliveryTime[] = {"20-30 min", "10-15 min", "40-45 min", "30-35 min"};
     String amount[] = {"300 Rs", "250 Rs", "280 Rs", "320 Rs"};
     String paymentMode[] = {"Online & COD", "Online & COD", "Online & COD", "Online & COD",};
-    List<Zone>dataset;
+    List<Zone> dataset;
 
-    MaterialSpinner  spinnerzone;
+    MaterialSpinner spinnerzone;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       rootview = inflater.inflate(R.layout.home_fragment, container, false);
+        rootview = inflater.inflate(R.layout.home_fragment, container, false);
 
 
-            ///==========================================================================
-            drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
-            msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
-            db=new DatabaseHandler(getActivity());
-            spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
-            dataset=new ArrayList<>();
-            LoadZone();
+        ///==========================================================================
+        drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
+        msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
+        db = new DatabaseHandler(getActivity());
+        spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
+        dataset = new ArrayList<>();
+        LoadZone();
 
 
-           spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //    Zone user = (Zone) parent.getSelectedItem();
-                    // displayUserData(user);
+        spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //    Zone user = (Zone) parent.getSelectedItem();
+                // displayUserData(user);
 
 
-
-
-
-
-
-
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-            TextView gocart=rootview.findViewById(R.id.tv_viewcart);
-            String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
-            adapter.setDropDownViewResource(R.layout.zone_spinner_items);
-
-
-
-
-            // spinnerzone.setAdapter(adapter);
-            String[] ITEMS2 = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),R.layout.zone_spinner_items, ITEMS2);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            MaterialSpinner  spinner2 = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
-            spinner2.setAdapter(adapter2);
-            spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(getActivity(), "haaai",Toast.LENGTH_LONG).show();
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-            gocart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), CartActivity.class));
-                }
-            });
-            navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
-            mPager = (ViewPager)rootview. findViewById(R.id.pager);
-            msearch_edit=rootview.findViewById(R.id.ed_search);
-            count=rootview.findViewById(R.id.tv_itemcount);
-            total=rootview.findViewById(R.id.totalamt);
-            totallist=new ArrayList<>();
-
-            msearch_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        String searchkey=msearch_edit.getText().toString();
-                        performSearch(searchkey);
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-            setToolbar();
-            productEntryModel=new ProductEntryModel();
-            doFetchProducts();
-            actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
-                    R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-                @Override
-                public void onDrawerClosed(View drawerView) {
-                    // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                    super.onDrawerClosed(drawerView);
-                }
-
-                @Override
-                public void onDrawerOpened(View drawerView) {
-                    // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-                    super.onDrawerOpened(drawerView);
-                }
-            };
-
-            //Setting the actionbarToggle to drawer layout
-            drawer.setDrawerListener(actionBarDrawerToggle);
-            //calling sync state is necessary or else your hamburger icon wont show up
-            actionBarDrawerToggle.syncState();
-            actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-            Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
-
-            //doFetchBestSelling();
-            //doFetchCactegory();
-
-            ///==========================================================================
-
-            recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-            homeListModelClassArrayList = new ArrayList<>();
-            for (int i = 0; i < image.length; i++) {
-                MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i), image[i], foodName[i], totalRest[i]);
-                homeListModelClassArrayList.add(menuItem_Model);
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        TextView gocart = rootview.findViewById(R.id.tv_viewcart);
+        String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
+        adapter.setDropDownViewResource(R.layout.zone_spinner_items);
+
+
+        // spinnerzone.setAdapter(adapter);
+        String[] ITEMS2 = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), R.layout.zone_spinner_items, ITEMS2);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        MaterialSpinner spinner2 = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
+        spinner2.setAdapter(adapter2);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(), "haaai", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        gocart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), CartActivity.class));
+            }
+        });
+        navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
+        mPager = (ViewPager) rootview.findViewById(R.id.pager);
+        msearch_edit = rootview.findViewById(R.id.ed_search);
+        count = rootview.findViewById(R.id.tv_itemcount);
+        total = rootview.findViewById(R.id.totalamt);
+        totallist = new ArrayList<>();
+
+        msearch_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchkey = msearch_edit.getText().toString();
+                    performSearch(searchkey);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        setToolbar();
+        productEntryModel = new ProductEntryModel();
+        doFetchProducts();
+        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawer.setDrawerListener(actionBarDrawerToggle);
+        //calling sync state is necessary or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+
+        //doFetchBestSelling();
+        //doFetchCactegory();
+
+        ///==========================================================================
+
+        recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        homeListModelClassArrayList = new ArrayList<>();
+        for (int i = 0; i < image.length; i++) {
+            MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i), image[i], foodName[i], totalRest[i]);
+            homeListModelClassArrayList.add(menuItem_Model);
+        }
         /*mAdapter = new MenuItemRecyAdapter(getContext(), homeListModelClassArrayList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);*/
 
-            tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
-            tvViewall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), CategoryListAll.class));
+        tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
+        tvViewall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CategoryListAll.class));
                 /*Bundle bundle = new Bundle();
                 bundle.putString(ConstantClass.MENU_TPYE, ConstantClass.VIEW_ALL);
 
@@ -254,20 +249,20 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                 myFragment.setArguments(bundle);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
                         myFragment).addToBackStack(null).commit();*/
-                }
-            });
-
-            ///===============
-
-            recyclerView1 = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-            recyclerView1.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            homeListModelClassArrayList2 = new ArrayList<>();
-            for (int i = 0; i < image.length; i++) {
-                FoodForYouModel beanClassForRecyclerView_contacts = new FoodForYouModel(ratings[i], restaurantName[i],
-                        restaurantCusines[i], deliveryTime[i], amount[i], paymentMode[i], foodImage[i]);
-
-                homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
             }
+        });
+
+        ///===============
+
+        recyclerView1 = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
+        recyclerView1.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        homeListModelClassArrayList2 = new ArrayList<>();
+        for (int i = 0; i < image.length; i++) {
+            FoodForYouModel beanClassForRecyclerView_contacts = new FoodForYouModel(ratings[i], restaurantName[i],
+                    restaurantCusines[i], deliveryTime[i], amount[i], paymentMode[i], foodImage[i]);
+
+            homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
+        }
       /*  rAdapter = new BestSellingAdapter(getContext());
         RecyclerView.LayoutManager rLayoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView1.setLayoutManager(rLayoutManager);
@@ -275,11 +270,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         recyclerView1.setAdapter(rAdapter);*/
 
 
-
-
-
-
-       return rootview;
+        return rootview;
     }
 
   /*  @Override
@@ -445,15 +436,15 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private void LoadZone() {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchZone>call=apiService.fetchzone(mAccesstoken,"test");
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseFetchZone> call = apiService.fetchzone(mAccesstoken, "test");
         call.enqueue(new Callback<ResponseFetchZone>() {
             @Override
             public void onResponse(Call<ResponseFetchZone> call, Response<ResponseFetchZone> response) {
-                if (response.body()!=null&&response.code()==200){
-                    ResponseFetchZone responseFetchZone=response.body();
-                  dataset=responseFetchZone.getZones();
-                   adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
+                if (response.body() != null && response.code() == 200) {
+                    ResponseFetchZone responseFetchZone = response.body();
+                    dataset = responseFetchZone.getZones();
+                    adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
 
@@ -468,7 +459,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     }
 
     private void performSearch(String searchkey) {
-        startActivity(new Intent(getActivity(), ItemListingActivity.class).putExtra("key",searchkey).putExtra("flag",""));
+        startActivity(new Intent(getActivity(), ItemListingActivity.class).putExtra("key", searchkey).putExtra("flag", ""));
     }
 
     private void doFetchCactegory() {
@@ -496,7 +487,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             @Override
             public void onFailure(Call<ResponseHomePage> call, Throwable t) {
-                Log.d("catresponse", "onResponse: " +t.getMessage());
+                Log.d("catresponse", "onResponse: " + t.getMessage());
 
             }
         });
@@ -541,16 +532,16 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             if (value > 0) {
 
-                if (!db.rowIdExists(Integer.parseInt(code))){
+                if (!db.rowIdExists(Integer.parseInt(code))) {
                     productEntryModel.setId(Integer.parseInt(code));
                     productEntryModel.setProductname(pname);
                     productEntryModel.setPrice(Double.valueOf(price));
                     productEntryModel.setQuantity(value);
                     db.addContact(productEntryModel);
                     calculatetotal();
-                }else{
-                    Log.d("clicked", "update: " + code);
-                    db.updateContact(value,Integer.parseInt(code));
+                } else {
+                    Log.d("clicked", "update: " + code + "value " + value);
+                    db.updateContact(value, Integer.parseInt(code));
                     calculatetotal();
 
                 }
@@ -584,7 +575,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     }
 
     ///==========================================================================
-    private  void doFetchProducts() {
+    private void doFetchProducts() {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchProducts> call = apiService.fetchproducts("319", mAccesstoken, "test");
@@ -595,9 +586,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     ResponseFetchProducts responseFetchProducts = response.body();
 
                     // dataSet=response.body().getProducts();
-                    List<Product>     dataSet = responseFetchProducts.getProducts();
+                    List<Product> dataSet = responseFetchProducts.getProducts();
 
-                   adapter = new ItemlistingBrahmaAdapter(getActivity(),  dataSet,FragHome.this);
+                    adapter = new ItemlistingBrahmaAdapter(getActivity(), dataSet, FragHome.this);
                     recyclerView.setAdapter(adapter);
 
 
@@ -611,6 +602,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         });
 
     }
+
     public void calculatetotal() {
         double sum = 0.0;
         totallist.clear();
@@ -619,17 +611,19 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             double price = totallist.get(i).getPrice() * totallist.get(i).getQuantity();
             sum = sum + price;
             Log.d("calculatetotal", "calculatetotal: " + sum);
-           total.setText("" + sum);
+            total.setText("" + sum);
             count.setText(" " + totallist.size());
         }
         //totalsum=sum;
 
 
     }
+
     public void getSelectedUser(View v) {
         Zone user = (Zone) spinnerzone.getSelectedItem();
         displayUserData(user);
     }
+
     private void displayUserData(Zone user) {
         String name = user.getName();
         int id = user.getId();

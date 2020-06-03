@@ -45,7 +45,6 @@ public class PaymentSuccess extends AppCompatActivity  {
         recyclerView=findViewById(R.id.recyvfinal);
         TextViewtotal=findViewById(R.id.total_amt);
         TextViewinvoiceid=findViewById(R.id.invoice_id);
-
         TextViewsubtotal=findViewById(R.id.tv_subtotal);
         TextViewtax=findViewById(R.id.tv_taxamt);
         mProgressDialog = new ProgressDialog(PaymentSuccess.this);
@@ -60,6 +59,7 @@ public class PaymentSuccess extends AppCompatActivity  {
         datasetAdd=new ArrayList<>();
         db=new DatabaseHandler(getApplicationContext());
         datasetAdd = db.getAllContacts();
+
         FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasetAdd);
         recyclerView.setAdapter(productAdapter);
         String mbillid= LocalPreferences.retrieveStringPreferences(getApplicationContext(),"billid");

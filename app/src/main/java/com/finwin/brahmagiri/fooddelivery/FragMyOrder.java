@@ -82,7 +82,7 @@ public class FragMyOrder extends Fragment {
                 homeListModelClassArrayList1.add(myOrderModel);
             }
         }
-        bAdapter = new MyOrderAdapter(getContext(), homeListModelClassArrayList1);
+        bAdapter = new MyOrderAdapter(getContext());
         menuRecycler.setAdapter(bAdapter);
 
 

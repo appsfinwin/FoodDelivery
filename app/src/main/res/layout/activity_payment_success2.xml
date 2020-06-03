@@ -4,344 +4,346 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include
             android:id="@+id/toolbar_layout"
             layout="@layout/custom_toolbar">
 
         </include>
 
-    <!-- TODO: Update blank fragment layout -->
-    <ScrollView
-        android:nestedScrollingEnabled="false"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:orientation="vertical"
+        <!-- TODO: Update blank fragment layout -->
+        <ScrollView
+            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/recyvfinal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-
-            <Button
-                android:visibility="gone"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/btn_invoice"
-
-                android:textColor="#FFF"
-                android:text="Generate Invoice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </Button>
-
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:layout_marginTop="50dp"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price Details"
-                    android:textColor="#2d2d2d"
-                    android:textStyle="bold">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/invoice_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price Details"
-                    android:textColor="#2d2d2d"
-                    android:textStyle="bold">
-
-                </TextView>
-
-                <View
+                <android.support.v7.widget.RecyclerView
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/recyvfinal"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="3dp"
-                    android:background="#2d2d2d">
+                    android:layout_height="wrap_content">
 
-                </View>
+                </android.support.v7.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:text="Subtotal"
-                        android:textColor="#2d2d2d" />
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:id="@+id/tv_subtotal"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-
-                        android:text="2000"
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:text="Tax"
-                        android:textColor="#2d2d2d" />
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:id="@+id/tv_taxamt"
-
-                        android:text="2000"
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
+                <Button
                     android:visibility="gone"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/btn_invoice"
+
+                    android:textColor="#FFF"
+                    android:text="Generate Invoice"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                </Button>
 
-                        android:text="Total before discount"
-                        android:textColor="#2d2d2d">
-
-                    </TextView>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-
-                        android:text="2000"
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
-
+                    android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:text="Discount Type"
-                        android:textColor="#2d2d2d" />
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-
-                        android:text=""
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="gone"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-
-                        android:layout_weight="1"
-                        android:text="Total after discount"
-                        android:textColor="#2d2d2d" />
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:gravity="end"
-                        android:text="2000"
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="gone"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:text="Round off account"
-                        android:textColor="#2d2d2d" />
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-
-                        android:gravity="end"
-                        android:text=""
-                        android:textColor="#2d2d2d" />
-
-
-                </LinearLayout>
-
-
-                <View
-                    android:layout_marginLeft="22dp"
-                    android:layout_marginRight="22dp"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="25dp"
-
-                    android:layout_height="1dp"
-                    android:background="#2d2d2d">
-
-                </View>
-
-                <RelativeLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_marginRight="50dp"
-
-                        android:layout_toLeftOf="@id/total_amt"
-                        android:gravity="start"
-                        android:text="Total"
-                        android:textColor="#2d2d2d"
-                        android:layout_width="100dp"
-
-                        android:layout_height="wrap_content">
-
-                    </TextView>
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:id="@+id/total_amt"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:minWidth="80dp"
-
-                        android:text="0.0"
-                        android:textColor="#2d2d2d" />
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:layout_marginRight="50dp"
-
-                        android:layout_toLeftOf="@id/balance"
-
-                        android:text="Balance"
+                        android:text="Price Details"
                         android:textColor="#2d2d2d"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content">
+                        android:textStyle="bold">
 
                     </TextView>
 
                     <TextView
+                        android:id="@+id/invoice_id"
                         android:layout_width="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:id="@+id/balance"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:minWidth="80dp"
-                        android:gravity="end"
-                        android:text="0.0"
-                        android:textColor="#2d2d2d" />
+                        android:text="Price Details"
+                        android:textColor="#2d2d2d"
+                        android:textStyle="bold">
 
-                    >
+                    </TextView>
 
-                </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="3dp"
+                        android:background="#2d2d2d">
 
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="Subtotal"
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:id="@+id/tv_subtotal"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text="2000"
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="Tax"
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:id="@+id/tv_taxamt"
+
+                            android:text="2000"
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="Total before discount"
+                            android:textColor="#2d2d2d">
+
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text="2000"
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="Discount Type"
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_weight="1"
+                            android:text="Total after discount"
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:gravity="end"
+                            android:text="2000"
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="Round off account"
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:gravity="end"
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginRight="22dp"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="25dp"
+
+                        android:layout_height="1dp"
+                        android:background="#2d2d2d">
+
+                    </View>
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_marginRight="50dp"
+
+                            android:layout_toLeftOf="@id/total_amt"
+                            android:gravity="start"
+                            android:text="Total"
+                            android:textColor="#2d2d2d"
+                            android:layout_width="100dp"
+
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/total_amt"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:minWidth="80dp"
+
+                            android:text="0.0"
+                            android:textColor="#2d2d2d" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_marginRight="50dp"
+
+                            android:layout_toLeftOf="@id/balance"
+
+                            android:text="Balance"
+                            android:textColor="#2d2d2d"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/balance"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minWidth="80dp"
+                            android:gravity="end"
+                            android:text="0.0"
+                            android:textColor="#2d2d2d" />
+
+                        >
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
     </LinearLayout>
 
 

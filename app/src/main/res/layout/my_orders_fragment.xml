@@ -281,18 +281,22 @@
                 android:textSize="11.3sp" />
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:background="#dfe0e2" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/menuRecycler"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             </android.support.v7.widget.RecyclerView>
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:layout_marginTop="9.2dp"
@@ -337,12 +341,16 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:layout_marginTop="0dp"
                 android:background="#dfe0e2" />
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:layout_marginTop="9.2dp"
@@ -397,12 +405,16 @@ Road, Vadodara, 390020"
             </LinearLayout>
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:layout_marginTop="0dp"
                 android:background="#dfe0e2" />
 
             <View
+                android:visibility="gone"
+
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:layout_marginTop="9.2dp"
