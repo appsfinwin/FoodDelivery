@@ -2,12 +2,10 @@ package com.finwin.brahmagiri.fooddelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +14,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -112,6 +99,7 @@ public class FragLogin extends Fragment {
                     if (mAccesstoken!=null){
                         LocalPreferences.storeStringPreference(getActivity(),"Accesstoken",mAccesstoken);
                         LocalPreferences.storeBooleanPreference(getActivity(),"isLoggedin",true);
+                        LocalPreferences.storeStringPreference(getActivity(),"userid",response.body().getUid().toString());
                         startActivity(new Intent(getContext(), ActivityMain.class));
                         Objects.requireNonNull(getActivity()).finish();
 

@@ -1,15 +1,13 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,13 +20,11 @@ import android.widget.TextView;
 import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderModel;
-import com.finwin.brahmagiri.fooddelivery.FragMyOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
-import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -42,7 +38,6 @@ import com.worldline.in.ipg.PaymentStandard;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -198,7 +193,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     private void fetchCart() {
         datasetcartlist = db.getAllContacts();
         // totallist = new ArrayList<>();
-        mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
+//        mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
 
         menuRecycler.setAdapter(mCartAdapter);
     }

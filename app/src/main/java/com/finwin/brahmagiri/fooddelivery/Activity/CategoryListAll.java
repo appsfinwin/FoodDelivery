@@ -1,10 +1,10 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -15,9 +15,6 @@ import com.finwin.brahmagiri.fooddelivery.Adapter.BestSellingAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ResponseFetchCategory;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.Tablecattotal;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table1;
 import com.finwin.brahmagiri.fooddelivery.Utilities.PaginationScrollListener;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;

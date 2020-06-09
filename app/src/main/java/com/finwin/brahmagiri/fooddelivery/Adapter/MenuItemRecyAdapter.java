@@ -4,12 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
-import com.finwin.brahmagiri.fooddelivery.FragMenuTab;
-import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomePageCat;
-import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import java.util.List;

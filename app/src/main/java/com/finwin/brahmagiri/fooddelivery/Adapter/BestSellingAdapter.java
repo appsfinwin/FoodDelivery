@@ -2,10 +2,9 @@ package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.finwin.brahmagiri.fooddelivery.FragForYouItemView;
 import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;

@@ -2,8 +2,8 @@ package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.finwin.brahmagiri.fooddelivery.Activity.Product;
-import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomeTopselling;
 import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
@@ -67,6 +66,10 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     @Override
     public void onBindViewHolder(final ItemlistingBrahmaAdapter.MyViewHolder holder, final int position) {
         //  holder1.image.setImageResource(result.get(position).getImage());
+        Glide.with(context)
+                .load("url")
+                .placeholder(R.drawable.placeholder)
+                .into(holder.image);
 
         Product result=dataset.get(position);
        /* String addedq=   db.getFromDb(result.getProductId().toString());
@@ -78,7 +81,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
       //  holder.btnElgntCount.setNumber(addedq, true);
         Log.d("fetchquantity", ": "+addedq);*/
 
-        Glide.with(context).load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500").into(holder.image);
+       // Glide.with(context).load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500").into(holder.image);
         //  itemVH.imageLike.setImageResource(result.get(position).getImageLike());
         //  itemVH.tvOffer.setText(itemListModelArrayList.get(position).getItemoffer());
         holder.tvPrice.setText(""+result.getPrice());

@@ -9,21 +9,23 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,18 +44,14 @@ import com.finwin.brahmagiri.fooddelivery.Adapter.ItemlistingBrahmaAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemModel;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemRecyAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.TopSellingAdapter;
-import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.Cat_data;
-import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
-import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ResponseFetchCategory;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomePageCat;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomeTopselling;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
-import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -113,6 +111,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     List<Zone> dataset;
 
     MaterialSpinner spinnerzone;
+    private Boolean mIsSpinnerFirstCall = true;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -134,9 +134,16 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //    Zone user = (Zone) parent.getSelectedItem();
                 // displayUserData(user);
-
-
+                if(!mIsSpinnerFirstCall) {
+                    // Your code goes gere
+                    Toast.makeText(getActivity(),"executing",Toast.LENGTH_SHORT).show();
+                }
+                mIsSpinnerFirstCall = false;
             }
+
+
+
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -437,12 +444,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchZone> call = apiService.fetchzone(mAccesstoken, "test");
-        call.enqueue(new Callback<ResponseFetchZone>() {
+        Call<Signup_Zone> call = apiService.fetchzonesignup( "test");
+        call.enqueue(new Callback<Signup_Zone>() {
             @Override
-            public void onResponse(Call<ResponseFetchZone> call, Response<ResponseFetchZone> response) {
+            public void onResponse(Call<Signup_Zone> call, Response<Signup_Zone> response) {
                 if (response.body() != null && response.code() == 200) {
-                    ResponseFetchZone responseFetchZone = response.body();
+                    Signup_Zone responseFetchZone = response.body();
                     dataset = responseFetchZone.getZones();
                     adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -452,7 +459,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             }
 
             @Override
-            public void onFailure(Call<ResponseFetchZone> call, Throwable t) {
+            public void onFailure(Call<Signup_Zone> call, Throwable t) {
 
             }
         });
@@ -531,6 +538,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             msummarylayout.setVisibility(View.VISIBLE);
 
             if (value > 0) {
+                doAddmyCart(value,code,pname,price);
 
                 if (!db.rowIdExists(Integer.parseInt(code))) {
                     productEntryModel.setId(Integer.parseInt(code));
@@ -560,6 +568,27 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         }
 
+    }
+
+    private void doAddmyCart(int value, String code, String pname, String price) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        String userid=LocalPreferences.retrieveStringPreferences(getActivity(),"userid");
+
+        ApiService apiService=APIClient.getClient().create(ApiService.class);
+        Call<ResponseAddcart>call=apiService.doAddtiocart(mAccesstoken,"test",Integer.parseInt(userid),Integer.parseInt(code),319,value,"y","2020-06-06T10:34");
+        call.enqueue(new Callback<ResponseAddcart>() {
+            @Override
+            public void onResponse(Call<ResponseAddcart> call, Response<ResponseAddcart> response) {
+                if (response.body()!=null&&response.code()==200){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAddcart> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

@@ -2,9 +2,9 @@ package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +12,12 @@ import android.widget.TextView;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.finwin.brahmagiri.fooddelivery.FragMenuTab;
-import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ToCartButtonListener;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.H_CART_ITM_AMOUNT;
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.H_CART_ITM_ID;
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.H_CART_ITM_IMAGE;
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.H_CART_ITM_NAME;
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.H_CART_ITM_TYPE;
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.hMapCartItem;
 
 public class MenuItemInListAdapter extends RecyclerView.Adapter<MenuItemInListAdapter.MyViewHolder> {

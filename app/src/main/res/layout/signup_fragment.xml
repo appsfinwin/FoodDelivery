@@ -51,6 +51,7 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
@@ -85,6 +86,7 @@
 
 
                 <EditText
+                    android:id="@+id/ed_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
@@ -100,6 +102,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="26.3dp"
@@ -119,6 +122,7 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
@@ -153,6 +157,7 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
@@ -189,12 +194,89 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_pin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
                     android:fontFamily="sans-serif"
                     android:inputType="number"
                     android:maxLength="6"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Zone Id"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/rect_grayoutline"
+
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:spinnerMode="dialog"
+                        android:prompt="@string/hint_resource"
+
+
+                        android:id="@+id/ed_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Username (Mobile number)"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/ed_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="phone"
+
                     android:paddingLeft="16.3dp"
                     android:paddingTop="15.7dp"
                     android:paddingBottom="15.7dp"
@@ -217,17 +299,18 @@
                     android:layout_marginStart="10.3dp"
                     android:fontFamily="sans-serif"
                     android:padding="5dp"
-                    android:text="Zone Id"
+                    android:text="Password"
                     android:textColor="@color/black"
                     android:textSize="11.7sp"
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
                     android:fontFamily="sans-serif"
-                    android:inputType="number"
+                    android:inputType="textPassword"
                     android:maxLength="6"
                     android:paddingLeft="16.3dp"
                     android:paddingTop="15.7dp"
@@ -237,6 +320,7 @@
                     android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
+
 
             <Button
                 android:id="@+id/btn_signup"

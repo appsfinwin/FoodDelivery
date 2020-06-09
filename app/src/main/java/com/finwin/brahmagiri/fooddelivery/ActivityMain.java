@@ -2,20 +2,17 @@ package com.finwin.brahmagiri.fooddelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
-import com.finwin.brahmagiri.fooddelivery.Activity.ProductListingActivity;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
-
-import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 

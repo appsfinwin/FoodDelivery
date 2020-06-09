@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -44,7 +44,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content" >
 
-                            <android.support.v4.view.ViewPager
+                            <androidx.viewpager.widget.ViewPager
                                 android:visibility="gone"
                                 android:id="@+id/pager"
                                 android:layout_width="fill_parent"
@@ -82,7 +82,7 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:visibility="gone"
                             android:id="@+id/recyclerView"
                             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                         android:textSize="14sp" />
                     <!--android:text="Restaurants near you"-->
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false">
 
-                    </android.support.v7.widget.RecyclerView>
+                    </androidx.recyclerview.widget.RecyclerView>
 
                     <ImageView
                         android:visibility="gone"
@@ -245,6 +245,7 @@
             </TextView>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/rupee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -261,6 +262,7 @@
             </TextView>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/totalamt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -300,4 +302,4 @@
 
     <include layout="@layout/activity_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

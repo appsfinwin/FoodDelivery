@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+
         tools:ignore="GoogleAppIndexingWarning"
+
         tools:replace="android:icon,android:allowBackup">
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.SplashScreen">
             <intent-filter>

@@ -1,15 +1,13 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,13 +19,9 @@ import com.finwin.brahmagiri.fooddelivery.Responses.AddtoCart.ResponseAddtoCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.AddtoCart.TableCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table;
-import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.Table1;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
-import com.finwin.brahmagiri.fooddelivery.Utilities.PaginationScrollListener;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;

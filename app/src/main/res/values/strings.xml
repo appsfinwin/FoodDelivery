@@ -20,4 +20,5 @@
     <string name="Roboto_Regular">Roboto-Regular</string>
     <string name="Roboto_Thin">Roboto-Thin</string>
     <string name="Roboto_Italic">Roboto-Italic</string>
+    <string name="hint_resource">Select Zone</string>
 </resources>

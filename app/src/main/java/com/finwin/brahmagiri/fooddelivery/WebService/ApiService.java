@@ -6,11 +6,15 @@ import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ResponseFetchCategory;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
 import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
+import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.gson.JsonObject;
 
 
@@ -82,15 +86,13 @@ public interface ApiService {
                                            @Field("PaymentType") String PaymentType);
 
 
-
-
     @FormUrlEncoded
     @POST("authtoken/get_token")
-    Call<ResponseLogin>dologinoutlet(@Field("db")String db, @Field("login")String login, @Field("password")String password);
+    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password);
 
 
     @GET("outlet/products?")
-    Call<ResponseFetchProducts>fetchproducts(@Query("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
+    Call<ResponseFetchProducts> fetchproducts(@Query("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
 
 
     @Headers({"Content-type: application/json",
@@ -98,6 +100,7 @@ public interface ApiService {
     @POST("cart/product_list ")
     Call<ResponseCreateBill> postRawJSON(@Header("Access-Token") String Access_Token,
                                          @Header("database") String database, @Body JsonObject locationPost);
+
     @Headers({"Content-type: application/json",
             "Accept: */*"})
     @POST("cart/product_list ")
@@ -106,7 +109,43 @@ public interface ApiService {
 
 
     @GET("all_zone/get_zone")
-    Call<ResponseFetchZone>fetchzone( @Header("Access-Token") String auth, @Header("database") String database);
+    Call<ResponseFetchZone> fetchzone(@Header("Access-Token") String auth, @Header("database") String database);
+
+    @POST("sign_up/zone_list")
+    Call<Signup_Zone> fetchzonesignup(@Header("database") String database);
+
+@FormUrlEncoded
+    @POST("register/sign_up")
+    Call<Response_Signup> dosignup(@Header("database") String database,
+                                   @Field("name") String name,
+                                   @Field("mobile") String  mobile,
+                                   @Field("address") String address,
+                                   @Field("pincode") int pincode,
+                                   @Field("username") String username,
+                                   @Field("password") String password,
+                                   @Field("zoneid")String zoneid);
+
+
+
+
+    @FormUrlEncoded
+    @POST("temporary/add_cart")
+    Call<ResponseAddcart> doAddtiocart(@Header("Access-Token") String Access_Token,
+                                       @Header("database") String database,
+                                       @Field("user_id") int user_id,
+                                       @Field("product_id") int product_id,
+                                       @Field("outlet") int outlet,
+                                       @Field("quantity") int quantity,
+                                       @Field("status") String status,
+                                       @Field("time") String time);
+
+
+    @FormUrlEncoded
+    @POST("cart_list/get_cart")
+    Call<ResponseBrahmaCart> FetchCart(@Header("Access-Token") String Access_Token,
+                                       @Header("database") String database,
+                                       @Field("user_id") int user_id,
+                                       @Field("outlet") int outlet);
 
 
 }

@@ -19,13 +19,13 @@
         android:layout_marginTop="10dp"
         tools:context="com.suleiman.pagination.MainActivity">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_catlisting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <ProgressBar
             android:id="@+id/main_progress"

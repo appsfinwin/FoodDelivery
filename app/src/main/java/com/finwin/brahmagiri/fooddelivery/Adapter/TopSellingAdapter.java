@@ -1,13 +1,10 @@
 package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +14,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.finwin.brahmagiri.fooddelivery.FragForYouItemView;
 import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomeTopselling;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 
 import java.util.List;
-
-import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.hMapCartItem;
 
 public class TopSellingAdapter extends RecyclerView.Adapter<TopSellingAdapter.MyViewHolder> {
     Context context;
