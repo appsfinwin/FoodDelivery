@@ -1,10 +1,14 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.content.Intent;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +22,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -25,6 +30,8 @@ import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityCartBinding;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +45,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     CartAdapter mCartAdapter;
     DatabaseHandler db;
     List<ProductEntryModel> datasetcartlist;
-    List<ProductEntryModel> totallist;
+    List<CartItem> totallist;
     double totalsum = 0.0;
 
     @Override
@@ -47,13 +54,22 @@ public class CartActivity extends AppCompatActivity implements showhide {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_cart);
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         binding.toolbarLayout.toolbartext.setText("Cart");
+        totallist = new ArrayList<>();
         // dofetchcartSummary(0,"","CART_SUMMARY");
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
         //db.getquantity("11");
-        Log.d("fetchquantity", ": "+ db.getFromDb("11"));
-      //  fetchCart();
-        fetchCartfromServer();
+        Log.d("fetchquantity", ": " + db.getFromDb("11"));
+        //  fetchCart();
+        String cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
+        if (cartoutid != null && !cartoutid.equals("")) {
+            fetchCartfromServer(cartoutid);
+        } else {
+            binding.emptyCart.setVisibility(View.VISIBLE);
+            binding.parent.setVisibility(View.GONE);
+            binding.lnrlayConfmpay.setVisibility(View.GONE);
+
+        }
 
 
         //calculatetotal();
@@ -61,18 +77,27 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
     }
 
-    private void fetchCartfromServer() {
+    private void fetchCartfromServer(String cartoutid) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
-        String userid=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"userid");
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart>cartCall=apiService.FetchCart(mAccesstoken,"test", Integer.parseInt(userid),319);
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
+
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
+        JsonParser parser = new JsonParser();
+
+        JsonObject jsonObject = (JsonObject) parser.parse(json);
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
-                if (response.body()!=null&&response.code()==200){
-                    ResponseBrahmaCart responseBrahmaCart=response.body();
+                if (response.body() != null && response.code() == 200) {
+                    ResponseBrahmaCart responseBrahmaCart = response.body();
 
-                    List<CartItem>cartItemList=responseBrahmaCart.getCartItems();
+                    List<CartItem> cartItemList = responseBrahmaCart.getCartItems();
+                    totallist = response.body().getCartItems();
+                    calculatetotal(totallist);
                     mCartAdapter = new CartAdapter(getApplication(), cartItemList, CartActivity.this, false);
                     binding.cartRecycler.setAdapter(mCartAdapter);
                     if (mCartAdapter.getItemCount() == 0) {
@@ -88,7 +113,6 @@ public class CartActivity extends AppCompatActivity implements showhide {
                     }
 
 
-
                 }
             }
 
@@ -102,7 +126,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
     private void fetchCart() {
         datasetcartlist = db.getAllContacts();
-        totallist = new ArrayList<>();
+
        /* mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, CartActivity.this, false);
 
         binding.cartRecycler.setAdapter(mCartAdapter);*/
@@ -111,7 +135,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     }
 
     public void GotoPayment(View view) {
-        startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("total",Double.toString(totalsum)));
+        startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("total", Double.toString(totalsum)));
     }
 
     private void dofetchcartSummary(int value, String code, String flag) {
@@ -193,7 +217,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     public void clicked(int value, String code) {
 
         //doUpdateCart(value, code, "INSERT");
-        db.updateContact(value, Integer.parseInt(code));
+        //db.updateContact(value, Integer.parseInt(code));
         //calculatetotal();
 
 
@@ -213,11 +237,12 @@ public class CartActivity extends AppCompatActivity implements showhide {
     @Override
     public void delete(String code) {
         //   doUpdateCart(0, code, "DELETE");
-        db.deleteEntry(Integer.parseInt(code));
+        //db.deleteEntry(Integer.parseInt(code));
+        deletefromServer("319", Integer.parseInt(code));
         mCartAdapter.notifyDataSetChanged();
         //calculatetotal();
-        Log.e("delete", "delete: "+mCartAdapter.getItemCount());
-        if (datasetcartlist.size() == 0) {
+        Log.e("delete", "delete: " + mCartAdapter.getItemCount());
+       /* if (datasetcartlist.size() == 0) {
             binding.emptyCart.setVisibility(View.VISIBLE);
             binding.parent.setVisibility(View.GONE);
             binding.lnrlayConfmpay.setVisibility(View.GONE);
@@ -227,23 +252,23 @@ public class CartActivity extends AppCompatActivity implements showhide {
             binding.emptyCart.setVisibility(View.GONE);
             binding.parent.setVisibility(View.VISIBLE);
             binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
-        }
+        }*/
 
 
     }
 
-    public void calculatetotal() {
+    public void calculatetotal(List<CartItem> cartItemList) {
         double sum = 0.0;
-        totallist.clear();
-        totallist = db.getAllContacts();
-        for (int i = 0; i < totallist.size(); i++) {
-            double price = totallist.get(i).getPrice() * totallist.get(i).getQuantity();
+        //  totallist.clear();
+
+        for (int i = 0; i < cartItemList.size(); i++) {
+            double price = cartItemList.get(i).getPrice() * totallist.get(i).getQuantity();
             sum = sum + price;
             Log.d("calculatetotal", "calculatetotal: " + sum);
             binding.tvCartSubtotal.setText("" + sum);
             binding.tvCartTotal.setText("₹ " + sum);
         }
-        totalsum=sum;
+        totalsum = sum;
 
 
     }
@@ -256,4 +281,38 @@ public class CartActivity extends AppCompatActivity implements showhide {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    private void deletefromServer(String cartoutid, int productcode) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
+
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"product_id\":" + productcode + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
+        JsonParser parser = new JsonParser();
+
+        JsonObject jsonObject = (JsonObject) parser.parse(json);
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseRemove> cartCall = apiService.doremove(mAccesstoken, "test", jsonObject);
+        cartCall.enqueue(new Callback<ResponseRemove>() {
+            @Override
+            public void onResponse(Call<ResponseRemove> call, Response<ResponseRemove> response) {
+                if (response.body() != null && response.code() == 200) {
+                    ResponseRemove responseBrahmaCart = response.body();
+
+                    Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    fetchCartfromServer("319");
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseRemove> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }

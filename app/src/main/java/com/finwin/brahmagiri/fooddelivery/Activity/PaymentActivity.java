@@ -20,10 +20,12 @@ import android.widget.TextView;
 import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
@@ -49,11 +51,12 @@ import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.PAYT
 
 public class PaymentActivity extends AppCompatActivity implements showhide {
     private List<ConfirmOrderModel> homeListModelClassArrayList;
-    List<ProductEntryModel> datasetcartlist;
+    List<CartItem> datasetcartlist;
     DatabaseHandler db;
     boolean cod = true;
     private RecyclerView menuRecycler;
     private ConfirmOrderAdapter bAdapter;
+    String cartoutid;
 
     View rootview;
     Double totalamt;
@@ -62,7 +65,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     ImageView imgChngPymnt;
     LinearLayout linrChngPymnt;
     CartAdapter mCartAdapter;
-    String total;
+    String total,getewaytotal;
 
     String itemArryId, itemArryName, itemArryCount, itemArryAmount,
             StrBndlTotal = "";
@@ -82,7 +85,10 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         linrChngPymnt = findViewById(R.id.linr_chng_pymnt);
         imgChngPymnt = findViewById(R.id.img_chng_pymnt);
         tvChngPymnt = findViewById(R.id.tv_chng_pymnt);
-        total = getIntent().getStringExtra("total");
+         total = getIntent().getStringExtra("total");
+        double d = Double.parseDouble(total);
+        int roundOff = (int) d*100;
+         getewaytotal=String.valueOf(roundOff);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
 
@@ -148,16 +154,16 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                     Load(datasetcartlist,0);
 
                 }else{
-
-
+                    Load(datasetcartlist,0);
+                   /* long time= System.currentTimeMillis();
                     Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
-                    /*   */
-                    intent.putExtra(Param.ORDER_ID, "88993265");
+                    *//*   *//*
+                    intent.putExtra(Param.ORDER_ID, String.valueOf(time));
                     intent.putExtra(Param.TRANSACTION_AMOUNT,"2000" );
                     intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
                     intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
                     intent.putExtra(Param.TRANSACTION_TYPE, "S");
-                    startActivityForResult(intent, 101);
+                    startActivityForResult(intent, 101);*/
                    /* Intent is = new Intent(getApplicationContext(), PayMentGateWay.class);
                     is.putExtra("total", total);
                     startActivity(is);*/
@@ -191,11 +197,42 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     private void fetchCart() {
-        datasetcartlist = db.getAllContacts();
+        cartoutid=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"cartoutid");
+      //  datasetcartlist = db.getAllContacts();
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        String userid=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: "+cartoutid);
+        String json=  "{\"user_id\":" +Integer.parseInt(userid)+",\"outlet\":" + Integer.parseInt(cartoutid) +"}";
+        JsonParser parser = new JsonParser();
+
+        JsonObject jsonObject = (JsonObject) parser.parse(json);
+        ApiService apiService=APIClient.getClient().create(ApiService.class);
+        Call<ResponseBrahmaCart>cartCall=apiService.FetchCart(mAccesstoken,"test", jsonObject);
+        cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
+            @Override
+            public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
+                if (response.body()!=null&&response.code()==200){
+                    ResponseBrahmaCart responseBrahmaCart=response.body();
+
+                    datasetcartlist=responseBrahmaCart.getCartItems();
+                    mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
+                    menuRecycler.setAdapter(mCartAdapter);
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBrahmaCart> call, Throwable t) {
+
+            }
+        });
+
         // totallist = new ArrayList<>();
 //        mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
 
-        menuRecycler.setAdapter(mCartAdapter);
+
     }
     //========
 
@@ -230,7 +267,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
     private void setPaymentMode(String type) {
         if (type.equals(PAYTM)) {
-            imgChngPymnt.setImageResource(R.drawable.paytm);
+            imgChngPymnt.setImageResource(R.drawable.credit_card);
             tvChngPymnt.setText(R.string.s_paytm);
             cod = false;
         } else if (type.equals(COD)) {
@@ -378,13 +415,13 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     public void delete(String code) {
 
     }
-    private void Load(List<ProductEntryModel> datasetAdd, int billid) {
-        String json = "{\"outlet_id\":" + "319" +
+    private void Load(List<CartItem> datasetAdd, int billid) {
+        String json = "{\"outlet_id\":" + cartoutid +
                 ",\"bill_id\":" + billid +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {
-            json += "{ \"Product\": " + datasetAdd.get(i).getId() + ", \"Price\": " +
+            json += "{ \"Product\": " + datasetAdd.get(i).getProductId() + ", \"Price\": " +
                     datasetAdd.get(i).getPrice() + " ,\"Quantity\": " + datasetAdd.get(i).getQuantity() + "}";
             if (i != datasetAdd.size() - 1) json += ",";
         }
@@ -416,9 +453,21 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                     if (response.body().getBillId().toString() != null) {
                         String mbillid = response.body().getBillId().toString();
+                        if (cod) {
 
-                        LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
-                        startActivity(new Intent(getApplicationContext(),PaymentSuccess.class));
+                            LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
+                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class));
+                        }else {
+                            long time= System.currentTimeMillis();
+                            Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
+                            /*   */
+                            intent.putExtra(Param.ORDER_ID, String.valueOf(time));
+                            intent.putExtra(Param.TRANSACTION_AMOUNT,getewaytotal );
+                            intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
+                            intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
+                            intent.putExtra(Param.TRANSACTION_TYPE, "S");
+                            startActivityForResult(intent, 101);
+                        }
                         // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
                     }
 
@@ -439,6 +488,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
+        try {
+
+        }catch (Exception e){
+            Log.e("myexception",e.getMessage());
+
         if (requestCode == 101) {
             Log.e("Payment", "onActivityResult: " + data);
 
@@ -469,7 +523,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 Log.e("Payment", "onActivityResult: " + msg);
                 if (statusCode.equals("S")){
                  //   doConfirmOrder(transactionAmount,orderId);
-
+                    startActivity(new Intent(getApplicationContext(),PaymentSuccess.class));
 
                 }else{
                    // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
@@ -484,6 +538,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 //  finishAffinity();
 
             }
+        }
         }
     }
 

@@ -79,17 +79,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(final CartAdapter.MyViewHolder holder, final int position) {
         final CartItem lists = dataset.get(position);
-        holder.tvItemName.setText(""+lists.getProductId());
+        holder.tvItemName.setText(""+lists.getProductName());
         Glide.with(context)
-                .load("url")
+                .load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
                 .placeholder(R.drawable.placeholder)
                 .into(holder.ItemImage);
 
-       // int cnt = lists.getQuantity();
-      //  holder.tvItemCount.setText("Qty : "+String.valueOf(cnt));
+       int cnt = lists.getQuantity();
+       holder.tvItemCount.setText("Qty : "+String.valueOf(cnt));
         // Glide.with(context).load(lists.getImageUrl()).into(holder.ItemImage);
 
-      //  holder.tvItemAmount.setText("₹ " + lists.getPrice());
+      holder.tvItemAmount.setText("₹ " + lists.getPrice());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

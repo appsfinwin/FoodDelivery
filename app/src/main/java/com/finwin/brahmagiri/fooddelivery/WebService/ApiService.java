@@ -9,10 +9,12 @@ import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchite
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.gson.JsonObject;
@@ -97,16 +99,19 @@ public interface ApiService {
 
     @Headers({"Content-type: application/json",
             "Accept: */*"})
-    @POST("cart/product_list ")
+    @POST("cart/product_list")
     Call<ResponseCreateBill> postRawJSON(@Header("Access-Token") String Access_Token,
                                          @Header("database") String database, @Body JsonObject locationPost);
 
     @Headers({"Content-type: application/json",
             "Accept: */*"})
-    @POST("cart/product_list ")
+    @POST("cart/product_list")
     Call<ResponseInvoiceGen> dogenerateinvoice(@Header("Access-Token") String Access_Token,
                                                @Header("database") String database, @Body JsonObject locationPost);
 
+
+    @GET("zone/outlets?")
+    Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database, @Query("zone_id")String zone_id);
 
     @GET("all_zone/get_zone")
     Call<ResponseFetchZone> fetchzone(@Header("Access-Token") String auth, @Header("database") String database);
@@ -128,25 +133,23 @@ public interface ApiService {
 
 
 
-    @FormUrlEncoded
+   // @FormUrlEncoded
     @POST("temporary/add_cart")
     Call<ResponseAddcart> doAddtiocart(@Header("Access-Token") String Access_Token,
                                        @Header("database") String database,
-                                       @Field("user_id") int user_id,
-                                       @Field("product_id") int product_id,
-                                       @Field("outlet") int outlet,
-                                       @Field("quantity") int quantity,
-                                       @Field("status") String status,
-                                       @Field("time") String time);
+                                       @Body JsonObject jsonObject);
 
 
-    @FormUrlEncoded
+  //  @FormUrlEncoded
     @POST("cart_list/get_cart")
     Call<ResponseBrahmaCart> FetchCart(@Header("Access-Token") String Access_Token,
                                        @Header("database") String database,
-                                       @Field("user_id") int user_id,
-                                       @Field("outlet") int outlet);
+                                      @Body JsonObject cartbody);
 
+    @POST("remove/remove_cart")
+    Call<ResponseRemove> doremove(@Header("Access-Token") String Access_Token,
+                                  @Header("database") String database,
+                                  @Body JsonObject cartbody);
 
 }
 

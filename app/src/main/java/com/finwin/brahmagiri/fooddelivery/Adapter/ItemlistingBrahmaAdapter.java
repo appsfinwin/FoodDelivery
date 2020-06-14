@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.finwin.brahmagiri.fooddelivery.Activity.Product;
+import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
@@ -67,7 +68,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     public void onBindViewHolder(final ItemlistingBrahmaAdapter.MyViewHolder holder, final int position) {
         //  holder1.image.setImageResource(result.get(position).getImage());
         Glide.with(context)
-                .load("url")
+                .load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
 
@@ -104,6 +105,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
             public void onClick(View view) {
                 holder.btnAdd.setVisibility(View.INVISIBLE);
                 holder.btnElgntCount.setNumber("1", true);
+
             }
         });
         int avq=(int) Math.round(dataset.get(position).getAvlQty());  ;
@@ -113,6 +115,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
             public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
            Log.e("Count", "onValueChange: "+newValue );
                 Log.e("Count", "onValueChange: "+oldValue );
+                LocalPreferences.storeStringPreference(context,"cartoutid",dataset.get(position).getOutId());
              String itemcode=dataset.get(position).getProductId().toString();
                 String price=dataset.get(position).getPrice().toString();
                 String pname=dataset.get(position).getProductName().toString();

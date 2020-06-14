@@ -39,7 +39,7 @@ public class FragSignUpDetails extends Fragment {
     TextView tvSignin;
     List<Zone> dataset;
     ArrayAdapter<Zone> adapters;
-    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd;
+    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd,EdConfirm;
     private String selecteditem;
 
 
@@ -64,6 +64,7 @@ public class FragSignUpDetails extends Fragment {
         Edaddress = rootview.findViewById(R.id.ed_address);
         Edusername = rootview.findViewById(R.id.ed_username);
         Edpasswd = rootview.findViewById(R.id.ed_pwd);
+        EdConfirm = rootview.findViewById(R.id.ed_confirmpwd);
 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -88,6 +89,7 @@ spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 String vaaddress=Edaddress.getText().toString();
                 String vausername=Edusername.getText().toString();
                 String vapassword=Edpasswd.getText().toString();
+                String vaConfirmpasswd=EdConfirm.getText().toString();
                 if (vaname.equals("")){
                     Edname.setError("Field Required");
 
@@ -111,7 +113,10 @@ spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     Edpasswd.setError("Field Required");
 
 
-                }else{
+                }else if(!vapassword.equals(vaConfirmpasswd)){
+                    EdConfirm.setError("Field Required");
+
+                }else {
                     doSignup(vaname,vaMobile,"vaemail",vaPin,vaaddress,vausername,vapassword);
                 }
 

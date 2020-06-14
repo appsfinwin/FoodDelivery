@@ -39,13 +39,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-4dp"
                 android:orientation="horizontal">
+
                 <fr.ganfra.materialspinner.MaterialSpinner
                     android:layout_margin="5dp"
                     android:id="@+id/spinner"
-                    android:layout_width="300dp"
+                    app:ms_hintTextSize="9sp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    app:ms_hint="Select Zone"
                     android:layout_height="wrap_content"
                     app:ms_multiline="false"
-                    app:ms_hint="Select Zone"
                     app:ms_enableFloatingLabel="false"
                     app:ms_enableErrorLabel="false"
                     app:ms_baseColor="@color/white"
@@ -57,33 +60,30 @@
                     app:ms_arrowColor="@color/white"
                     app:ms_arrowSize="16dp"
                     app:ms_alignLabels="false"
-                    app:ms_floatingLabelColor="@color/white"/>
+                    app:ms_floatingLabelColor="@color/white" />
+
                 <fr.ganfra.materialspinner.MaterialSpinner
                     android:layout_margin="5dp"
                     android:id="@+id/spinner2"
-                    android:visibility="gone"
-
+                    app:ms_hint="Select Outlet"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:ms_multiline="false"
-                    app:ms_hint="Select Outlet"
                     app:ms_enableFloatingLabel="false"
                     app:ms_enableErrorLabel="false"
+                    app:ms_hintTextSize="9sp"
 
                     app:ms_baseColor="@color/white"
                     app:ms_highlightColor="@color/white"
                     app:ms_errorColor="@color/white"
 
 
-
-
                     app:ms_hintColor="@color/white"
                     app:ms_arrowColor="@color/white"
                     app:ms_arrowSize="16dp"
                     app:ms_alignLabels="false"
-                    app:ms_floatingLabelColor="@color/white"/>
-
+                    app:ms_floatingLabelColor="@color/white" />
 
 
             </LinearLayout>

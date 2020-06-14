@@ -13,8 +13,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
+import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
+import com.finwin.brahmagiri.fooddelivery.Responses.Outlet;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,6 +32,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -59,6 +66,8 @@ import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,13 +87,14 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     TextView tvViewall;
     View rootview;
     ArrayAdapter<Zone> adapters;
+    ArrayAdapter<Outlet> adapteroutlet;
     EditText msearch_edit;
     RelativeLayout msummarylayout;
     ProductEntryModel productEntryModel;
     private ArrayList<MenuItemModel> homeListModelClassArrayList;
     private RecyclerView recyclerView;
     private MenuItemRecyAdapter mAdapter;
-    List<ProductEntryModel> totallist;
+    List<CartItem> totallist;
     private ArrayList<FoodForYouModel> homeListModelClassArrayList2;
     private RecyclerView recyclerView1;
     private BestSellingAdapter rAdapter;
@@ -109,9 +119,13 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     String amount[] = {"300 Rs", "250 Rs", "280 Rs", "320 Rs"};
     String paymentMode[] = {"Online & COD", "Online & COD", "Online & COD", "Online & COD",};
     List<Zone> dataset;
+    List<Outlet> datasetout;
 
     MaterialSpinner spinnerzone;
-    private Boolean mIsSpinnerFirstCall = true;
+    MaterialSpinner spinneroutlet;
+    private Boolean mIsZoneSpinnerFirstCall = true;
+    private Boolean mIsOutletSpinnerFirstCall = true;
+
 
 
     @Override
@@ -125,48 +139,46 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
         db = new DatabaseHandler(getActivity());
         spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
+        spinneroutlet = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
         dataset = new ArrayList<>();
+        datasetout = new ArrayList<>();
         LoadZone();
 
 
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position!=-1) {
+                    fechoutletbumyZOne(dataset.get(position).getId().toString());
+                    spinnerzone.setSelection(3);
+                }
+                mIsZoneSpinnerFirstCall = false;
                 //    Zone user = (Zone) parent.getSelectedItem();
                 // displayUserData(user);
-                if(!mIsSpinnerFirstCall) {
+                /*if (!mIsSpinnerFirstCall) {
                     // Your code goes gere
-                    Toast.makeText(getActivity(),"executing",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "executing"+dataset.get(position).getName(), Toast.LENGTH_SHORT).show();
+
                 }
-                mIsSpinnerFirstCall = false;
+                mIsSpinnerFirstCall = false;*/
             }
-
-
-
 
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        TextView gocart = rootview.findViewById(R.id.tv_viewcart);
-        String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
-        adapter.setDropDownViewResource(R.layout.zone_spinner_items);
-
-
-        // spinnerzone.setAdapter(adapter);
-        String[] ITEMS2 = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), R.layout.zone_spinner_items, ITEMS2);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        MaterialSpinner spinner2 = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinneroutlet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), "haaai", Toast.LENGTH_LONG).show();
+            if (i!=-1) {
+                    // Your code goes gere
+                String outid = datasetout.get(i).getOutlet().toString();
+                doFetchProducts(outid);
+
+                }
+                mIsOutletSpinnerFirstCall = false;
 
             }
 
@@ -175,6 +187,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             }
         });
+        TextView gocart = rootview.findViewById(R.id.tv_viewcart);
+
+
+        // spinnerzone.setAdapter(adapter);
+
+
         gocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,7 +220,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         setToolbar();
         productEntryModel = new ProductEntryModel();
-        doFetchProducts();
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -444,16 +462,19 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Signup_Zone> call = apiService.fetchzonesignup( "test");
+        Call<Signup_Zone> call = apiService.fetchzonesignup("test");
         call.enqueue(new Callback<Signup_Zone>() {
             @Override
             public void onResponse(Call<Signup_Zone> call, Response<Signup_Zone> response) {
                 if (response.body() != null && response.code() == 200) {
                     Signup_Zone responseFetchZone = response.body();
                     dataset = responseFetchZone.getZones();
+                    String firstzone = dataset.get(0).getId().toString();
+//                    LocalPreferences.storeStringPreference(getActivity(), "firstzone", firstzone);
                     adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
+                    //fechoutletbumyZOne(firstzone);
 
                 }
             }
@@ -465,40 +486,38 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         });
     }
 
+    private void fechoutletbumyZOne(String firstzone) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, "test", firstzone);
+        call.enqueue(new Callback<ResponseFetchOutlet>() {
+            @Override
+            public void onResponse(Call<ResponseFetchOutlet> call, Response<ResponseFetchOutlet> response) {
+                if (response.body() != null && response.code() == 200) {
+                    ResponseFetchOutlet responseFetchOutlet = response.body();
+                    datasetout = responseFetchOutlet.getOutlets();
+                    adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
+                    adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinneroutlet.setAdapter(adapteroutlet);
+
+                } else {
+                    spinneroutlet.setError("Invalid id");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseFetchOutlet> call, Throwable t) {
+                Toast.makeText(getActivity(), "Invalid Selection", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
     private void performSearch(String searchkey) {
         startActivity(new Intent(getActivity(), ItemListingActivity.class).putExtra("key", searchkey).putExtra("flag", ""));
     }
 
-    private void doFetchCactegory() {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseHomePage> call = apiService.doFetchhomePage("", "", "HOME_VALUES", 0, "", "", "", "44402", "");
-        call.enqueue(new Callback<ResponseHomePage>() {
-            @Override
-            public void onResponse(Call<ResponseHomePage> call, Response<ResponseHomePage> response) {
-                Log.d("catresponse", "onResponse: " + new Gson().toJson(response.body()));
-                if (response.body() != null && response.code() == 200) {
-                    List<HomePageCat> dataset = response.body().getData().getTable2();
-                    List<HomeTopselling> datasettopselling = response.body().getData().getTable1();
-                    recyclerView1.setAdapter(new TopSellingAdapter(getActivity(), datasettopselling, FragHome.this));
-
-
-                    mAdapter = new MenuItemRecyAdapter(getContext(), dataset);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
-                    recyclerView.setAdapter(mAdapter);
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseHomePage> call, Throwable t) {
-                Log.d("catresponse", "onResponse: " + t.getMessage());
-
-            }
-        });
-    }
 
     ///==========================================================================
 
@@ -538,21 +557,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             msummarylayout.setVisibility(View.VISIBLE);
 
             if (value > 0) {
-                doAddmyCart(value,code,pname,price);
+                doAddmyCart(value, code, pname, price);
 
-                if (!db.rowIdExists(Integer.parseInt(code))) {
-                    productEntryModel.setId(Integer.parseInt(code));
-                    productEntryModel.setProductname(pname);
-                    productEntryModel.setPrice(Double.valueOf(price));
-                    productEntryModel.setQuantity(value);
-                    db.addContact(productEntryModel);
-                    calculatetotal();
-                } else {
-                    Log.d("clicked", "update: " + code + "value " + value);
-                    db.updateContact(value, Integer.parseInt(code));
-                    calculatetotal();
-
-                }
 
                 //  db.rowIdExists(Integer.parseInt(code));
                 Log.d("clicked", "clicked: " + db.rowIdExists(Integer.parseInt(code)));
@@ -572,14 +578,23 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     private void doAddmyCart(int value, String code, String pname, String price) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
-        String userid=LocalPreferences.retrieveStringPreferences(getActivity(),"userid");
+        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "userid");
+        String status = "y";
+        String time = "2020-06-06";
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"product_id\":" + Integer.parseInt(code) + ",\"outlet\":" + Integer.parseInt("319") + ",\"quantity\":" + value +
+                ",\"status\":" + status + ",\"time\":" + time +"}";
+        JsonParser parser = new JsonParser();
 
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddcart>call=apiService.doAddtiocart(mAccesstoken,"test",Integer.parseInt(userid),Integer.parseInt(code),319,value,"y","2020-06-06T10:34");
+        JsonObject jsonObject = (JsonObject) parser.parse(json);
+
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseAddcart> call = apiService.doAddtiocart(mAccesstoken, "test", jsonObject);
         call.enqueue(new Callback<ResponseAddcart>() {
             @Override
             public void onResponse(Call<ResponseAddcart> call, Response<ResponseAddcart> response) {
-                if (response.body()!=null&&response.code()==200){
+                if (response.body() != null && response.code() == 200) {
+                    fetchCartfromServer("319");
 
                 }
             }
@@ -598,13 +613,13 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     @Override
     public void delete(String code) {
-        db.deleteEntry(Integer.parseInt(code));
+       // db.deleteEntry(Integer.parseInt(code));
         adapter.notifyDataSetChanged();
-        calculatetotal();
+        //calculatetotal();
     }
 
     ///==========================================================================
-    private void doFetchProducts() {
+    private void doFetchProducts(String outlet_id) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchProducts> call = apiService.fetchproducts("319", mAccesstoken, "test");
@@ -631,15 +646,51 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         });
 
     }
+    private void fetchCartfromServer(String cartoutid) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        String userid=LocalPreferences.retrieveStringPreferences(getActivity(),"userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: "+cartoutid);
+
+        String json=  "{\"user_id\":" +Integer.parseInt(userid)+",\"outlet\":" + Integer.parseInt(cartoutid) +"}";
+        JsonParser parser = new JsonParser();
+
+        JsonObject jsonObject = (JsonObject) parser.parse(json);
+
+        ApiService apiService=APIClient.getClient().create(ApiService.class);
+        Call<ResponseBrahmaCart>cartCall=apiService.FetchCart(mAccesstoken,"test", jsonObject);
+        cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
+            @Override
+            public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
+                if (response.body()!=null&&response.code()==200){
+                    ResponseBrahmaCart responseBrahmaCart=response.body();
+
+                    List<CartItem>cartItemList=responseBrahmaCart.getCartItems();
+                    Log.d("calculatetotal", "calculatetotal: " + cartItemList.size());
+
+                    totallist=response.body().getCartItems();
+                    calculatetotal();
+
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBrahmaCart> call, Throwable t) {
+
+            }
+        });
+
+    }
 
     public void calculatetotal() {
         double sum = 0.0;
-        totallist.clear();
-        totallist = db.getAllContacts();
+
         for (int i = 0; i < totallist.size(); i++) {
             double price = totallist.get(i).getPrice() * totallist.get(i).getQuantity();
             sum = sum + price;
-            Log.d("calculatetotal", "calculatetotal: " + sum);
             total.setText("" + sum);
             count.setText(" " + totallist.size());
         }

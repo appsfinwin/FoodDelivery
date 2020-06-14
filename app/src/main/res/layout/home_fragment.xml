@@ -114,6 +114,7 @@
                     <!--android:text="Restaurants near you"-->
 
                     <androidx.recyclerview.widget.RecyclerView
+
                         android:id="@+id/recyclerView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -123,6 +124,12 @@
                         android:nestedScrollingEnabled="false">
 
                     </androidx.recyclerview.widget.RecyclerView>
+                    <include
+                        android:visibility="gone"
+                        android:id="@+id/empty_cart"
+                        layout="@layout/empty_cart">
+
+                    </include>
 
                     <ImageView
                         android:visibility="gone"
@@ -245,7 +252,7 @@
             </TextView>
 
             <TextView
-                android:visibility="gone"
+
                 android:id="@+id/rupee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -262,7 +269,7 @@
             </TextView>
 
             <TextView
-                android:visibility="gone"
+
                 android:id="@+id/totalamt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

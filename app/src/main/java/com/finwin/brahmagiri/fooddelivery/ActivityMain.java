@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
+import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -125,6 +126,7 @@ public class ActivityMain extends AppCompatActivity {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
+                                LocalPreferences.clearPreferences(getApplicationContext());
                                 startActivity(new Intent(ActivityMain.this, ActivityInitial.class));
                                 finish();
                                 sDialog.dismiss();
