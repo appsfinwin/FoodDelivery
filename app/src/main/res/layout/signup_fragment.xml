@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -234,7 +235,7 @@
                     android:layout_width="match_parent"
                     android:background="@drawable/rect_grayoutline"
 
-                    android:layout_height="wrap_content">
+                    android:layout_height="50dp">
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:spinnerMode="dialog"
@@ -247,9 +248,8 @@
                 </LinearLayout>
 
 
-
-
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -285,6 +285,7 @@
                     android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -303,8 +304,13 @@
                     android:textColor="@color/black"
                     android:textSize="11.7sp"
                     android:textStyle="normal" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    app:passwordToggleEnabled="true"
+                    android:layout_height="wrap_content">
 
                 <EditText
+                    android:paddingRight="5dp"
                     android:id="@+id/ed_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -319,7 +325,9 @@
                     android:textColorHint="@color/greyText"
                     android:textSize="15sp"
                     android:textStyle="normal" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -339,21 +347,29 @@
                     android:textSize="11.7sp"
                     android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/ed_confirmpwd"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rect_grayoutline"
-                    android:fontFamily="sans-serif"
-                    android:inputType="textPassword"
-                    android:maxLength="6"
-                    android:paddingLeft="16.3dp"
-                    android:paddingTop="15.7dp"
-                    android:paddingBottom="15.7dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/greyText"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
+                    app:passwordToggleEnabled="true"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/ed_confirmpwd"
+                        android:paddingRight="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rect_grayoutline"
+                        android:fontFamily="sans-serif"
+                        android:inputType="textPassword"
+                        android:maxLength="6"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:paddingBottom="15.7dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/greyText"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
 
 

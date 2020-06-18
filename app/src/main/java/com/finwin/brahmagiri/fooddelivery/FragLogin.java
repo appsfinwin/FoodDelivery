@@ -95,9 +95,13 @@ public class FragLogin extends Fragment {
             @Override
             public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {
                 if (response!=null&&response.code()==200){
+                    ResponseLogin responseLogin=response.body();
                     String mAccesstoken=response.body().getAccessToken();
                     if (mAccesstoken!=null){
                         LocalPreferences.storeStringPreference(getActivity(),"Accesstoken",mAccesstoken);
+                        LocalPreferences.storeStringPreference(getActivity(),"partnerid",responseLogin.getPartnerId().toString());
+                        LocalPreferences.storeStringPreference(getActivity(),"zone",responseLogin.getZone().toString());
+
                         LocalPreferences.storeBooleanPreference(getActivity(),"isLoggedin",true);
                         LocalPreferences.storeStringPreference(getActivity(),"userid",response.body().getUid().toString());
                         startActivity(new Intent(getContext(), ActivityMain.class));

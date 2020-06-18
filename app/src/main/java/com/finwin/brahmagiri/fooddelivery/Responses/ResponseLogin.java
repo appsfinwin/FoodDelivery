@@ -10,9 +10,15 @@ public class ResponseLogin {
     @SerializedName("user_context")
     @Expose
     private UserContext userContext;
+    @SerializedName("partner_id")
+    @Expose
+    private Integer partnerId;
     @SerializedName("uid")
     @Expose
     private Integer uid;
+    @SerializedName("zone")
+    @Expose
+    private Integer zone;
 
     public String getAccessToken() {
         return accessToken;
@@ -30,6 +36,14 @@ public class ResponseLogin {
         this.userContext = userContext;
     }
 
+    public Integer getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Integer partnerId) {
+        this.partnerId = partnerId;
+    }
+
     public Integer getUid() {
         return uid;
     }
@@ -37,5 +51,14 @@ public class ResponseLogin {
     public void setUid(Integer uid) {
         this.uid = uid;
     }
+
+    public Integer getZone() {
+        return zone;
+    }
+
+    public void setZone(Integer zone) {
+        this.zone = zone;
+    }
+
 
 }

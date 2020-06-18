@@ -15,9 +15,30 @@
         android:background="#f9f9f9">
 
 
+        <FrameLayout
+            android:id="@+id/framlayt"
+            android:visibility="gone"
 
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/no_products_found"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </ImageView>
+
+            </RelativeLayout>
+
+        </FrameLayout>
 
             <RelativeLayout
+
                 android:layout_above="@id/summary_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -36,6 +57,7 @@
                         android:background="#dfe0e2" />
 
                     <LinearLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
@@ -114,6 +136,7 @@
                     <!--android:text="Restaurants near you"-->
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="invisible"
 
                         android:id="@+id/recyclerView1"
                         android:layout_width="match_parent"

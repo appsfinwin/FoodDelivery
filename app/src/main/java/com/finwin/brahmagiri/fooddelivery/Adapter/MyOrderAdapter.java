@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.finwin.brahmagiri.fooddelivery.Responses.PreviousSale;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import java.util.List;
@@ -14,20 +15,25 @@ import java.util.List;
 public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHolder> {
 
     Context context;
-    private List<MyOrderModel> OfferList;
+    private List<PreviousSale> OfferList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView dishName, rupees, quantity;
+        TextView invoicenumber, tvdate, outletname,tvamt;
 
         public MyViewHolder(View view) {
             super(view);
+            invoicenumber=view.findViewById(R.id.invoice_no);
+            tvdate=view.findViewById(R.id.invoicedate);
+            outletname=view.findViewById(R.id.outletname);
+            tvamt=view.findViewById(R.id.totalamt);
+
 
         }
     }
     public MyOrderAdapter(Context context) {
         this.context = context;
     }
-    public MyOrderAdapter(Context mainActivityContacts, List<MyOrderModel> offerList) {
+    public MyOrderAdapter(Context mainActivityContacts, List<PreviousSale> offerList) {
         this.OfferList = offerList;
         this.context = mainActivityContacts;
     }
@@ -35,21 +41,23 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     @Override
     public MyOrderAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.myorder_recycler, parent, false);
+                .inflate(R.layout.myorder_recycler2, parent, false);
         return new MyOrderAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyOrderAdapter.MyViewHolder holder, int position) {
-      /*  MyOrderModel lists = OfferList.get(position);
-        holder.dishName.setText(lists.getDishName());
-        holder.quantity.setText(lists.getQuantity());
-        holder.rupees.setText(lists.getRupees());*/
+        PreviousSale lists = OfferList.get(position);
+        holder.invoicenumber.setText("Invoice number :"+lists.getInvoiceNo());
+        holder.tvdate.setText("Date :"+lists.getInvoiceDate());
+        holder.tvamt.setText("₹ "+lists.getTotalAmount());
+        holder.outletname.setText("Outlet name : "+lists.getOutletName());
+
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return OfferList.size();
     }
 
 }

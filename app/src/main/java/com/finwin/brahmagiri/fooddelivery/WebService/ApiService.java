@@ -14,6 +14,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
@@ -128,7 +129,7 @@ public interface ApiService {
                                    @Field("pincode") int pincode,
                                    @Field("username") String username,
                                    @Field("password") String password,
-                                   @Field("zoneid")String zoneid);
+                                   @Field("zone")String zoneid);
 
 
 
@@ -150,6 +151,13 @@ public interface ApiService {
     Call<ResponseRemove> doremove(@Header("Access-Token") String Access_Token,
                                   @Header("database") String database,
                                   @Body JsonObject cartbody);
+@FormUrlEncoded
+    @POST("consumer_sales/get_order")
+    Call<ResponseMyOrder> doFetchMyOrder(@Header("Access-Token") String Access_Token,
+                                   @Header("database") String database,
+                                   @Field("consumer_id") String cartbody);
+
+
 
 }
 

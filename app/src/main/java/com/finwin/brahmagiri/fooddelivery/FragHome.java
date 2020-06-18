@@ -37,6 +37,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,6 +103,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     DatabaseHandler db;
     TextView total, count;
     ItemlistingBrahmaAdapter adapter;
+    int selectedindex;
 
 
     public static Integer image[] = {R.drawable.food2, R.drawable.food1, R.drawable.food3, R.drawable.food4};
@@ -120,6 +122,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     String paymentMode[] = {"Online & COD", "Online & COD", "Online & COD", "Online & COD",};
     List<Zone> dataset;
     List<Outlet> datasetout;
+    FrameLayout frameLayout;
 
     MaterialSpinner spinnerzone;
     MaterialSpinner spinneroutlet;
@@ -140,6 +143,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         db = new DatabaseHandler(getActivity());
         spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
         spinneroutlet = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
+        frameLayout=rootview.findViewById(R.id.framlayt);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
         LoadZone();
@@ -148,10 +152,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 if (position!=-1) {
                     fechoutletbumyZOne(dataset.get(position).getId().toString());
-                    spinnerzone.setSelection(3);
+
+
+
+                   // spinnerzone.setSelection(3);
                 }
                 mIsZoneSpinnerFirstCall = false;
                 //    Zone user = (Zone) parent.getSelectedItem();
@@ -169,6 +175,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+
         spinneroutlet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -176,6 +184,11 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     // Your code goes gere
                 String outid = datasetout.get(i).getOutlet().toString();
                 doFetchProducts(outid);
+                spinneroutlet.setSelection(i);
+/*
+                LocalPreferences.storeStringPreference("lastpos");
+*/
+
 
                 }
                 mIsOutletSpinnerFirstCall = false;
@@ -288,178 +301,17 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
         }
-      /*  rAdapter = new BestSellingAdapter(getContext());
-        RecyclerView.LayoutManager rLayoutManager = new GridLayoutManager(getActivity(),2);
-        recyclerView1.setLayoutManager(rLayoutManager);
-        recyclerView1.setItemAnimator(new DefaultItemAnimator());
-        recyclerView1.setAdapter(rAdapter);*/
+
 
 
         return rootview;
     }
 
-  /*  @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        ///==========================================================================
-        drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
-        msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
-        db=new DatabaseHandler(getActivity());
-        spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
-        dataset=new ArrayList<>();
-        LoadZone();
-
-        spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            //    Zone user = (Zone) parent.getSelectedItem();
-               // displayUserData(user);
-                String item = parent.getItemAtPosition(position).toString();
-
-
-                if (dataset!=null){
-                    Toast.makeText(getActivity(), ""+item,Toast.LENGTH_LONG).show();
-
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });        TextView gocart=rootview.findViewById(R.id.tv_viewcart);
-        String[] ITEMS = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
-        adapter.setDropDownViewResource(R.layout.zone_spinner_items);
-
-
-
-
-       // spinnerzone.setAdapter(adapter);
-        String[] ITEMS2 = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"};
-
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),R.layout.zone_spinner_items, ITEMS2);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        MaterialSpinner  spinner2 = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getActivity(), "haaai",Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        gocart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CartActivity.class));
-            }
-        });
-        navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
-        mPager = (ViewPager)rootview. findViewById(R.id.pager);
-        msearch_edit=rootview.findViewById(R.id.ed_search);
-        count=rootview.findViewById(R.id.tv_itemcount);
-        total=rootview.findViewById(R.id.totalamt);
-        totallist=new ArrayList<>();
-
-        msearch_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String searchkey=msearch_edit.getText().toString();
-                    performSearch(searchkey);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        setToolbar();
-        productEntryModel=new ProductEntryModel();
-        doFetchProducts();
-        actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-                super.onDrawerOpened(drawerView);
-            }
-        };
-
-        //Setting the actionbarToggle to drawer layout
-        drawer.setDrawerListener(actionBarDrawerToggle);
-        //calling sync state is necessary or else your hamburger icon wont show up
-        actionBarDrawerToggle.syncState();
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
-
-        //doFetchBestSelling();
-        //doFetchCactegory();
-
-        ///==========================================================================
-
-        recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        homeListModelClassArrayList = new ArrayList<>();
-        for (int i = 0; i < image.length; i++) {
-            MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i), image[i], foodName[i], totalRest[i]);
-            homeListModelClassArrayList.add(menuItem_Model);
-        }
-        *//*mAdapter = new MenuItemRecyAdapter(getContext(), homeListModelClassArrayList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);*//*
-
-        tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
-        tvViewall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CategoryListAll.class));
-                *//*Bundle bundle = new Bundle();
-                bundle.putString(ConstantClass.MENU_TPYE, ConstantClass.VIEW_ALL);
-
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Fragment myFragment = new FragMenuTab();
-                myFragment.setArguments(bundle);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
-                        myFragment).addToBackStack(null).commit();*//*
-            }
-        });
-
-        ///===============
-
-        recyclerView1 = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-        recyclerView1.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        homeListModelClassArrayList2 = new ArrayList<>();
-        for (int i = 0; i < image.length; i++) {
-            FoodForYouModel beanClassForRecyclerView_contacts = new FoodForYouModel(ratings[i], restaurantName[i],
-                    restaurantCusines[i], deliveryTime[i], amount[i], paymentMode[i], foodImage[i]);
-
-            homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
-        }
-      *//*  rAdapter = new BestSellingAdapter(getContext());
-        RecyclerView.LayoutManager rLayoutManager = new GridLayoutManager(getActivity(),2);
-        recyclerView1.setLayoutManager(rLayoutManager);
-        recyclerView1.setItemAnimator(new DefaultItemAnimator());
-        recyclerView1.setAdapter(rAdapter);*//*
-
-    }*/
 
     private void LoadZone() {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<Signup_Zone> call = apiService.fetchzonesignup("test");
@@ -474,6 +326,17 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
+                    String zones=   LocalPreferences.retrieveStringPreferences(getActivity(),"zone");
+               for (int i=0;i<dataset.size();i++){
+                   int id=dataset.get(i).getId();
+                   if (id==Integer.parseInt(zones)){
+                       Log.e("zoneindex", "onCreateView: "+i+zones );
+                       spinnerzone.setSelection(i+1);
+                       fechoutletbumyZOne(dataset.get(i).getId().toString());
+                   }
+               }
+
+
                     //fechoutletbumyZOne(firstzone);
 
                 }
@@ -499,6 +362,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
                     adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinneroutlet.setAdapter(adapteroutlet);
+                    spinneroutlet.setSelection(1);
 
                 } else {
                     spinneroutlet.setError("Invalid id");
@@ -622,7 +486,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private void doFetchProducts(String outlet_id) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchProducts> call = apiService.fetchproducts("319", mAccesstoken, "test");
+        Call<ResponseFetchProducts> call = apiService.fetchproducts(outlet_id, mAccesstoken, "test");
         call.enqueue(new Callback<ResponseFetchProducts>() {
             @Override
             public void onResponse(Call<ResponseFetchProducts> call, Response<ResponseFetchProducts> response) {
@@ -634,6 +498,13 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
                     adapter = new ItemlistingBrahmaAdapter(getActivity(), dataSet, FragHome.this);
                     recyclerView.setAdapter(adapter);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    frameLayout.setVisibility(View.GONE);
+                    if (adapter.getItemCount()==0){
+                       // Toast.makeText(getActivity(), "No Products found for the selected outlet", Toast.LENGTH_SHORT).show();
+                        frameLayout.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                    }
 
 
                 }

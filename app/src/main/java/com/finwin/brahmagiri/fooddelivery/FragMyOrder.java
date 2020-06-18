@@ -12,28 +12,36 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.PreviousSale;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
 import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
+import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
+import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FragMyOrder extends Fragment {
 
-    private ArrayList<MyOrderModel> homeListModelClassArrayList1;
+
     private RecyclerView menuRecycler;
     private MyOrderAdapter bAdapter;
+    FrameLayout frameLayout;
 
-    String foodName[] = {"Beef items", "Chicken"};
-    String quantity[] = {"Quantity 1", "Quantity 1"};
-    String rupees[] = {"Rs 300", "Rs 300"};
 
-    String itemArryId, itemArryName, itemArryCount, itemArryAmount;
     ImageButton ibtn_back;
     View rootview;
     TextView tvOK;
@@ -47,53 +55,52 @@ public class FragMyOrder extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+frameLayout=rootview.findViewById(R.id.emptyorder);
         menuRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
+     String partnerid=   LocalPreferences.retrieveStringPreferences(getActivity(),"partnerid");
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
-        homeListModelClassArrayList1 = new ArrayList<>();
+    ApiService apiService= APIClient.getClient().create(ApiService.class);
+    Call<ResponseMyOrder>call=apiService.doFetchMyOrder(mAccesstoken,"test",partnerid);
+    call.enqueue(new Callback<ResponseMyOrder>() {
+        @Override
+        public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
+            if (response.body()!=null&&response.code()==200){
+                ResponseMyOrder responseMyOrder=response.body();
+                List<PreviousSale>dataset=responseMyOrder.getPreviousSales();
+                bAdapter = new MyOrderAdapter(getContext(),dataset);
+                menuRecycler.setAdapter(bAdapter);
+                if (bAdapter.getItemCount()==0){
+                    frameLayout.setVisibility(View.VISIBLE);
+                    menuRecycler.setVisibility(View.GONE);
+                }
+                frameLayout.setVisibility(View.GONE);
+                menuRecycler.setVisibility(View.VISIBLE);
+
+
+
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
+
+        }
+    });
 
 //        for (int i = 0; i < foodName.length; i++) {
 //            MyOrderModel beanClassForRecyclerView_contacts = new MyOrderModel(foodName[i], quantity[i], rupees[i]);
 //            homeListModelClassArrayList1.add(beanClassForRecyclerView_contacts);
 //        }
 
-        if (ConstantClass.hMapCartItem != null) {
-            for (Map.Entry<String, Map<String, String>> entry : ConstantClass.hMapCartItem.entrySet()) {
-                itemArryId = entry.getKey();
-                for (Map.Entry<String, String> secndEntry : entry.getValue().entrySet()) {
-                    if (secndEntry.getKey().equals(ConstantClass.H_ITEM_NAME)) {
-                        itemArryName = secndEntry.getValue();
-                    }
-                    if (secndEntry.getKey().equals(ConstantClass.H_ITEM_AMNT)) {
-                        itemArryAmount = secndEntry.getValue();
-                    }
-                    if (secndEntry.getKey().equals(ConstantClass.H_ITEM_COUNT)) {
-                        itemArryCount = secndEntry.getValue();
-                    }
-//                itemArryName = secndEntry.getKey();
-//                itemArryAmount = String.valueOf(secndEntry.getValue());
-                }
-
-                MyOrderModel myOrderModel = new MyOrderModel(itemArryName, itemArryCount, itemArryAmount);
-                homeListModelClassArrayList1.add(myOrderModel);
-            }
-        }
-        bAdapter = new MyOrderAdapter(getContext());
-        menuRecycler.setAdapter(bAdapter);
 
 
-        tvOK = rootview.findViewById(R.id.tv_myorder_ok);
-        tvOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                assert getFragmentManager() != null;
-//                getFragmentManager().popBackStack();
-                clearStack();
-            }
-        });
+
+
+
 
         ibtn_back = rootview.findViewById(R.id.ibtn_back_mordr);
         ibtn_back.setOnClickListener(new View.OnClickListener() {

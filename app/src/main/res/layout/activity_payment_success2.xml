@@ -54,6 +54,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/mainparent"
                     android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,7 +114,7 @@
                             android:layout_weight="1"
                             android:gravity="end"
 
-                            android:text="2000"
+                            android:text=""
                             android:textColor="#2d2d2d" />
 
 
@@ -140,7 +141,7 @@
                             android:gravity="end"
                             android:id="@+id/tv_taxamt"
 
-                            android:text="2000"
+                            android:text=""
                             android:textColor="#2d2d2d" />
 
 

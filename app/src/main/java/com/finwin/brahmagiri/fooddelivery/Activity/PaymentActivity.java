@@ -416,8 +416,10 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
     }
     private void Load(List<CartItem> datasetAdd, int billid) {
+        String partnerid=   LocalPreferences.retrieveStringPreferences(getApplicationContext(),"partnerid");
+
         String json = "{\"outlet_id\":" + cartoutid +
-                ",\"bill_id\":" + billid +
+                ",\"consumer_id\":" + partnerid +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {

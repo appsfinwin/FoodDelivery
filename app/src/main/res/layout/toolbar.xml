@@ -65,7 +65,6 @@
                 <fr.ganfra.materialspinner.MaterialSpinner
                     android:layout_margin="5dp"
                     android:id="@+id/spinner2"
-                    app:ms_hint="Select Outlet"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

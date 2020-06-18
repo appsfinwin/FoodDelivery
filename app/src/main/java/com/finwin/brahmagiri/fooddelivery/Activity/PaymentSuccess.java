@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +48,7 @@ public class PaymentSuccess extends AppCompatActivity {
     String cartoutid;
     TextView TextViewtotal, TextViewsubtotal, TextViewtax, TextViewinvoiceid;
     ProgressDialog mProgressDialog;
+    LinearLayout mainparent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class PaymentSuccess extends AppCompatActivity {
         TextViewinvoiceid = findViewById(R.id.invoice_id);
         TextViewsubtotal = findViewById(R.id.tv_subtotal);
         TextViewtax = findViewById(R.id.tv_taxamt);
+        mainparent=findViewById(R.id.mainparent);
         mProgressDialog = new ProgressDialog(PaymentSuccess.this);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setCancelable(false);
@@ -129,6 +133,10 @@ public class PaymentSuccess extends AppCompatActivity {
                     }
 
 
+                }else {
+                    mainparent.setVisibility(View.GONE);
+
+                    Toast.makeText(PaymentSuccess.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                 }
 
             }

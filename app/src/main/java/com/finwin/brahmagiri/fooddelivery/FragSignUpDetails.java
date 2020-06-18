@@ -2,6 +2,7 @@ package com.finwin.brahmagiri.fooddelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSpinner;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
+import com.finwin.brahmagiri.fooddelivery.Utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
@@ -39,9 +41,8 @@ public class FragSignUpDetails extends Fragment {
     TextView tvSignin;
     List<Zone> dataset;
     ArrayAdapter<Zone> adapters;
-    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd,EdConfirm;
+    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd, EdConfirm;
     private String selecteditem;
-
 
 
     @Override
@@ -65,62 +66,68 @@ public class FragSignUpDetails extends Fragment {
         Edusername = rootview.findViewById(R.id.ed_username);
         Edpasswd = rootview.findViewById(R.id.ed_pwd);
         EdConfirm = rootview.findViewById(R.id.ed_confirmpwd);
-spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        selecteditem=adapters.getItem(i).getName();
-        Toast.makeText(getActivity(), ""+selecteditem, Toast.LENGTH_SHORT).show();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != -1) {
+                    selecteditem = adapters.getItem(i).getId().toString();
 
-    }
+                }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+            }
 
-    }
-});
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         btnSignup = rootview.findViewById(R.id.btn_signup);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String vaname=Edname.getText().toString();
-                String vaMobile=Edmobile.getText().toString();
-                String vaPin=Edpin.getText().toString();
-                String vaaddress=Edaddress.getText().toString();
-                String vausername=Edusername.getText().toString();
-                String vapassword=Edpasswd.getText().toString();
-                String vaConfirmpasswd=EdConfirm.getText().toString();
-                if (vaname.equals("")){
+                String vaname = Edname.getText().toString();
+                String vaMobile = Edmobile.getText().toString();
+                String vaPin = Edpin.getText().toString();
+                String vaaddress = Edaddress.getText().toString();
+                String vausername = Edusername.getText().toString();
+                String vapassword = Edpasswd.getText().toString();
+                String vaConfirmpasswd = EdConfirm.getText().toString();
+                if (vaname.equals("")) {
                     Edname.setError("Field Required");
 
-                }else if(vaMobile.equals("")){
+                } else if (vaMobile.equals("")) {
                     Edmobile.setError("Field Required");
+                } else if (!new AppUtility(getActivity()).isValidMobile(vaMobile)) {
+                    Edmobile.setError("Invalid Mobile");
+                    Edmobile.requestFocus();
 
 
-                }else if(vaPin.equals("")){
+
+                } else if (vaPin.equals("")) {
                     Edpin.setError("Field Required");
 
 
-                }else if(vaaddress.equals("")){
+                } else if (vaaddress.equals("")) {
                     Edaddress.setError("Field Required");
 
 
-                }else if(vausername.equals("")){
+                } else if (vausername.equals("")) {
                     Edusername.setError("Field Required");
 
 
-                }else if(vapassword.equals("")){
+                } else if (vapassword.equals("")) {
                     Edpasswd.setError("Field Required");
 
 
-                }else if(!vapassword.equals(vaConfirmpasswd)){
+                } else if (!vapassword.equals(vaConfirmpasswd)) {
                     EdConfirm.setError("Field Required");
 
-                }else {
-                    doSignup(vaname,vaMobile,"vaemail",vaPin,vaaddress,vausername,vapassword);
+                } else {
+                    doSignup(vaname, vaMobile, "vaemail", vaPin, vaaddress, vausername, vapassword);
                 }
 
-               // doSignup(vaname, vaMobile, "vaemail", vaPin, vaaddress, vausername, vapassword);
+                // doSignup(vaname, vaMobile, "vaemail", vaPin, vaaddress, vausername, vapassword);
 
 
                 // ActivitySignUp.viewPager.setCurrentItem(1, true);
@@ -140,16 +147,14 @@ spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
     private void doSignup(String vaname, String vaMobile, String vaemail, String vaPin, String vaaddress, String vausername, String vapassword) {
 
 
-
-
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Response_Signup> call = apiService.dosignup("test",vaname,vaMobile,vaaddress,Integer.parseInt(vaPin),vausername,vapassword,"2");
+        Call<Response_Signup> call = apiService.dosignup("test", vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, selecteditem);
         call.enqueue(new Callback<Response_Signup>() {
             @Override
             public void onResponse(Call<Response_Signup> call, Response<Response_Signup> response) {
-                if (response.body()!=null&&response.code()==200){
-                    Toast.makeText(getActivity(), ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(),ActivityInitial.class));
+                if (response.body() != null && response.code() == 200) {
+                    Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), ActivityInitial.class));
                     getActivity().finishAffinity();
 
                 }
