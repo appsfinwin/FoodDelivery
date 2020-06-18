@@ -104,6 +104,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     TextView total, count;
     ItemlistingBrahmaAdapter adapter;
     int selectedindex;
+    String outletid;
 
 
     public static Integer image[] = {R.drawable.food2, R.drawable.food1, R.drawable.food3, R.drawable.food4};
@@ -148,12 +149,17 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         datasetout = new ArrayList<>();
         LoadZone();
 
+    String pos= LocalPreferences.retrieveStringPreferences(getActivity(),"zonepos");
+    if(pos!=null&&!pos.equals("")) {
+        spinnerzone.setSelection(Integer.parseInt(pos));
+    }
 
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position!=-1) {
                     fechoutletbumyZOne(dataset.get(position).getId().toString());
+                    LocalPreferences.storeStringPreference(getActivity(),"zonepos",String.valueOf(position));
 
 
 
@@ -176,6 +182,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             }
         });
 
+        String posout= LocalPreferences.retrieveStringPreferences(getActivity(),"outletpos");
+        if(posout!=null&&!posout.equals("")) {
+            //spinneroutlet.setSelection(Integer.parseInt(pos));
+        }
 
         spinneroutlet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -185,6 +195,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                 String outid = datasetout.get(i).getOutlet().toString();
                 doFetchProducts(outid);
                 spinneroutlet.setSelection(i);
+                LocalPreferences.storeStringPreference(getActivity(),"outletpos",String.valueOf(i));
+
 /*
                 LocalPreferences.storeStringPreference("lastpos");
 */
@@ -339,6 +351,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
                     //fechoutletbumyZOne(firstzone);
 
+                }else{
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+
                 }
             }
 
@@ -362,7 +377,14 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
                     adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinneroutlet.setAdapter(adapteroutlet);
-                    spinneroutlet.setSelection(1);
+                    String posout= LocalPreferences.retrieveStringPreferences(getActivity(),"outletpos");
+                    Log.d("onResponse", "outletposition: "+posout);
+                    if(posout!=null&&!posout.equals("")) {
+                        spinneroutlet.setSelection(Integer.parseInt(posout));
+                    }else {
+                        spinneroutlet.setSelection(1);
+
+                    }
 
                 } else {
                     spinneroutlet.setError("Invalid id");
@@ -416,12 +438,13 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     }
 
     @Override
-    public void clickedpdct(int value, String code, String pname, String price) {
+    public void clickedpdct(int value, String code, String pname, String outid) {
         {
             msummarylayout.setVisibility(View.VISIBLE);
 
             if (value > 0) {
-                doAddmyCart(value, code, pname, price);
+                doAddmyCart(value, code, pname, outid);
+                outletid=outid;
 
 
                 //  db.rowIdExists(Integer.parseInt(code));
@@ -440,12 +463,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     }
 
-    private void doAddmyCart(int value, String code, String pname, String price) {
+    private void doAddmyCart(int value, String code, String pname, String outid) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "userid");
         String status = "y";
         String time = "2020-06-06";
-        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"product_id\":" + Integer.parseInt(code) + ",\"outlet\":" + Integer.parseInt("319") + ",\"quantity\":" + value +
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"product_id\":" + Integer.parseInt(code) + ",\"outlet\":" + Integer.parseInt(outid) + ",\"quantity\":" + value +
                 ",\"status\":" + status + ",\"time\":" + time +"}";
         JsonParser parser = new JsonParser();
 
@@ -458,7 +481,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             @Override
             public void onResponse(Call<ResponseAddcart> call, Response<ResponseAddcart> response) {
                 if (response.body() != null && response.code() == 200) {
-                    fetchCartfromServer("319");
+                    fetchCartfromServer(outletid);
 
                 }
             }
@@ -517,7 +540,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         });
 
     }
-    private void fetchCartfromServer(String cartoutid) {
+    private void fetchCartfromServer(String cartoutid){
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         String userid=LocalPreferences.retrieveStringPreferences(getActivity(),"userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: "+cartoutid);

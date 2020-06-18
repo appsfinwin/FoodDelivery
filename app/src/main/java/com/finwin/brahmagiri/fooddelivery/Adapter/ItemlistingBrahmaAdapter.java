@@ -117,7 +117,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
                 Log.e("Count", "onValueChange: "+oldValue );
                 LocalPreferences.storeStringPreference(context,"cartoutid",dataset.get(position).getOutId());
              String itemcode=dataset.get(position).getProductId().toString();
-                String price=dataset.get(position).getPrice().toString();
+                String price=dataset.get(position).getOutId().toString();
                 String pname=dataset.get(position).getProductName().toString();
                 Double avq=dataset.get(position).getAvlQty();
                 if (newValue>avq){

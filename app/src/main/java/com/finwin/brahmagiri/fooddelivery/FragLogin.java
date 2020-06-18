@@ -109,7 +109,7 @@ public class FragLogin extends Fragment {
 
                     }
                 }else{
-                    Toast.makeText(getActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -157,6 +157,9 @@ public class FragSignUpDetails extends Fragment {
                     startActivity(new Intent(getActivity(), ActivityInitial.class));
                     getActivity().finishAffinity();
 
+                }else{
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+
                 }
 
             }

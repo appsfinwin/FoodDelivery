@@ -183,7 +183,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvEditAddrs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangeAddress();
+                //ChangeAddress();
             }
         });
 

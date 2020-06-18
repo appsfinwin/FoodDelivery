@@ -136,7 +136,7 @@ public class PaymentSuccess extends AppCompatActivity {
                 }else {
                     mainparent.setVisibility(View.GONE);
 
-                    Toast.makeText(PaymentSuccess.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
                 }
 
             }

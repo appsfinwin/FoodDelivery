@@ -1,6 +1,7 @@
 package com.finwin.brahmagiri.fooddelivery;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,12 +10,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderModel;
@@ -55,51 +58,48 @@ public class FragMyOrder extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-frameLayout=rootview.findViewById(R.id.emptyorder);
+        frameLayout = rootview.findViewById(R.id.emptyorder);
         menuRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
-     String partnerid=   LocalPreferences.retrieveStringPreferences(getActivity(),"partnerid");
+        String partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
-    ApiService apiService= APIClient.getClient().create(ApiService.class);
-    Call<ResponseMyOrder>call=apiService.doFetchMyOrder(mAccesstoken,"test",partnerid);
-    call.enqueue(new Callback<ResponseMyOrder>() {
-        @Override
-        public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
-            if (response.body()!=null&&response.code()==200){
-                ResponseMyOrder responseMyOrder=response.body();
-                List<PreviousSale>dataset=responseMyOrder.getPreviousSales();
-                bAdapter = new MyOrderAdapter(getContext(),dataset);
-                menuRecycler.setAdapter(bAdapter);
-                if (bAdapter.getItemCount()==0){
-                    frameLayout.setVisibility(View.VISIBLE);
-                    menuRecycler.setVisibility(View.GONE);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, "test", partnerid);
+        call.enqueue(new Callback<ResponseMyOrder>() {
+            @Override
+            public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
+                if (response.body() != null && response.code() == 200) {
+                    ResponseMyOrder responseMyOrder = response.body();
+                    List<PreviousSale> dataset = responseMyOrder.getPreviousSales();
+                    bAdapter = new MyOrderAdapter(getContext(), dataset);
+                    menuRecycler.setAdapter(bAdapter);
+                    if (bAdapter.getItemCount() == 0) {
+                        frameLayout.setVisibility(View.VISIBLE);
+                        menuRecycler.setVisibility(View.GONE);
+                    }
+                    frameLayout.setVisibility(View.GONE);
+                    menuRecycler.setVisibility(View.VISIBLE);
+
+
+                }else{
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+
                 }
-                frameLayout.setVisibility(View.GONE);
-                menuRecycler.setVisibility(View.VISIBLE);
+            }
 
-
+            @Override
+            public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
 
             }
-        }
-
-        @Override
-        public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
-
-        }
-    });
+        });
 
 //        for (int i = 0; i < foodName.length; i++) {
 //            MyOrderModel beanClassForRecyclerView_contacts = new MyOrderModel(foodName[i], quantity[i], rupees[i]);
 //            homeListModelClassArrayList1.add(beanClassForRecyclerView_contacts);
 //        }
-
-
-
-
-
 
 
         ibtn_back = rootview.findViewById(R.id.ibtn_back_mordr);
