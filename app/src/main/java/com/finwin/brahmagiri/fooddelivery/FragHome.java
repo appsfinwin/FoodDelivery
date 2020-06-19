@@ -194,7 +194,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     // Your code goes gere
                 String outid = datasetout.get(i).getOutlet().toString();
                 doFetchProducts(outid);
-                spinneroutlet.setSelection(i);
+                //spinneroutlet.setSelection(i);
                 LocalPreferences.storeStringPreference(getActivity(),"outletpos",String.valueOf(i));
 
 /*
@@ -382,7 +382,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     if(posout!=null&&!posout.equals("")) {
                         spinneroutlet.setSelection(Integer.parseInt(posout));
                     }else {
-                        spinneroutlet.setSelection(1);
+                      //  spinneroutlet.setSelection(1);
 
                     }
 
