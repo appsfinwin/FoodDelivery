@@ -23,6 +23,7 @@ import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.FinalbillAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.Products;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
@@ -73,8 +74,7 @@ public class PaymentSuccess extends AppCompatActivity {
         fetchCart();
         //  datasetAdd = db.getAllContacts();
 
-        //FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasetAdd);
-        // recyclerView.setAdapter(productAdapter);
+
 
 
     }
@@ -120,6 +120,9 @@ public class PaymentSuccess extends AppCompatActivity {
 
                     String invoiceid = response.body().getInvoiceId().toString();
                     if (invoiceid != null) {
+                        List<Products>datasets=responseInvoiceGen.getProducts();
+                        FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
+                        recyclerView.setAdapter(productAdapter);
                         Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         String totalamt = response.body().getTotalAmount().toString();
                         String sub_total = response.body().getSubtotal().toString();
@@ -130,7 +133,7 @@ public class PaymentSuccess extends AppCompatActivity {
                         TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
                       //  LocalPreferences.clearPreferences(getApplicationContext());
                         LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
-                        new DatabaseHandler(getApplicationContext()).removeAll();
+                       // new DatabaseHandler(getApplicationContext()).removeAll();
 
                     }
 

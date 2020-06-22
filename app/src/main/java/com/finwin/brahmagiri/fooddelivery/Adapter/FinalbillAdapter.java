@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.Products;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.Onclick;
 
@@ -23,16 +24,16 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
     private Context mCtx;
 
     //we are storing all the products in a list
-    private List<ProductEntryModel> productList;
+    private List<Products> productList;
 
     //getting the context and product list with constructor
 
-    public FinalbillAdapter(Context mCtx, List<ProductEntryModel> productList) {
+    public FinalbillAdapter(Context mCtx, List<Products> productList) {
         this.mCtx = mCtx;
         this.productList = productList;
     }
 
-    public FinalbillAdapter(Context mCtx, List<ProductEntryModel> productList, Onclick mclick) {
+    public FinalbillAdapter(Context mCtx, List<Products> productList, Onclick mclick) {
         this.mCtx = mCtx;
         this.productList = productList;
         this.mclick = mclick;
@@ -49,10 +50,10 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         //getting the product of the specified position
-        ProductEntryModel product = productList.get(position);
+        Products product = productList.get(position);
 
         //binding the data with the viewholder views
-        holder.textViewTitle.setText(product.getProductname());
+        holder.textViewTitle.setText(product.getProductName());
         holder.textViewPrice.setText("₹ " + product.getPrice());
         holder.textViewQnty.setText("" + product.getQuantity());
         Double subtotal = product.getPrice() * product.getQuantity();
@@ -84,17 +85,6 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
             textViewSubtotal = itemView.findViewById(R.id.tv_subtotal);
             textViewPrice = itemView.findViewById(R.id.tv_cost);
             textViewDelete = itemView.findViewById(R.id.tv_delete);
-            textViewDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    int id = productList.get(pos).getDbid();
-                    mclick.delete(id);
-                    productList.remove(pos);
-                    notifyItemRemoved(pos);
-
-                }
-            });
 
             // imageView = itemView.findViewById(R.id.imageView);
         }

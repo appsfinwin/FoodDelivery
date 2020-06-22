@@ -48,8 +48,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyOrderAdapter.MyViewHolder holder, int position) {
         PreviousSale lists = OfferList.get(position);
-        holder.invoicenumber.setText("Invoice number :"+lists.getInvoiceNo());
-        holder.tvdate.setText("Date :"+lists.getInvoiceDate());
+        holder.invoicenumber.setText("Invoice number : "+lists.getInvoiceNo());
+        holder.tvdate.setText("Date : "+lists.getInvoiceDate());
         holder.tvamt.setText("₹ "+lists.getTotalAmount());
         holder.outletname.setText("Outlet name : "+lists.getOutletName());
 

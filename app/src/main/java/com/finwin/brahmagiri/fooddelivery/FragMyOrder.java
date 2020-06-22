@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,9 +61,12 @@ public class FragMyOrder extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         frameLayout = rootview.findViewById(R.id.emptyorder);
         menuRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+      LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         menuRecycler.setLayoutManager(layoutManager);
-        menuRecycler.setItemAnimator(new DefaultItemAnimator());
+     //   menuRecycler.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(menuRecycler.getContext(),
+                layoutManager.getOrientation());
+        menuRecycler.addItemDecoration(dividerItemDecoration);
         String partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 

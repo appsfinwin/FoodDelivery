@@ -101,7 +101,6 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private RecyclerView recyclerView1;
     private BestSellingAdapter rAdapter;
     ViewPager mPager;
-    DatabaseHandler db;
     TextView total, count;
     ItemlistingBrahmaAdapter adapter;
     int selectedindex;
@@ -142,7 +141,6 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         ///==========================================================================
         drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
         msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
-        db = new DatabaseHandler(getActivity());
         spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
         spinneroutlet = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
       frameLayout=rootview.findViewById(R.id.empty_layout);
@@ -357,7 +355,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     String posout= LocalPreferences.retrieveStringPreferences(getActivity(),"outletpos");
                     Log.d("onResponse", "outletposition: "+posout);
                     if(posout!=null&&!posout.equals("")) {
-                        spinneroutlet.setSelection(Integer.parseInt(posout));
+                       // spinneroutlet.setSelection(Integer.parseInt(posout));
                     }else {
                       //  spinneroutlet.setSelection(1);
 
@@ -425,8 +423,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
 
                 //  db.rowIdExists(Integer.parseInt(code));
-                Log.d("clicked", "clicked: " + db.rowIdExists(Integer.parseInt(code)));
-                Log.d("clicked", "clicked: " + code);
+
 
 
                 //  doUpdateCart(value, code, "INSERT");

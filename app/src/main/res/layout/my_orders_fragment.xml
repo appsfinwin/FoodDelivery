@@ -11,10 +11,10 @@
         android:id="@+id/linr_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:background="#222129"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <ImageButton
             android:id="@+id/ibtn_back_mordr"
@@ -28,8 +28,8 @@
             android:id="@+id/blnched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_marginLeft="20dp"
+            android:padding="10dp"
             android:text="My Order"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -37,30 +37,45 @@
 
     </LinearLayout>
 
-<FrameLayout
-    android:visibility="gone"
-    android:id="@+id/emptyorder"
-    android:layout_below="@id/linr_lay"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:gravity="center"
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/tv_orderhist"
+        android:textSize="16sp"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="9dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linr_lay"
+        android:text="Order History">
+
+    </TextView>
+
+    <FrameLayout
+        android:id="@+id/emptyorder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:src="@drawable/noorder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ImageView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/linr_lay"
+        android:visibility="gone">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-</FrameLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/noorder"></ImageView>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:layout_below="@id/linr_lay"
-        android:id="@+id/nstd_scrl"
+android:layout_marginTop="20dp"        android:id="@+id/nstd_scrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_orderhist"
 
         android:scrollbars="none">
 
@@ -68,7 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
 
             <androidx.recyclerview.widget.RecyclerView
