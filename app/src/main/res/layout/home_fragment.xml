@@ -10,230 +10,43 @@
 <!--    tools:context="e.wolfsoft1.iyedelivery.HomeActivity"-->
 
     <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f9f9f9">
 
 
-        <FrameLayout
-            android:id="@+id/framlayt"
-            android:visibility="gone"
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/no_products_found"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+        <include layout="@layout/toolbar"
+          />
 
-                </ImageView>
-
-            </RelativeLayout>
-
-        </FrameLayout>
-
-            <RelativeLayout
-
-                android:layout_above="@id/summary_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:layout_marginTop="120dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <include layout="@layout/toolbar" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.8dp"
-                        android:layout_marginTop="45dp"
-                        android:background="#dfe0e2" />
+                <androidx.recyclerview.widget.RecyclerView
 
-                    <LinearLayout
+                    android:visibility="gone"
 
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#ffffff"
-                        android:orientation="vertical">
-                        <RelativeLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content" >
-
-                            <androidx.viewpager.widget.ViewPager
-                                android:visibility="gone"
-                                android:id="@+id/pager"
-                                android:layout_width="fill_parent"
-                                android:layout_height="200dp"
-                                android:layout_alignParentTop="true" />
-
-
-                        </RelativeLayout>
-
-                        <LinearLayout
-                            android:visibility="gone"
-                            android:layout_marginTop="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="15dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:text="What would you like to order ?"
-                                android:textColor="#37393e" />
-
-                            <TextView
-                                android:id="@+id/tv_viewall"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="15dp"
-                                android:padding="5dp"
-                                android:gravity="right"
-                                android:text="VIEW ALL"
-                                android:textColor="#ea5b31"
-                                android:textSize="12dp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:visibility="gone"
-                            android:id="@+id/recyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:clipToPadding="false"
-                            android:nestedScrollingEnabled="false"
-                            android:paddingBottom="25dp"
-                            android:paddingLeft="11dp"/>
-
-                        <!--</android.support.v7.widget.RecyclerView>-->
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.8dp"
-                        android:background="#dfe0e2" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="20dp"
-                        android:text="For you"
-                        android:textColor="#37393e"
-                        android:textSize="14sp" />
-                    <!--android:text="Restaurants near you"-->
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:visibility="invisible"
-
-                        android:id="@+id/recyclerView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false">
-
-                    </androidx.recyclerview.widget.RecyclerView>
-                    <include
-                        android:visibility="gone"
-                        android:id="@+id/empty_cart"
-                        layout="@layout/empty_cart">
-
-                    </include>
-
-                    <ImageView
-                        android:visibility="gone"
-                        android:layout_width="300dp"
-                        android:layout_height="180dp"
-                        android:layout_marginLeft="20dp"
-                        android:src="@drawable/imagebottom" />
-
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="25dp"
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:visibility="gone"
-                        android:src="@drawable/logo_food_delivery" />
-
-                </LinearLayout>
-
-                <!--<FrameLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <RelativeLayout
+                    android:id="@+id/recyclerView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="69dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false">
 
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_toLeftOf="@+id/liner"
-                        android:background="@drawable/rect2"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                </androidx.recyclerview.widget.RecyclerView>
+                <include
+                    android:visibility="gone"
+                    layout="@layout/empty_pdct">
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="11dp"
-                            android:src="@drawable/ic_search" />
-
-                        <EditText
-                            android:maxLines="1"
-                            android:imeOptions="actionSearch"
-                            android:inputType="text"
-                            android:id="@+id/ed_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="0dp"
-                            android:background="#00000000"
-                            android:hint="Search here"
-                            android:textColor="#95989a"
-                            android:textSize="12dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/liner"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:background="@drawable/rect2">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
-                            android:src="@drawable/ic_filter" />
-                    </LinearLayout>
-                </RelativeLayout>
-                <!--</FrameLayout>-->
-            </RelativeLayout>
+                </include>
+                </LinearLayout>
         <RelativeLayout
             android:id="@+id/summary_layout"
             android:layout_width="match_parent"
@@ -328,7 +141,10 @@
 
         </RelativeLayout>
 
-    </RelativeLayout>
+                <!--</FrameLayout>-->
+            </RelativeLayout>
+
+
 
     <include layout="@layout/activity_drawer" />
 

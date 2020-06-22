@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,7 +124,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     String paymentMode[] = {"Online & COD", "Online & COD", "Online & COD", "Online & COD",};
     List<Zone> dataset;
     List<Outlet> datasetout;
-    FrameLayout frameLayout;
+   LinearLayout frameLayout;
 
     MaterialSpinner spinnerzone;
     MaterialSpinner spinneroutlet;
@@ -144,7 +145,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         db = new DatabaseHandler(getActivity());
         spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
         spinneroutlet = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
-        frameLayout=rootview.findViewById(R.id.framlayt);
+      frameLayout=rootview.findViewById(R.id.empty_layout);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
         LoadZone();
@@ -225,23 +226,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             }
         });
         navigationView = (NavigationView) rootview.findViewById(R.id.navigation_view);
-        mPager = (ViewPager) rootview.findViewById(R.id.pager);
-        msearch_edit = rootview.findViewById(R.id.ed_search);
+
         count = rootview.findViewById(R.id.tv_itemcount);
         total = rootview.findViewById(R.id.totalamt);
         totallist = new ArrayList<>();
 
-        msearch_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String searchkey = msearch_edit.getText().toString();
-                    performSearch(searchkey);
-                    return true;
-                }
-                return false;
-            }
-        });
+
 
         setToolbar();
         productEntryModel = new ProductEntryModel();
@@ -286,21 +276,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);*/
 
-        tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
-        tvViewall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CategoryListAll.class));
-                /*Bundle bundle = new Bundle();
-                bundle.putString(ConstantClass.MENU_TPYE, ConstantClass.VIEW_ALL);
+//        tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
 
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Fragment myFragment = new FragMenuTab();
-                myFragment.setArguments(bundle);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,
-                        myFragment).addToBackStack(null).commit();*/
-            }
-        });
 
         ///===============
 
@@ -522,11 +499,11 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapter = new ItemlistingBrahmaAdapter(getActivity(), dataSet, FragHome.this);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(View.VISIBLE);
-                    frameLayout.setVisibility(View.GONE);
+                   frameLayout.setVisibility(View.GONE);
                     if (adapter.getItemCount()==0){
                        // Toast.makeText(getActivity(), "No Products found for the selected outlet", Toast.LENGTH_SHORT).show();
                         frameLayout.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.INVISIBLE);
+                      recyclerView.setVisibility(View.INVISIBLE);
                     }
 
 

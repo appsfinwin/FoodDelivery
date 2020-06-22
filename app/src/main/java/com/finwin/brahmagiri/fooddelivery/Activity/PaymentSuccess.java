@@ -116,6 +116,8 @@ public class PaymentSuccess extends AppCompatActivity {
             public void onResponse(Call<ResponseInvoiceGen> call, Response<ResponseInvoiceGen> response) {
                 mProgressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
+                    ResponseInvoiceGen responseInvoiceGen=response.body();
+
                     String invoiceid = response.body().getInvoiceId().toString();
                     if (invoiceid != null) {
                         Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
