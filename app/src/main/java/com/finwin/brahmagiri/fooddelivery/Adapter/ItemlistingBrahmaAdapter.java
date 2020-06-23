@@ -68,7 +68,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     public void onBindViewHolder(final ItemlistingBrahmaAdapter.MyViewHolder holder, final int position) {
         //  holder1.image.setImageResource(result.get(position).getImage());
         Glide.with(context)
-                .load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
+                .load("http://finwintechnologies.com/assets/images/Brahmagiri/b1.jpg")
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
 
