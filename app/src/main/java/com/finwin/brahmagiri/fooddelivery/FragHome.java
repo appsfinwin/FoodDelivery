@@ -310,7 +310,8 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     dataset = responseFetchZone.getZones();
                     String firstzone = dataset.get(0).getId().toString();
 //                    LocalPreferences.storeStringPreference(getActivity(), "firstzone", firstzone);
-                    adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
+
+                    adapters = new ArrayAdapter<Zone>(Objects.requireNonNull(getActivity()), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
                     String zones=   LocalPreferences.retrieveStringPreferences(getActivity(),"zone");

@@ -458,7 +458,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         if (cod) {
 
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
-                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class));
+                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid","null"));
                         }else {
                             long time= System.currentTimeMillis();
                             Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
@@ -523,13 +523,16 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                 String msg = "Status transactionAmount: " + statusCode + "\nRef No: " + statusDescription + "\nOrder id: " + orderId;
                 Log.e("Payment", "onActivityResult: " + msg);
+                Log.e("txnid", "onActivityResult: " + orderId);
+
                 if (statusCode.equals("S")){
                  //   doConfirmOrder(transactionAmount,orderId);
-                    startActivity(new Intent(getApplicationContext(),PaymentSuccess.class));
+                    startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId));
 
                 }else{
-                   // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
-                   // finishAffinity();
+                   //startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
+                  //finishAffinity();
+                    Log.e("onActivityResult", "paymentfailure   : " );
                 }
                 // Utility.showAlertDialog(this, msg);
 

@@ -50,6 +50,7 @@ public class PaymentSuccess extends AppCompatActivity {
     TextView TextViewtotal, TextViewsubtotal, TextViewtax, TextViewinvoiceid;
     ProgressDialog mProgressDialog;
     LinearLayout mainparent;
+    String transactionid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class PaymentSuccess extends AppCompatActivity {
         TextViewinvoiceid = findViewById(R.id.invoice_id);
         TextViewsubtotal = findViewById(R.id.tv_subtotal);
         TextViewtax = findViewById(R.id.tv_taxamt);
-        mainparent=findViewById(R.id.mainparent);
+        mainparent = findViewById(R.id.mainparent);
         mProgressDialog = new ProgressDialog(PaymentSuccess.this);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setCancelable(false);
@@ -73,7 +74,7 @@ public class PaymentSuccess extends AppCompatActivity {
         datasetAdd = new ArrayList<>();
         fetchCart();
         //  datasetAdd = db.getAllContacts();
-
+        transactionid=getIntent().getStringExtra("trnxnid");
 
 
 
@@ -82,6 +83,8 @@ public class PaymentSuccess extends AppCompatActivity {
     private void LoadInvoice(List<CartItem> datasetAdd, int billid) {
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"bill_id\":" + billid +
+                ",\"transaction_id\":" + "null"+
+                ",\"payment_mode\":" + "cod" +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {
@@ -116,11 +119,11 @@ public class PaymentSuccess extends AppCompatActivity {
             public void onResponse(Call<ResponseInvoiceGen> call, Response<ResponseInvoiceGen> response) {
                 mProgressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
-                    ResponseInvoiceGen responseInvoiceGen=response.body();
+                    ResponseInvoiceGen responseInvoiceGen = response.body();
 
                     String invoiceid = response.body().getInvoiceId().toString();
                     if (invoiceid != null) {
-                        List<Products>datasets=responseInvoiceGen.getProducts();
+                        List<Products> datasets = responseInvoiceGen.getProducts();
                         FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
                         recyclerView.setAdapter(productAdapter);
                         Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -131,14 +134,14 @@ public class PaymentSuccess extends AppCompatActivity {
                         TextViewtotal.setText("₹ " + totalamt);
                         TextViewtax.setText("₹ " + taxamt);
                         TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
-                      //  LocalPreferences.clearPreferences(getApplicationContext());
+                        //  LocalPreferences.clearPreferences(getApplicationContext());
                         LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
-                       // new DatabaseHandler(getApplicationContext()).removeAll();
+                        // new DatabaseHandler(getApplicationContext()).removeAll();
 
                     }
 
 
-                }else {
+                } else {
                     mainparent.setVisibility(View.GONE);
 
                     Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
@@ -162,7 +165,7 @@ public class PaymentSuccess extends AppCompatActivity {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
-        String json=  "{\"user_id\":" +Integer.parseInt(userid)+",\"outlet\":" + Integer.parseInt(cartoutid) +"}";
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
         JsonParser parser = new JsonParser();
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
