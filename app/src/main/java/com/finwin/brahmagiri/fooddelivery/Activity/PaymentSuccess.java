@@ -26,6 +26,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.Products;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
+import com.finwin.brahmagiri.fooddelivery.Responses.Tax;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -47,7 +48,7 @@ public class PaymentSuccess extends AppCompatActivity {
     RecyclerView recyclerView;
     Button btninvoice;
     String cartoutid;
-    TextView TextViewtotal, TextViewsubtotal, TextViewtax, TextViewinvoiceid;
+    TextView TextViewtotal, TextViewsubtotal, TextViewtax, TextViewinvoiceid,Textviewcgstname,Textviewcgstvalue,Textviewsgstname,TextviewSgstvalue;
     ProgressDialog mProgressDialog;
     LinearLayout mainparent;
     String transactionid;
@@ -60,6 +61,11 @@ public class PaymentSuccess extends AppCompatActivity {
         TextViewtotal = findViewById(R.id.total_amt);
         TextViewinvoiceid = findViewById(R.id.invoice_id);
         TextViewsubtotal = findViewById(R.id.tv_subtotal);
+        Textviewcgstname = findViewById(R.id.tv_gstname1);
+        Textviewcgstvalue = findViewById(R.id.tv_gstvalue1);
+        Textviewsgstname = findViewById(R.id.tv_gstname2);
+        TextviewSgstvalue = findViewById(R.id.tv_gstvalue2);
+
         TextViewtax = findViewById(R.id.tv_taxamt);
         mainparent = findViewById(R.id.mainparent);
         mProgressDialog = new ProgressDialog(PaymentSuccess.this);
@@ -124,6 +130,7 @@ public class PaymentSuccess extends AppCompatActivity {
                     String invoiceid = response.body().getInvoiceId().toString();
                     if (invoiceid != null) {
                         List<Products> datasets = responseInvoiceGen.getProducts();
+                        List<Tax>dataset=responseInvoiceGen.getTax();
                         FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
                         recyclerView.setAdapter(productAdapter);
                         Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -134,6 +141,10 @@ public class PaymentSuccess extends AppCompatActivity {
                         TextViewtotal.setText("₹ " + totalamt);
                         TextViewtax.setText("₹ " + taxamt);
                         TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
+                        Textviewcgstname.setText(dataset.get(0).getTax());
+                        Textviewcgstvalue.setText(""+Math.round(dataset.get(0).getTaxValue()));
+                        Textviewsgstname.setText(dataset.get(1).getTax());
+                        TextviewSgstvalue.setText(""+Math.round(dataset.get(1).getTaxValue()));
                         //  LocalPreferences.clearPreferences(getApplicationContext());
                         LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
                         // new DatabaseHandler(getApplicationContext()).removeAll();

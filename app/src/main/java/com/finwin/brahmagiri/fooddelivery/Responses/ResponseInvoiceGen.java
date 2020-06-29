@@ -16,6 +16,9 @@ public class ResponseInvoiceGen {
     @SerializedName("invoice_id")
     @Expose
     private Integer invoiceId;
+    @SerializedName("Tax")
+    @Expose
+    private List<Tax> tax = null;
     @SerializedName("products")
     @Expose
     private List<Products> products = null;
@@ -51,6 +54,14 @@ public class ResponseInvoiceGen {
 
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public List<Tax> getTax() {
+        return tax;
+    }
+
+    public void setTax(List<Tax> tax) {
+        this.tax = tax;
     }
 
     public List<Products> getProducts() {

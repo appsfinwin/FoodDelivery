@@ -119,7 +119,6 @@
 
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -128,6 +127,61 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/tv_gstname1"
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:id="@+id/tv_gstvalue1"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/tv_gstname2"
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:id="@+id/tv_gstvalue2"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
 
                             android:text="Tax"
