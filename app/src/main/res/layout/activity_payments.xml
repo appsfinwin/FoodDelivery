@@ -234,7 +234,39 @@
                     android:orientation="vertical"
                     android:paddingLeft="21.1dp"
                     android:paddingBottom="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="17.7dp"
+                        android:text="Delivery Option"
+                        android:textColor="@color/textColor"
+                        android:textSize="13.3sp" />
+                    <RadioGroup
+                        android:id="@+id/radiogrp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                            android:checked="true"
+                            android:id="@+id/collectionfromoutlet"
+                            android:layout_width="wrap_content"
+                            android:text="Collect from outlet"
+                            android:layout_height="wrap_content">
+
+                        </androidx.appcompat.widget.AppCompatRadioButton>
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                            android:id="@+id/homedelivery"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:text="Home Delivery"
+                            android:layout_height="wrap_content">
+
+                        </androidx.appcompat.widget.AppCompatRadioButton>
+
+                    </RadioGroup>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

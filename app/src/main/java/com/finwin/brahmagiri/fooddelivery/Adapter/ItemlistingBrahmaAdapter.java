@@ -67,12 +67,13 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     @Override
     public void onBindViewHolder(final ItemlistingBrahmaAdapter.MyViewHolder holder, final int position) {
         //  holder1.image.setImageResource(result.get(position).getImage());
+        Product result=dataset.get(position);
         Glide.with(context)
-                .load("http://finwintechnologies.com/assets/images/Brahmagiri/b1.jpg")
+                .load(result.getProduct_image_url())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.image);
 
-        Product result=dataset.get(position);
+
        /* String addedq=   db.getFromDb(result.getProductId().toString());
         if(!addedq.equals("0")){
             holder.btnAdd.setVisibility(View.INVISIBLE);

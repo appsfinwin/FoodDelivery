@@ -4,6 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product {
+    @SerializedName("product_image_url")
+    @Expose
+    private String product_image_url;
+
     @SerializedName("price")
     @Expose
     private Double price;
@@ -58,5 +62,13 @@ public class Product {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getProduct_image_url() {
+        return product_image_url;
+    }
+
+    public void setProduct_image_url(String product_image_url) {
+        this.product_image_url = product_image_url;
     }
 }

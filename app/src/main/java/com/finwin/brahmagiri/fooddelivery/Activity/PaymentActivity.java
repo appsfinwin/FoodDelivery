@@ -15,7 +15,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderAdapter;
@@ -69,6 +72,12 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
     String itemArryId, itemArryName, itemArryCount, itemArryAmount,
             StrBndlTotal = "";
+    private RadioGroup collection;
+    private RadioButton radioButton;
+    String deliveryoption;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +86,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvTotal_co = findViewById(R.id.tv_total_co);
         tvAddressName = findViewById(R.id.tv_addressName);
         tvAddress = findViewById(R.id.tv_address);
+        collection=(RadioGroup)findViewById(R.id.radiogrp);
 
         tvCheckout = findViewById(R.id.tv_checkout);
         ibtn_back = findViewById(R.id.ibtn_back_co);
@@ -91,6 +101,25 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
          getewaytotal=String.valueOf(roundOff);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
+        collection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int selectedId=collection.getCheckedRadioButtonId();
+                radioButton=(RadioButton)findViewById(selectedId);
+               if (radioButton.getText().equals("Collect from outlet")){
+                   Log.d("onCheckedChanged", "out: ");
+                   deliveryoption="by_customer";
+
+               }else if(radioButton.getText().equals("Home Delivery")){
+                   deliveryoption="take_away";
+
+                   Log.d("onCheckedChanged", "home: ");
+
+               }else{
+                   deliveryoption="";
+               }
+            }
+        });
 
        /* Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -420,6 +449,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"consumer_id\":" + partnerid +
+                ",\"collecting_option\":" + deliveryoption +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {
