@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFF">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include
             android:id="@+id/toolbar_layout"
@@ -18,57 +19,37 @@
 
         <!-- TODO: Update blank fragment layout -->
         <ScrollView
-            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:orientation="vertical"
+            android:fillViewport="true"
+            android:nestedScrollingEnabled="false">
+            <androidx.cardview.widget.CardView
+                app:cardUseCompatPadding="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:cardCornerRadius="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/recyvfinal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-                <Button
-                    android:visibility="gone"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/btn_invoice"
-
-                    android:textColor="#FFF"
-                    android:text="Generate Invoice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </Button>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/mainparent"
-                    android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_height="100dp"
+                    android:background="#F5F5F5"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Price Details"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Invoice"
                         android:textColor="#2d2d2d"
+                        android:textSize="14sp"
                         android:textStyle="bold">
 
                     </TextView>
@@ -76,12 +57,65 @@
                     <TextView
                         android:id="@+id/invoice_id"
                         android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Price Details"
+                        android:textColor="#2d2d2d"
+                        android:textSize="18sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyvfinal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <Button
+                    android:id="@+id/btn_invoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+
+                    android:layout_marginRight="15dp"
+                    android:text="Generate Invoice"
+                    android:textColor="#FFF"
+                    android:visibility="gone">
+
+                </Button>
+
+
+                <LinearLayout
+                    android:id="@+id/mainparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Price Details"
                         android:textColor="#2d2d2d"
                         android:textStyle="bold">
 
                     </TextView>
+
 
                     <View
                         android:layout_width="match_parent"
@@ -108,8 +142,8 @@
 
 
                         <TextView
-                            android:layout_width="0dp"
                             android:id="@+id/tv_subtotal"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
@@ -119,23 +153,24 @@
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:id="@+id/tv_gstname1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text=""
                             android:textColor="#2d2d2d" />
 
 
                         <TextView
-                            android:layout_width="0dp"
                             android:id="@+id/tv_gstvalue1"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
@@ -145,23 +180,24 @@
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:id="@+id/tv_gstname2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text=""
                             android:textColor="#2d2d2d" />
 
 
                         <TextView
-                            android:layout_width="0dp"
                             android:id="@+id/tv_gstvalue2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
@@ -174,10 +210,10 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -189,11 +225,11 @@
 
 
                         <TextView
+                            android:id="@+id/tv_taxamt"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:id="@+id/tv_taxamt"
 
                             android:text=""
                             android:textColor="#2d2d2d" />
@@ -202,10 +238,10 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -230,11 +266,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
-
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -258,11 +294,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
-
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -286,11 +322,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
-
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="0dp"
@@ -315,12 +351,12 @@
 
 
                     <View
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginRight="22dp"
                         android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="22dp"
                         android:layout_marginTop="25dp"
 
-                        android:layout_height="1dp"
+                        android:layout_marginRight="22dp"
                         android:background="#2d2d2d">
 
                     </View>
@@ -332,24 +368,24 @@
                         android:layout_marginTop="10dp">
 
                         <TextView
-                            android:layout_marginRight="50dp"
+                            android:layout_width="100dp"
 
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="50dp"
                             android:layout_toLeftOf="@id/total_amt"
                             android:gravity="start"
                             android:text="Total"
-                            android:textColor="#2d2d2d"
-                            android:layout_width="100dp"
 
-                            android:layout_height="wrap_content">
+                            android:textColor="#2d2d2d">
 
                         </TextView>
 
                         <TextView
+                            android:id="@+id/total_amt"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:id="@+id/total_amt"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
                             android:minWidth="80dp"
@@ -367,26 +403,26 @@
                         android:layout_marginTop="10dp">
 
                         <TextView
-                            android:layout_marginRight="50dp"
-
-                            android:layout_toLeftOf="@id/balance"
-
-                            android:text="Balance"
-                            android:textColor="#2d2d2d"
                             android:layout_width="100dp"
-                            android:layout_height="wrap_content">
+
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginRight="50dp"
+                            android:layout_toLeftOf="@id/balance"
+                            android:text="Balance"
+                            android:textColor="#2d2d2d">
 
                         </TextView>
 
                         <TextView
+                            android:id="@+id/balance"
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:id="@+id/balance"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:minWidth="80dp"
                             android:gravity="end"
+                            android:minWidth="80dp"
                             android:text="0.0"
                             android:textColor="#2d2d2d" />
 
@@ -398,6 +434,8 @@
                 </LinearLayout>
 
             </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
         </ScrollView>
     </LinearLayout>
 
