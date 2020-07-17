@@ -70,7 +70,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
         Product result=dataset.get(position);
         Glide.with(context)
                 .load(result.getProduct_image_url())
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.noimage)
                 .into(holder.image);
 
 

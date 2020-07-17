@@ -364,6 +364,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
                 } else {
                     spinneroutlet.setError("Invalid id");
+                    Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(getActivity(),ActivityInitial.class));
+                    getActivity().finishAffinity();
                 }
             }
 

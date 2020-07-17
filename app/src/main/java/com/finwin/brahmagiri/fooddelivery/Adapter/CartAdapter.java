@@ -81,8 +81,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         final CartItem lists = dataset.get(position);
         holder.tvItemName.setText(""+lists.getProductName());
         Glide.with(context)
-                .load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
-                .placeholder(R.drawable.placeholder)
+                .load("")
+                .placeholder(R.drawable.noimage)
                 .into(holder.ItemImage);
 
        int cnt = lists.getQuantity();
