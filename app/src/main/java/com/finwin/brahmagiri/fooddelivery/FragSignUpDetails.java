@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finwin.brahmagiri.fooddelivery.Responses.District;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
+import com.finwin.brahmagiri.fooddelivery.Responses.States;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
 import com.finwin.brahmagiri.fooddelivery.Utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +41,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragSignUpDetails extends Fragment {
-    AppCompatSpinner spinner;
+    AppCompatSpinner spinner, spinnerdistrict, spinnerstate;
     View rootview;
     Button btnSignup;
     TextView tvSignin;
     List<Zone> dataset;
+    List<States> datasetstates;
+    List<District> datasetdistrict;
+
     ArrayAdapter<Zone> adapters;
-    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd, EdConfirm;
-    private String selecteditem;
+    ArrayAdapter<District> adapterdistrict;
+    ArrayAdapter<States> adapterstate;
+
+    EditText Edname, Edmobile, Edemail, Edpin, Edaddress, Edusername, Edpasswd, EdConfirm, EdStreet, EdCity, Edlandmark;
+    private String selecteditem, selecteditemdistrict, selecteditemstate;
 
 
     @Override
@@ -56,7 +68,15 @@ public class FragSignUpDetails extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         dataset = new ArrayList<>();
         LoadZone();
+        LoadStates();
+
         spinner = rootview.findViewById(R.id.ed_spinner);
+        spinnerdistrict = rootview.findViewById(R.id.ed_district);
+        spinnerstate = rootview.findViewById(R.id.ed_state);
+        EdStreet = rootview.findViewById(R.id.ed_streetaddress);
+        EdCity = rootview.findViewById(R.id.ed_city);
+        Edlandmark = rootview.findViewById(R.id.ed_landmark);
+
 
         Edname = rootview.findViewById(R.id.ed_name);
         Edmobile = rootview.findViewById(R.id.ed_mobile);
@@ -82,6 +102,39 @@ public class FragSignUpDetails extends Fragment {
             }
         });
 
+        spinnerdistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != -1) {
+                    selecteditemdistrict = adapterdistrict.getItem(i).getId().toString();
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerstate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != -1) {
+                    selecteditemstate = Objects.requireNonNull(adapterstate.getItem(i)).getId().toString();
+                    String las = adapterstate.getItem(i).getId().toString();
+                    Log.d("onItemSelected", "onItemSelected: " + i);
+                    LoadDistricts(selecteditemstate);
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         btnSignup = rootview.findViewById(R.id.btn_signup);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +146,12 @@ public class FragSignUpDetails extends Fragment {
                 String vausername = Edusername.getText().toString();
                 String vapassword = Edpasswd.getText().toString();
                 String vaConfirmpasswd = EdConfirm.getText().toString();
+                String vastreet = EdStreet.getText().toString();
+                String vaCity = EdCity.getText().toString();
+                String vaLandmark = Edlandmark.getText().toString();
+                String vaEmail = Edemail.getText().toString();
+
+
                 if (vaname.equals("")) {
                     Edname.setError("Field Required");
 
@@ -103,13 +162,24 @@ public class FragSignUpDetails extends Fragment {
                     Edmobile.requestFocus();
 
 
-
                 } else if (vaPin.equals("")) {
                     Edpin.setError("Field Required");
 
 
                 } else if (vaaddress.equals("")) {
                     Edaddress.setError("Field Required");
+
+
+                } else if (vaCity.equals("")) {
+                    EdCity.setError("Field Required");
+
+
+                } else if (vastreet.equals("")) {
+                    EdStreet.setError("Field Required");
+
+
+                } else if (vaLandmark.equals("")) {
+                    Edlandmark.setError("Field Required");
 
 
                 } else if (vausername.equals("")) {
@@ -124,7 +194,7 @@ public class FragSignUpDetails extends Fragment {
                     EdConfirm.setError("Field Required");
 
                 } else {
-                    doSignup(vaname, vaMobile, "vaemail", vaPin, vaaddress, vausername, vapassword);
+                    doSignup(vaname, vaMobile, vaEmail, vaPin, vaaddress, vausername, vapassword, vaLandmark, vastreet, vaCity);
                 }
 
                 // doSignup(vaname, vaMobile, "vaemail", vaPin, vaaddress, vausername, vapassword);
@@ -144,11 +214,11 @@ public class FragSignUpDetails extends Fragment {
 
     }
 
-    private void doSignup(String vaname, String vaMobile, String vaemail, String vaPin, String vaaddress, String vausername, String vapassword) {
+    private void doSignup(String vaname, String vaMobile, String vaemail, String vaPin, String vaaddress, String vausername, String vapassword, String vaLandmark, String vastreet, String vaCity) {
 
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Response_Signup> call = apiService.dosignup("test", vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, selecteditem);
+        Call<Response_Signup> call = apiService.dosignup("test", vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, vastreet, vaCity, vaLandmark, Integer.parseInt(selecteditemstate), Integer.parseInt(selecteditemdistrict), vaemail, selecteditem);
         call.enqueue(new Callback<Response_Signup>() {
             @Override
             public void onResponse(Call<Response_Signup> call, Response<Response_Signup> response) {
@@ -157,7 +227,7 @@ public class FragSignUpDetails extends Fragment {
                     startActivity(new Intent(getActivity(), ActivityInitial.class));
                     getActivity().finishAffinity();
 
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
 
                 }
@@ -193,6 +263,60 @@ public class FragSignUpDetails extends Fragment {
 
             @Override
             public void onFailure(Call<Signup_Zone> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void LoadStates() {
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseStates> call = apiService.doFetchStates("test");
+        call.enqueue(new Callback<ResponseStates>() {
+            @Override
+            public void onResponse(Call<ResponseStates> call, Response<ResponseStates> response) {
+                if (response.body() != null && response.code() == 200) {
+                    ResponseStates signup_zone = response.body();
+                    datasetstates = signup_zone.getStates();
+                    adapterstate = new ArrayAdapter<States>(getActivity(), android.R.layout.simple_spinner_item, datasetstates);
+                    adapterstate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerstate.setAdapter(adapterstate);
+
+                } else {
+                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseStates> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void LoadDistricts(String selecteditemstate) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("state", Integer.parseInt(selecteditemstate));
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseDistricts> call = apiService.doFetchDistricts("test", jsonObject);
+        call.enqueue(new Callback<ResponseDistricts>() {
+            @Override
+            public void onResponse(Call<ResponseDistricts> call, Response<ResponseDistricts> response) {
+                if (response.body() != null && response.code() == 200) {
+                    ResponseDistricts signup_zone = response.body();
+                    datasetdistrict = signup_zone.getDistricts();
+                    adapterdistrict = new ArrayAdapter<District>(getActivity(), android.R.layout.simple_spinner_item, datasetdistrict);
+                    adapterdistrict.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerdistrict.setAdapter(adapterdistrict);
+
+                } else {
+                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseDistricts> call, Throwable t) {
 
             }
         });

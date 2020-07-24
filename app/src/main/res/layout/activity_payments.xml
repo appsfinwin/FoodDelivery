@@ -276,11 +276,12 @@
                         android:textSize="13.3sp" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tv_addressName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
-                        android:text="Office"
+                        android:text=""
                         android:textColor="#ec5a31"
                         android:textSize="14dp" />
 
@@ -290,12 +291,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8.3dp"
                         android:layout_marginRight="20dp"
-                        android:text="S02, India bulls mega mall, near dinesh mill, Jetalpur
-Road, Vadodara, 390020"
+                        android:text=""
                         android:textColor="#7c7b7b"
                         android:textSize="12dp" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tv_edit_addrs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

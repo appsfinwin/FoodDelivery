@@ -9,13 +9,16 @@ import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchite
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.gson.JsonObject;
@@ -112,7 +115,7 @@ public interface ApiService {
 
 
     @GET("zone/outlets?")
-    Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database, @Query("zone_id")String zone_id);
+    Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database, @Query("zone_id") String zone_id);
 
     @GET("all_zone/get_zone")
     Call<ResponseFetchZone> fetchzone(@Header("Access-Token") String auth, @Header("database") String database);
@@ -120,44 +123,65 @@ public interface ApiService {
     @POST("sign_up/zone_list")
     Call<Signup_Zone> fetchzonesignup(@Header("database") String database);
 
-@FormUrlEncoded
+    @FormUrlEncoded
     @POST("register/sign_up")
     Call<Response_Signup> dosignup(@Header("database") String database,
                                    @Field("name") String name,
-                                   @Field("mobile") String  mobile,
+                                   @Field("mobile") String mobile,
                                    @Field("address") String address,
                                    @Field("pincode") int pincode,
                                    @Field("username") String username,
                                    @Field("password") String password,
-                                   @Field("zone")String zoneid);
+                                   @Field("street") String street,
+                                   @Field("city") String city,
+                                   @Field("landmark") String landmark,
+                                   @Field("state") int stateid,
+                                   @Field("district") int districtid,
+                                   @Field("email") String email,
+
+                                   @Field("zone") String zoneid);
 
 
-
-
-   // @FormUrlEncoded
+    // @FormUrlEncoded
     @POST("temporary/add_cart")
     Call<ResponseAddcart> doAddtiocart(@Header("Access-Token") String Access_Token,
                                        @Header("database") String database,
                                        @Body JsonObject jsonObject);
 
 
-  //  @FormUrlEncoded
+    //  @FormUrlEncoded
     @POST("cart_list/get_cart")
     Call<ResponseBrahmaCart> FetchCart(@Header("Access-Token") String Access_Token,
                                        @Header("database") String database,
-                                      @Body JsonObject cartbody);
+                                       @Body JsonObject cartbody);
 
     @POST("remove/remove_cart")
     Call<ResponseRemove> doremove(@Header("Access-Token") String Access_Token,
                                   @Header("database") String database,
                                   @Body JsonObject cartbody);
-@FormUrlEncoded
+
+    @FormUrlEncoded
     @POST("consumer_sales/get_order")
     Call<ResponseMyOrder> doFetchMyOrder(@Header("Access-Token") String Access_Token,
-                                   @Header("database") String database,
-                                   @Field("consumer_id") String cartbody);
+                                         @Header("database") String database,
+                                         @Field("consumer_id") String cartbody);
+    @POST("send/otp")
+    Call<JsonObject> doSendOtp(@Header("database") String database,
+                                                                      @Body JsonObject cartbody);
+    @POST("otp/verification")
+    Call<JsonObject> Verifyotp( @Header("database") String database,
+                                @Body JsonObject cartbody);
 
-
+    @POST("change/password")
+    Call<JsonObject> doChangepwd( @Header("database") String database,
+                                @Body JsonObject cartbody);
+    @POST("state/state_list")
+    Call<ResponseStates> doFetchStates(@Header("database") String database);
+    @POST("district/district_list")
+    Call<ResponseDistricts> doFetchDistricts(@Header("database") String database,@Body JsonObject cartbody);
+    @POST("consumer/profile")
+    Call<ResponseFetchProfile> doFetchProfile(@Header("database") String database,
+                                              @Header("Access-Token") String Access_Token,@Body JsonObject cartbody);
 
 }
 

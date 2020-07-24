@@ -18,6 +18,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.Outlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.android.material.navigation.NavigationView;
 
@@ -146,7 +147,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
       frameLayout=rootview.findViewById(R.id.empty_layout);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
-        LoadZone();
+
 
     String pos= LocalPreferences.retrieveStringPreferences(getActivity(),"zonepos");
     if(pos!=null&&!pos.equals("")) {
@@ -583,5 +584,43 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         Toast.makeText(getActivity(), name, Toast.LENGTH_LONG).show();
     }
+    private void doFetch() {
+        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
 
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("partner_id", Integer.parseInt(userid));
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseFetchProfile> call = apiService.doFetchProfile("test", mAccesstoken, jsonObject);
+        call.enqueue(new Callback<ResponseFetchProfile>() {
+            @Override
+            public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
+                if (response.body() != null && response.code() == 200) {
+                    String name = response.body().getName();
+                    String mobile=response.body().getMobile();
+                    String email=response.body().getEmail();
+
+                    String address=name+" \n "+mobile+" , "+email+"\n"+response.body().getHouseNo()+" ,"+response.body().getStreet()+" ,"+response.body().getCity()+"  ,"
+                            +response.body().getDistrict()+" ,"
+                            +response.body().getState()+" ,"+ "\n"+"Landmark - "+response.body().getLandmark()+ "\n"+"Pincode - "+response.body().getPincode();
+
+                    LocalPreferences.storeStringPreference(getActivity(),"Address",address);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseFetchProfile> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadZone();
+        doFetch();
+    }
 }

@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'com.github.ganfra:material-spinner:2.0.0'
     implementation 'com.worldline.in:worldlineipg:1.8'
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.0'
 
 
     implementation('com.github.ganfra:material-spinner:2.0.0') {

@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
@@ -34,6 +36,7 @@ public class FragLogin extends Fragment {
     Button btnLogin;
     RequestQueue requestQueue;
     EditText edUsername,edPass;
+    TextView changpass;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +50,14 @@ public class FragLogin extends Fragment {
         requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
         edUsername=rootview.findViewById(R.id.ed_username);
         edPass=rootview.findViewById(R.id.ed_passwd);
+        changpass=rootview.findViewById(R.id.tv_changepwd);
+        changpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), EnterMobActivity.class));
+
+            }
+        });
 
 
         btnLogin = rootview.findViewById(R.id.btn_login);

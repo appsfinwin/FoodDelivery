@@ -80,8 +80,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     public void onBindViewHolder(final CartAdapter.MyViewHolder holder, final int position) {
         final CartItem lists = dataset.get(position);
         holder.tvItemName.setText(""+lists.getProductName());
+
+
         Glide.with(context)
-                .load("")
+                .load(lists.getProduct_image_url())
                 .placeholder(R.drawable.noimage)
                 .into(holder.ItemImage);
 

@@ -11,10 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-
         tools:ignore="GoogleAppIndexingWarning"
-
         tools:replace="android:icon,android:allowBackup">
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.OtpVerify"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity" />
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.Changepassword" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,9 +33,7 @@
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityInitial"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityMain"
             android:screenOrientation="portrait" />
@@ -45,10 +44,10 @@
 
         <meta-data
             android:name="key"
-            android:value="6375b97b954b37f956966977e5753ee6" />
+            android:value="e1a1cf35429f651fc4ead3714b6203f5" />
         <meta-data
             android:name="mid"
-            android:value="WL0000000027698" />
+            android:value="WL0000000065439" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />

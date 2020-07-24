@@ -1,9 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.OtpVerify">
+    android:orientation="vertical"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_toolbar">
+
+    </include>
+
+    <ImageView
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/parent"
+        android:src="@drawable/blogo"
+        android:layout_width="200dp"
+        android:layout_height="150dp">
+
+    </ImageView>
+
+    <LinearLayout
+        android:id="@+id/parent"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        tools:context=".Activity.OtpVerify">
+        <TextView
+            android:textColor="#000"
+            android:layout_marginTop="30dp"
+            android:text="Enter OTP "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <com.mukesh.OtpView
+            android:id="@+id/otp_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:inputType="number"
+            android:itemBackground="#FFF"
+            android:textColor="@color/colorPrimary"
+            app:itemCount="4"
+            app:lineColor="@color/colorPrimary"
+            app:viewType="line" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="19.3dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/rect_loginbtn"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_marginTop="50dp"
+            android:id="@+id/otptimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btndresend"
+            android:background="@drawable/rect_loginbtn"
+            android:textColor="#FFF"
+            android:text="Resend Otp"
+            android:padding="15dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,9 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.EnterMobActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/custom_toolbar">
+
+        </include>
+
+        <ImageView
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/parent"
+            android:src="@drawable/blogo"
+            android:layout_width="200dp"
+            android:layout_height="150dp">
+
+        </ImageView>
+
+        <LinearLayout
+            android:id="@+id/parent"
+            android:layout_centerInParent="true"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="25dp"
+                android:text="Mobile Number"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="40dp"
+                android:orientation="vertical"
+                android:padding="1dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:passwordToggleEnabled="false">
+
+                    <EditText
+                        android:id="@+id/ed_username"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="48dp"
+                        android:background="@drawable/rect_grayoutline"
+                        android:fontFamily="sans-serif"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:paddingStart="7dp"
+                        android:paddingLeft="16.3dp"
+                        android:paddingTop="15.7dp"
+                        android:paddingBottom="15.7dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/greyText"
+                        android:textSize="15sp"
+                        android:textStyle="normal" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="27dp"
+                android:layout_marginTop="19.3dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/rect_loginbtn"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>
+

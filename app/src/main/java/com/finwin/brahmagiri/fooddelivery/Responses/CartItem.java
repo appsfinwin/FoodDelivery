@@ -7,6 +7,10 @@ public class CartItem {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("product_image_url")
+    @Expose
+    private String product_image_url;
+
     @SerializedName("user_id")
     @Expose
     private Integer userId;
@@ -91,6 +95,14 @@ public class CartItem {
 
     public void setOutlet(Integer outlet) {
         this.outlet = outlet;
+    }
+
+    public String getProduct_image_url() {
+        return product_image_url;
+    }
+
+    public void setProduct_image_url(String product_image_url) {
+        this.product_image_url = product_image_url;
     }
 }
 

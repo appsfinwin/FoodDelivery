@@ -101,6 +101,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
          getewaytotal=String.valueOf(roundOff);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
+       String address= LocalPreferences.retrieveStringPreferences(getApplicationContext(),"Address");
+       tvAddress.setText(address);
+
         collection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -121,11 +124,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             }
         });
 
-       /* Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            StrBndlTotal = bundle.getString(ConstantClass.TOTAL_AMNT, "");
-        }*/
-        //dofetchcartSummary(0, "", "CART_SUMMARY");
 
         menuRecycler = (RecyclerView) findViewById(R.id.menuRecycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -140,35 +138,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         fetchCart();
 
         homeListModelClassArrayList = new ArrayList<>();
-
-//        for (int i = 0; i < foodName.length; i++) {
-//            ConfirmOrderModel beanClassForRecyclerView_contacts = new ConfirmOrderModel(foodName[i], quantity[i], rupees[i]);
-//            homeListModelClassArrayList.add(beanClassForRecyclerView_contacts);
-//        }
-
-       /* for (Map.Entry<String, Map<String, String>> entry : ConstantClass.hMapCartItem.entrySet()) {
-            itemArryId = entry.getKey();
-            for (Map.Entry<String, String> secndEntry : entry.getValue().entrySet()) {
-                if (secndEntry.getKey().equals(ConstantClass.H_ITEM_NAME)) {
-                    itemArryName = secndEntry.getValue();
-                }
-                if (secndEntry.getKey().equals(ConstantClass.H_ITEM_AMNT)) {
-                    itemArryAmount = secndEntry.getValue();
-                }
-                if (secndEntry.getKey().equals(ConstantClass.H_ITEM_COUNT)) {
-                    itemArryCount = secndEntry.getValue();
-                }
-//                itemArryName = secndEntry.getKey();
-//                itemArryAmount = String.valueOf(secndEntry.getValue());
-            }
-
-            ConfirmOrderModel cnfrmOrderModel = new ConfirmOrderModel(itemArryName, itemArryCount, itemArryAmount);
-            homeListModelClassArrayList.add(cnfrmOrderModel);
-//
-        }*/
-
-       /* bAdapter = new ConfirmOrderAdapter(getApplicationContext(), homeListModelClassArrayList);
-        menuRecycler.setAdapter(bAdapter);*/
 
         //===========================================================
         if (TextUtils.isEmpty(StrBndlTotal)) {
@@ -494,7 +463,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
                             /*   */
                             intent.putExtra(Param.ORDER_ID, String.valueOf(time));
-                            intent.putExtra(Param.TRANSACTION_AMOUNT,getewaytotal );
+                            intent.putExtra(Param.TRANSACTION_AMOUNT,"12000" );
                             intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
                             intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
                             intent.putExtra(Param.TRANSACTION_TYPE, "S");
@@ -520,13 +489,12 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        try {
+try {
 
-        }catch (Exception e){
-            Log.e("myexception",e.getMessage());
+
 
         if (requestCode == 101) {
-            Log.e("Payment", "onActivityResult: " + data);
+            Log.e("Payment", "onActivityResult: " + resultCode);
 
             if (resultCode == RESULT_OK) {
                 String orderId = data.getStringExtra(Param.ORDER_ID);
@@ -557,7 +525,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                 if (statusCode.equals("S")){
                  //   doConfirmOrder(transactionAmount,orderId);
-                    startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId));
+                  //  startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId));
 
                 }else{
                    //startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
@@ -574,7 +542,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
             }
         }
-        }
+        }catch (Exception e){
+    Log.e("Payment", "cancelled: " + e.getMessage());
+
+}
     }
+
 
 }
