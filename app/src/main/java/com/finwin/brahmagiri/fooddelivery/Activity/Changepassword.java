@@ -90,4 +90,13 @@ ActivityChangepasswordBinding binding;
             }
         });
     }
+
+    public void onBack(View view) {
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

@@ -14,7 +14,7 @@ public class Product {
     @SerializedName("avl_qty")
     @Expose
     private Double avlQty;
-    @SerializedName("out_id")
+    @SerializedName("outlet_id")
     @Expose
     private String outId;
     @SerializedName("product_id")

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -37,7 +38,9 @@ public class FragProfile extends Fragment {
     Button btnLogin;
     ImageButton ibtn_back;
     ImageView img_Chng_homeAdd, img_Chng_ofcAdd;
-
+    String name;
+    String mobile;
+    String email,address,street,city,pincode,landmark;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -86,9 +89,14 @@ public class FragProfile extends Fragment {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
                 if (response.body() != null && response.code() == 200) {
-                    String name = response.body().getName();
-                    String mobile=response.body().getMobile();
-                    String email=response.body().getEmail();
+                     name = response.body().getName();
+                     mobile=response.body().getMobile();
+                     email=response.body().getEmail();
+                     address=response.body().getHouseNo();
+                     street=response.body().getStreet();
+                     city=response.body().getCity();
+                     landmark=response.body().getLandmark();
+                     pincode=response.body().getPincode().toString();
                     binding.tvname.setText(name);
                     binding.tvEmail.setText(email);
                     binding.tvMobile.setText(mobile);
@@ -121,12 +129,31 @@ public class FragProfile extends Fragment {
         b.setTitle(addTest);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_chng_address, null);
+        final EditText edname=dialogView.findViewById(R.id.ed_name);
+        final EditText edmobile=dialogView.findViewById(R.id.ed_mobile);
+        final EditText edlandmark=dialogView.findViewById(R.id.ed_landmark);
+        final EditText edaddress=dialogView.findViewById(R.id.ed_address);
+        final EditText edstreet=dialogView.findViewById(R.id.ed_street);
+        final EditText edcity=dialogView.findViewById(R.id.ed_city);
+        final EditText edpin=dialogView.findViewById(R.id.ed_pin);
+        final EditText edemail=dialogView.findViewById(R.id.ed_email);
+
+        edname.setText(name);
+        edmobile.setText(mobile);
+        edlandmark.setText(landmark);
+        edaddress.setText(address);
+        edstreet.setText(street);
+        edcity.setText(city);
+        edpin.setText(pincode);
+        edemail.setText(email);
         b.setView(dialogView);
         b.setCancelable(false);
         b.setPositiveButton("Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.e("onClick: ", "+++++");
+                doUpdateProfile(edname.getText().toString(),edmobile.getText().toString(),edlandmark.getText().toString(),
+                        edaddress.getText().toString(),edstreet.getText().toString(),edcity.getText().toString(),edemail.getText().toString(),edpin.getText().toString());
             }
         });
 
@@ -155,6 +182,42 @@ public class FragProfile extends Fragment {
 //            }
 //        });
         alertDialog.show();
+    }
+
+    private void doUpdateProfile(String edname,String edmobile,String edlandmark,
+                                 String edaddress,String edstreet,String edcity,String edemail,String edpin){
+        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("partner_id", Integer.parseInt(userid));
+        jsonObject.addProperty("name", edname);
+        jsonObject.addProperty("mobile", edmobile);
+        jsonObject.addProperty("landmark", edlandmark);
+        jsonObject.addProperty("address", edaddress);
+        jsonObject.addProperty("street", edstreet);
+        jsonObject.addProperty("city", edcity);
+        jsonObject.addProperty("email", edemail);
+        jsonObject.addProperty("pincode", edpin);
+
+
+
+
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        ApiService apiService=APIClient.getClient().create(ApiService.class);
+        Call<JsonObject>call=apiService.doUpdateProfile("test",mAccesstoken,jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!=null&&response.code()==200){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
 

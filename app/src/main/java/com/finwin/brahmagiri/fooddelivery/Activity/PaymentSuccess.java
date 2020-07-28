@@ -52,6 +52,8 @@ public class PaymentSuccess extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     LinearLayout mainparent;
     String transactionid;
+    String paymentmode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class PaymentSuccess extends AppCompatActivity {
         fetchCart();
         //  datasetAdd = db.getAllContacts();
         transactionid=getIntent().getStringExtra("trnxnid");
+        paymentmode=getIntent().getStringExtra("paymode");
 
 
 
@@ -89,8 +92,8 @@ public class PaymentSuccess extends AppCompatActivity {
     private void LoadInvoice(List<CartItem> datasetAdd, int billid) {
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"bill_id\":" + billid +
-                ",\"transaction_id\":" + "null"+
-                ",\"payment_mode\":" + "cod" +
+                ",\"transaction_id\":" + transactionid+
+                ",\"payment_mode\":" + paymentmode +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {

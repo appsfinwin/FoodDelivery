@@ -34,6 +34,7 @@
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityInitial"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentFailureActivity"></activity>
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityMain"
             android:screenOrientation="portrait" />

@@ -19,19 +19,110 @@
             android:orientation="vertical"
             android:paddingTop="15dp">
 
-<!--            android:gravity="center"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="48dp"-->
-<!--                android:layout_marginBottom="18dp"-->
-<!--                android:fontFamily="sans-serif"-->
-<!--                android:text="Change Address"-->
-<!--                android:textColor="@color/greyText"-->
-<!--                android:textSize="18sp"-->
-<!--                android:textStyle="normal" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Name"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
 
+                <EditText
+                    android:id="@+id/ed_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="text"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Mobile"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/ed_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Landmark"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/ed_landmark"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="text"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,18 +144,88 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
                     android:fontFamily="sans-serif"
                     android:inputType="textMultiLine"
-                    android:lines="5"
+                    android:lines="2"
+
                     android:gravity="top"
                     android:maxLines="10"
                     android:paddingLeft="16.3dp"
                     android:paddingTop="15.7dp"
                     android:paddingBottom="15.7dp"
                     android:singleLine="false"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Street"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/ed_street"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="text"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="City"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/ed_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="text"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/greyText"
                     android:textSize="15sp"
@@ -91,12 +252,47 @@
                     android:textStyle="normal" />
 
                 <EditText
+                    android:id="@+id/ed_pin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rect_grayoutline"
                     android:fontFamily="sans-serif"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:maxLength="6"
+                    android:paddingLeft="16.3dp"
+                    android:paddingTop="15.7dp"
+                    android:paddingBottom="15.7dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/greyText"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Email"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/ed_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rect_grayoutline"
+                    android:fontFamily="sans-serif"
+                    android:inputType="text"
                     android:paddingLeft="16.3dp"
                     android:paddingTop="15.7dp"
                     android:paddingBottom="15.7dp"

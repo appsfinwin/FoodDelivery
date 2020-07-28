@@ -59,11 +59,11 @@ public class FragMenuItem extends Fragment {
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
 
         homeListModelClassArrayList1 = new ArrayList<>();
-        for (int i = 0; i < foodName.length; i++) {
+      /*  for (int i = 0; i < foodName.length; i++) {
             MenuItemInListModel menuItemInListModel = new MenuItemInListModel(String.valueOf(300 + i), FragHome.image[0],
                     foodName[i], foodType1[i], rupees[i]);
             homeListModelClassArrayList1.add(menuItemInListModel);
-        }
+        }*/
 
         bAdapter = new MenuItemInListAdapter(getContext(), homeListModelClassArrayList1, new FragMenuTab());
         menuRecycler.setAdapter(bAdapter);

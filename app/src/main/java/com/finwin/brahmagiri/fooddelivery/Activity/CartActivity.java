@@ -47,7 +47,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     List<ProductEntryModel> datasetcartlist;
     List<CartItem> totallist;
     double totalsum = 0.0;
-
+    String cartoutid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         //db.getquantity("11");
         Log.d("fetchquantity", ": " + db.getFromDb("11"));
         //  fetchCart();
-        String cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
+    cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
         if (cartoutid != null && !cartoutid.equals("")) {
             fetchCartfromServer(cartoutid);
         } else {
@@ -241,7 +241,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     public void delete(String code) {
         //   doUpdateCart(0, code, "DELETE");
         //db.deleteEntry(Integer.parseInt(code));
-        deletefromServer("319", Integer.parseInt(code));
+        deletefromServer(cartoutid , Integer.parseInt(code));
         mCartAdapter.notifyDataSetChanged();
         //calculatetotal();
         Log.e("delete", "delete: " + mCartAdapter.getItemCount());
@@ -285,7 +285,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         super.onBackPressed();
     }
 
-    private void deletefromServer(String cartoutid, int productcode) {
+    private void deletefromServer(final String cartoutid, int productcode) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
@@ -304,7 +304,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
                     ResponseRemove responseBrahmaCart = response.body();
 
                     Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    fetchCartfromServer("319");
+                    fetchCartfromServer(cartoutid);
 
 
                 }

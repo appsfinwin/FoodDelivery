@@ -72,8 +72,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -106,25 +109,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     ItemlistingBrahmaAdapter adapter;
     int selectedindex;
     String outletid;
+    FrameLayout mprogres;
 
 
-    public static Integer image[] = {R.drawable.food2, R.drawable.food1, R.drawable.food3, R.drawable.food4};
-    public static String foodName[] = {"Beef items", "Mutton items", "Chicken items", "Meat products"};
-    String totalRest[] = {"fillet, steak etc.", "jowl,Spare ribs etc", "halal,Boneless etc.", "chicken,boneless.."};
-
-    Integer foodImage[] = {R.drawable.food5, R.drawable.food6, R.drawable.food7, R.drawable.food5};
-    String ratings[] = {"4.5", "4.2", "4.3", "4.5"};
-    String restaurantName[] = {"Beef items", "Pork items", "Chicken", "Chicken products"};
-    String restaurantCusines[] = {"Beef skeletal muscle,fillet mignon,sirloin steak,rump steak",
-            "Pork belly,Pork jowl,Spare ribs",
-            "Halal Cut,Boneless,Leg Meat",
-            "Chicken,Breat,sliced boneless skinless"};
-    String deliveryTime[] = {"20-30 min", "10-15 min", "40-45 min", "30-35 min"};
-    String amount[] = {"300 Rs", "250 Rs", "280 Rs", "320 Rs"};
-    String paymentMode[] = {"Online & COD", "Online & COD", "Online & COD", "Online & COD",};
     List<Zone> dataset;
     List<Outlet> datasetout;
-   LinearLayout frameLayout;
+    LinearLayout frameLayout;
 
     MaterialSpinner spinnerzone;
     MaterialSpinner spinneroutlet;
@@ -132,38 +122,37 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private Boolean mIsOutletSpinnerFirstCall = true;
 
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.home_fragment, container, false);
-
-
+        mprogres = rootview.findViewById(R.id.progressbars);
+        LoadZone();
+        doFetch();
         ///==========================================================================
         drawer = (DrawerLayout) rootview.findViewById(R.id.drawer_layou);
         msummarylayout = (RelativeLayout) rootview.findViewById(R.id.summary_layout);
         spinnerzone = (MaterialSpinner) rootview.findViewById(R.id.spinner);
         spinneroutlet = (MaterialSpinner) rootview.findViewById(R.id.spinner2);
-      frameLayout=rootview.findViewById(R.id.empty_layout);
+        frameLayout = rootview.findViewById(R.id.empty_layout);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
 
 
-    String pos= LocalPreferences.retrieveStringPreferences(getActivity(),"zonepos");
-    if(pos!=null&&!pos.equals("")) {
-        spinnerzone.setSelection(Integer.parseInt(pos));
-    }
+        String pos = LocalPreferences.retrieveStringPreferences(getActivity(), "zonepos");
+        if (pos != null && !pos.equals("")) {
+            spinnerzone.setSelection(Integer.parseInt(pos));
+        }
 
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position!=-1) {
+                if (position != -1) {
                     fechoutletbumyZOne(dataset.get(position).getId().toString());
-                    LocalPreferences.storeStringPreference(getActivity(),"zonepos",String.valueOf(position));
+                    LocalPreferences.storeStringPreference(getActivity(), "zonepos", String.valueOf(position));
 
 
-
-                   // spinnerzone.setSelection(3);
+                    // spinnerzone.setSelection(3);
                 }
                 mIsZoneSpinnerFirstCall = false;
                 //    Zone user = (Zone) parent.getSelectedItem();
@@ -182,20 +171,20 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             }
         });
 
-        String posout= LocalPreferences.retrieveStringPreferences(getActivity(),"outletpos");
-        if(posout!=null&&!posout.equals("")) {
+        String posout = LocalPreferences.retrieveStringPreferences(getActivity(), "outletpos");
+        if (posout != null && !posout.equals("")) {
             //spinneroutlet.setSelection(Integer.parseInt(pos));
         }
 
         spinneroutlet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            if (i!=-1) {
+                if (i != -1) {
                     // Your code goes gere
-                String outid = datasetout.get(i).getOutlet().toString();
-                doFetchProducts(outid);
-                //spinneroutlet.setSelection(i);
-                LocalPreferences.storeStringPreference(getActivity(),"outletpos",String.valueOf(i));
+                    String outid = datasetout.get(i).getOutlet().toString();
+                    doFetchProducts(outid);
+                    //spinneroutlet.setSelection(i);
+                    LocalPreferences.storeStringPreference(getActivity(), "outletpos", String.valueOf(i));
 
 /*
                 LocalPreferences.storeStringPreference("lastpos");
@@ -231,7 +220,6 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         totallist = new ArrayList<>();
 
 
-
         setToolbar();
         productEntryModel = new ProductEntryModel();
 
@@ -264,37 +252,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        homeListModelClassArrayList = new ArrayList<>();
-        for (int i = 0; i < image.length; i++) {
-            MenuItemModel menuItem_Model = new MenuItemModel(String.valueOf(i), image[i], foodName[i], totalRest[i]);
-            homeListModelClassArrayList.add(menuItem_Model);
-        }
-        /*mAdapter = new MenuItemRecyAdapter(getContext(), homeListModelClassArrayList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);*/
 
-//        tvViewall = (TextView) rootview.findViewById(R.id.tv_viewall);
-
-
-        ///===============
-
-        recyclerView1 = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-        recyclerView1.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        homeListModelClassArrayList2 = new ArrayList<>();
-        for (int i = 0; i < image.length; i++) {
-            FoodForYouModel beanClassForRecyclerView_contacts = new FoodForYouModel(ratings[i], restaurantName[i],
-                    restaurantCusines[i], deliveryTime[i], amount[i], paymentMode[i], foodImage[i]);
-
-            homeListModelClassArrayList2.add(beanClassForRecyclerView_contacts);
-        }
 
 
 
         return rootview;
     }
-
 
 
     private void LoadZone() {
@@ -315,20 +278,20 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapters = new ArrayAdapter<Zone>(Objects.requireNonNull(getActivity()), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
-                    String zones=   LocalPreferences.retrieveStringPreferences(getActivity(),"zone");
-               for (int i=0;i<dataset.size();i++){
-                   int id=dataset.get(i).getId();
-                   if (id==Integer.parseInt(zones)){
-                       Log.e("zoneindex", "onCreateView: "+i+zones );
-                       spinnerzone.setSelection(i+1);
-                       fechoutletbumyZOne(dataset.get(i).getId().toString());
-                   }
-               }
+                    String zones = LocalPreferences.retrieveStringPreferences(getActivity(), "zone");
+                    for (int i = 0; i < dataset.size(); i++) {
+                        int id = dataset.get(i).getId();
+                        if (id == Integer.parseInt(zones)) {
+                            Log.e("zoneindex", "onCreateView: " + i + zones);
+                            spinnerzone.setSelection(i + 1);
+                            fechoutletbumyZOne(dataset.get(i).getId().toString());
+                        }
+                    }
 
 
                     //fechoutletbumyZOne(firstzone);
 
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
 
                 }
@@ -354,19 +317,19 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
                     adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinneroutlet.setAdapter(adapteroutlet);
-                    String posout= LocalPreferences.retrieveStringPreferences(getActivity(),"outletpos");
-                    Log.d("onResponse", "outletposition: "+posout);
-                    if(posout!=null&&!posout.equals("")) {
-                       // spinneroutlet.setSelection(Integer.parseInt(posout));
-                    }else {
-                      //  spinneroutlet.setSelection(1);
+                    String posout = LocalPreferences.retrieveStringPreferences(getActivity(), "outletpos");
+                    Log.d("onResponse", "outletposition: " + posout);
+                    if (posout != null && !posout.equals("")) {
+                        // spinneroutlet.setSelection(Integer.parseInt(posout));
+                    } else {
+                        //  spinneroutlet.setSelection(1);
 
                     }
 
                 } else {
                     spinneroutlet.setError("Invalid id");
                     Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getActivity(),ActivityInitial.class));
+                    startActivity(new Intent(getActivity(), ActivityInitial.class));
                     getActivity().finishAffinity();
                 }
             }
@@ -419,16 +382,16 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     @Override
     public void clickedpdct(int value, String code, String pname, String outid) {
+        Log.d("TAG", "clickedpdct: " + value + code + pname + outid);
         {
             msummarylayout.setVisibility(View.VISIBLE);
 
             if (value > 0) {
                 doAddmyCart(value, code, pname, outid);
-                outletid=outid;
+                outletid = outid;
 
 
                 //  db.rowIdExists(Integer.parseInt(code));
-
 
 
                 //  doUpdateCart(value, code, "INSERT");
@@ -446,9 +409,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "userid");
         String status = "y";
-        String time = "2020-06-06";
+
+        String time = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"product_id\":" + Integer.parseInt(code) + ",\"outlet\":" + Integer.parseInt(outid) + ",\"quantity\":" + value +
-                ",\"status\":" + status + ",\"time\":" + time +"}";
+                ",\"status\":" + status + ",\"time\":" + time + "}";
         JsonParser parser = new JsonParser();
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
@@ -479,19 +443,22 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     @Override
     public void delete(String code) {
-       // db.deleteEntry(Integer.parseInt(code));
+        // db.deleteEntry(Integer.parseInt(code));
         adapter.notifyDataSetChanged();
         //calculatetotal();
     }
 
     ///==========================================================================
     private void doFetchProducts(String outlet_id) {
+        mprogres.setVisibility(View.VISIBLE);
+
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchProducts> call = apiService.fetchproducts(outlet_id, mAccesstoken, "test");
         call.enqueue(new Callback<ResponseFetchProducts>() {
             @Override
             public void onResponse(Call<ResponseFetchProducts> call, Response<ResponseFetchProducts> response) {
+                mprogres.setVisibility(View.GONE);
                 if (response != null && response.code() == 200) {
                     ResponseFetchProducts responseFetchProducts = response.body();
 
@@ -501,11 +468,11 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     adapter = new ItemlistingBrahmaAdapter(getActivity(), dataSet, FragHome.this);
                     recyclerView.setAdapter(adapter);
                     recyclerView.setVisibility(View.VISIBLE);
-                   frameLayout.setVisibility(View.GONE);
-                    if (adapter.getItemCount()==0){
-                       // Toast.makeText(getActivity(), "No Products found for the selected outlet", Toast.LENGTH_SHORT).show();
+                    frameLayout.setVisibility(View.GONE);
+                    if (adapter.getItemCount() == 0) {
+                        // Toast.makeText(getActivity(), "No Products found for the selected outlet", Toast.LENGTH_SHORT).show();
                         frameLayout.setVisibility(View.VISIBLE);
-                      recyclerView.setVisibility(View.INVISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
                     }
 
 
@@ -514,37 +481,36 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
             @Override
             public void onFailure(Call<ResponseFetchProducts> call, Throwable t) {
+                mprogres.setVisibility(View.GONE);
 
             }
         });
 
     }
-    private void fetchCartfromServer(String cartoutid){
-        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
-        String userid=LocalPreferences.retrieveStringPreferences(getActivity(),"userid");
-        Log.d("fetchCartfromServer", "fetchCartfromServer: "+cartoutid);
 
-        String json=  "{\"user_id\":" +Integer.parseInt(userid)+",\"outlet\":" + Integer.parseInt(cartoutid) +"}";
+    private void fetchCartfromServer(String cartoutid) {
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
+
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
         JsonParser parser = new JsonParser();
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
 
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart>cartCall=apiService.FetchCart(mAccesstoken,"test", jsonObject);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
-                if (response.body()!=null&&response.code()==200){
-                    ResponseBrahmaCart responseBrahmaCart=response.body();
+                if (response.body() != null && response.code() == 200) {
+                    ResponseBrahmaCart responseBrahmaCart = response.body();
 
-                    List<CartItem>cartItemList=responseBrahmaCart.getCartItems();
+                    List<CartItem> cartItemList = responseBrahmaCart.getCartItems();
                     Log.d("calculatetotal", "calculatetotal: " + cartItemList.size());
 
-                    totallist=response.body().getCartItems();
+                    totallist = response.body().getCartItems();
                     calculatetotal();
-
-
-
 
 
                 }
@@ -560,6 +526,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
     public void calculatetotal() {
         double sum = 0.0;
+        if (totallist.size() == 0) {
+            msummarylayout.setVisibility(View.GONE);
+        }
 
         for (int i = 0; i < totallist.size(); i++) {
             double price = totallist.get(i).getPrice() * totallist.get(i).getQuantity();
@@ -584,6 +553,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         Toast.makeText(getActivity(), name, Toast.LENGTH_LONG).show();
     }
+
     private void doFetch() {
         String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
 
@@ -598,14 +568,14 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
                 if (response.body() != null && response.code() == 200) {
                     String name = response.body().getName();
-                    String mobile=response.body().getMobile();
-                    String email=response.body().getEmail();
+                    String mobile = response.body().getMobile();
+                    String email = response.body().getEmail();
 
-                    String address=name+" \n "+mobile+" , "+email+"\n"+response.body().getHouseNo()+" ,"+response.body().getStreet()+" ,"+response.body().getCity()+"  ,"
-                            +response.body().getDistrict()+" ,"
-                            +response.body().getState()+" ,"+ "\n"+"Landmark - "+response.body().getLandmark()+ "\n"+"Pincode - "+response.body().getPincode();
+                    String address = name + " \n " + mobile + " , " + email + "\n" + response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
+                            + response.body().getDistrict() + " ,"
+                            + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
 
-                    LocalPreferences.storeStringPreference(getActivity(),"Address",address);
+                    LocalPreferences.storeStringPreference(getActivity(), "Address", address);
                 }
             }
 
@@ -620,7 +590,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     @Override
     public void onResume() {
         super.onResume();
-        LoadZone();
-        doFetch();
+        if (outletid != null) {
+            fetchCartfromServer(outletid);
+        }
+
+
     }
 }

@@ -457,17 +457,19 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         if (cod) {
 
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
-                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid","null"));
+                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid","null").putExtra("paymode","cod"));
                         }else {
                             long time= System.currentTimeMillis();
                             Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
                             /*   */
                             intent.putExtra(Param.ORDER_ID, String.valueOf(time));
-                            intent.putExtra(Param.TRANSACTION_AMOUNT,"12000" );
+                            intent.putExtra(Param.TRANSACTION_AMOUNT,getewaytotal );
                             intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
                             intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
                             intent.putExtra(Param.TRANSACTION_TYPE, "S");
                             startActivityForResult(intent, 101);
+                            LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
+
                         }
                         // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
                     }
@@ -489,8 +491,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-try {
-
 
 
         if (requestCode == 101) {
@@ -524,12 +524,12 @@ try {
                 Log.e("txnid", "onActivityResult: " + orderId);
 
                 if (statusCode.equals("S")){
-                 //   doConfirmOrder(transactionAmount,orderId);
-                  //  startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId));
+                //  doConfirmOrder(transactionAmount,orderId);
+                 startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId).putExtra("paymode","onlinepayment"));
 
                 }else{
-                   //startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
-                  //finishAffinity();
+                   startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
+                  finishAffinity();
                     Log.e("onActivityResult", "paymentfailure   : " );
                 }
                 // Utility.showAlertDialog(this, msg);
@@ -542,11 +542,7 @@ try {
 
             }
         }
-        }catch (Exception e){
-    Log.e("Payment", "cancelled: " + e.getMessage());
-
-}
+        }
     }
 
 
-}

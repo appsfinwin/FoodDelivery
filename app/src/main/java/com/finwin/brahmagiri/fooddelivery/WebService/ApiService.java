@@ -96,9 +96,9 @@ public interface ApiService {
     @POST("authtoken/get_token")
     Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password);
 
-
-    @GET("outlet/products?")
-    Call<ResponseFetchProducts> fetchproducts(@Query("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
+@FormUrlEncoded
+    @POST("outlet_stock/stock_available")
+    Call<ResponseFetchProducts> fetchproducts(@Field("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
 
 
     @Headers({"Content-type: application/json",
@@ -181,6 +181,11 @@ public interface ApiService {
     Call<ResponseDistricts> doFetchDistricts(@Header("database") String database,@Body JsonObject cartbody);
     @POST("consumer/profile")
     Call<ResponseFetchProfile> doFetchProfile(@Header("database") String database,
+                                              @Header("Access-Token") String Access_Token,@Body JsonObject cartbody);
+
+
+    @POST("profile/edit")
+    Call<JsonObject> doUpdateProfile(@Header("database") String database,
                                               @Header("Access-Token") String Access_Token,@Body JsonObject cartbody);
 
 }

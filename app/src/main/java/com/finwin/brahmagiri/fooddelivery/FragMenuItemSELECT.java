@@ -63,11 +63,11 @@ public class FragMenuItemSELECT extends Fragment {
         } catch (Exception e) {
         }
 
-        for (int i = 0; i < 5; i++) {
+      /*  for (int i = 0; i < 5; i++) {
             MenuItemInListModelSELECT menuItemInListModel = new MenuItemInListModelSELECT(
                     String.valueOf(400 + i), FragHome.image[idd], FragHome.foodName[idd], foodType1[idd], rupees[idd]);
             homeListModelClassArrayList1.add(menuItemInListModel);
-        }
+        }*/
 
         bAdapter = new MenuItemInListAdapterSELECT(getContext(), homeListModelClassArrayList1, new FragMenuTab());
         menuRecycler.setAdapter(bAdapter);
