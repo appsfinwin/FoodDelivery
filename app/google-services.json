@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "397200847443",
+    "firebase_url": "https://brahmagiri-ecommerce.firebaseio.com",
+    "project_id": "brahmagiri-ecommerce",
+    "storage_bucket": "brahmagiri-ecommerce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397200847443:android:bad5fff94ddd4c7df60ca6",
+        "android_client_info": {
+          "package_name": "com.finwin.brahmagiri.fooddelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397200847443-njc3nja3bqt8koodru603ism1kqu56he.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSDn0wNA99WBLFf0vyYUkLtG9wABzzC6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397200847443-njc3nja3bqt8koodru603ism1kqu56he.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

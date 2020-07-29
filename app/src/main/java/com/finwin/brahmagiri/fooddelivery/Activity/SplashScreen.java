@@ -8,7 +8,14 @@ import android.os.Bundle;
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
 import com.finwin.brahmagiri.fooddelivery.ActivityMain;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
+import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -16,6 +23,9 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        dofetchVersion();
+
         final boolean islooged= LocalPreferences.retrieveBooleanPreferences(getApplicationContext(),"isLoggedin");
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -43,5 +53,25 @@ public class SplashScreen extends AppCompatActivity {
                 //the current activity will get finished.
             }
         }, 1000);
+    }
+
+    private void dofetchVersion() {
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("app_type","Consumer App");
+        ApiService apiService= APIClient.getClient().create(ApiService.class);
+        Call<JsonObject>call=apiService.doFetchVersionControl("test",jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body()!=null&&response.code()==200){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 }
