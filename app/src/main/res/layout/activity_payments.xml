@@ -296,7 +296,7 @@
                         android:textSize="12dp" />
 
                     <TextView
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:id="@+id/tv_edit_addrs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

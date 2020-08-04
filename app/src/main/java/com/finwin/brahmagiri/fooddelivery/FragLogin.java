@@ -2,6 +2,7 @@ package com.finwin.brahmagiri.fooddelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,7 +36,7 @@ public class FragLogin extends Fragment {
     LinearLayout linSignup;
     Button btnLogin;
     RequestQueue requestQueue;
-    EditText edUsername,edPass;
+    EditText edUsername, edPass;
     TextView changpass;
 
     @Override
@@ -48,9 +49,9 @@ public class FragLogin extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requestQueue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
-        edUsername=rootview.findViewById(R.id.ed_username);
-        edPass=rootview.findViewById(R.id.ed_passwd);
-        changpass=rootview.findViewById(R.id.tv_changepwd);
+        edUsername = rootview.findViewById(R.id.ed_username);
+        edPass = rootview.findViewById(R.id.ed_passwd);
+        changpass = rootview.findViewById(R.id.tv_changepwd);
         changpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,14 +68,14 @@ public class FragLogin extends Fragment {
 //                getPendingLoanList();
 
 
-                String username=edUsername.getText().toString().trim();
-                String password=edPass.getText().toString().trim();
-                if (username.equals("")){
-                 edUsername.setError("This field is empty");
-                }else if (password.equals("")){
+                String username = edUsername.getText().toString().trim();
+                String password = edPass.getText().toString().trim();
+                if (username.equals("")) {
+                    edUsername.setError("This field is empty");
+                } else if (password.equals("")) {
                     edPass.setError("This field is empty");
-                }else{
-                    doLogin(username,password);
+                } else {
+                    doLogin(username, password);
                 }
 
             }
@@ -100,34 +101,37 @@ public class FragLogin extends Fragment {
 
 
     private void doLogin(String username, String password) {
-        ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<ResponseLogin> call=apiService.dologinoutlet("test",username,password);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseLogin> call = apiService.dologinoutlet("test", username, password, "consumer");
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {
-                if (response!=null&&response.code()==200){
-                    ResponseLogin responseLogin=response.body();
-                    String mAccesstoken=response.body().getAccessToken();
-                    if (mAccesstoken!=null){
-                        LocalPreferences.storeStringPreference(getActivity(),"Accesstoken",mAccesstoken);
-                        LocalPreferences.storeStringPreference(getActivity(),"partnerid",responseLogin.getPartnerId().toString());
-                        LocalPreferences.storeStringPreference(getActivity(),"zone",responseLogin.getZone().toString());
+                if (response != null && response.code() == 200) {
+                    ResponseLogin responseLogin = response.body();
+                    String mAccesstoken = response.body().getAccessToken();
+                    if (mAccesstoken != null) {
+                        LocalPreferences.storeStringPreference(getActivity(), "Accesstoken", mAccesstoken);
+                        LocalPreferences.storeStringPreference(getActivity(), "partnerid", responseLogin.getPartnerId().toString());
+                        LocalPreferences.storeStringPreference(getActivity(), "zone", responseLogin.getZone().toString());
 
-                        LocalPreferences.storeBooleanPreference(getActivity(),"isLoggedin",true);
-                        LocalPreferences.storeStringPreference(getActivity(),"userid",response.body().getUid().toString());
+                        LocalPreferences.storeBooleanPreference(getActivity(), "isLoggedin", true);
+                        LocalPreferences.storeStringPreference(getActivity(), "userid", response.body().getUid().toString());
                         startActivity(new Intent(getContext(), ActivityMain.class));
                         Objects.requireNonNull(getActivity()).finish();
 
-                    }
+
                 }else{
-                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
+            }else{
+                Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+            }
 
             }
 
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
-                Toast.makeText(getActivity(), "Login Failed"+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Login Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
 
 
             }

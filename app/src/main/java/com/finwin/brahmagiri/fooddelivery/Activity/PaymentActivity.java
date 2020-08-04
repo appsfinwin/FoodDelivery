@@ -1,17 +1,22 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +35,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -60,7 +66,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     private RecyclerView menuRecycler;
     private ConfirmOrderAdapter bAdapter;
     String cartoutid;
-
+    String name;
+    String mobile;
+    String email, address, street, city, pincode, landmark;
     View rootview;
     Double totalamt;
     TextView tvTotal_co, tvCheckout, tvEditAddrs, tvAddressName, tvAddress, tvChngPymnt;
@@ -68,15 +76,13 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     ImageView imgChngPymnt;
     LinearLayout linrChngPymnt;
     CartAdapter mCartAdapter;
-    String total,getewaytotal;
+    String total, getewaytotal;
 
     String itemArryId, itemArryName, itemArryCount, itemArryAmount,
             StrBndlTotal = "";
     private RadioGroup collection;
     private RadioButton radioButton;
     String deliveryoption;
-
-
 
 
     @Override
@@ -86,7 +92,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvTotal_co = findViewById(R.id.tv_total_co);
         tvAddressName = findViewById(R.id.tv_addressName);
         tvAddress = findViewById(R.id.tv_address);
-        collection=(RadioGroup)findViewById(R.id.radiogrp);
+        collection = (RadioGroup) findViewById(R.id.radiogrp);
 
         tvCheckout = findViewById(R.id.tv_checkout);
         ibtn_back = findViewById(R.id.ibtn_back_co);
@@ -95,32 +101,31 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         linrChngPymnt = findViewById(R.id.linr_chng_pymnt);
         imgChngPymnt = findViewById(R.id.img_chng_pymnt);
         tvChngPymnt = findViewById(R.id.tv_chng_pymnt);
-         total = getIntent().getStringExtra("total");
+        total = getIntent().getStringExtra("total");
         double d = Double.parseDouble(total);
-        int roundOff = (int) d*100;
-         getewaytotal=String.valueOf(roundOff);
+        int roundOff = (int) d * 100;
+        getewaytotal = String.valueOf(roundOff);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
-       String address= LocalPreferences.retrieveStringPreferences(getApplicationContext(),"Address");
-       tvAddress.setText(address);
+
 
         collection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int selectedId=collection.getCheckedRadioButtonId();
-                radioButton=(RadioButton)findViewById(selectedId);
-               if (radioButton.getText().equals("Collect from outlet")){
-                   Log.d("onCheckedChanged", "out: ");
-                   deliveryoption="by_customer";
+                int selectedId = collection.getCheckedRadioButtonId();
+                radioButton = (RadioButton) findViewById(selectedId);
+                if (radioButton.getText().equals("Collect from outlet")) {
+                    Log.d("onCheckedChanged", "out: ");
+                    deliveryoption = "by_customer";
 
-               }else if(radioButton.getText().equals("Home Delivery")){
-                   deliveryoption="take_away";
+                } else if (radioButton.getText().equals("Home Delivery")) {
+                    deliveryoption = "take_away";
 
-                   Log.d("onCheckedChanged", "home: ");
+                    Log.d("onCheckedChanged", "home: ");
 
-               }else{
-                   deliveryoption="";
-               }
+                } else {
+                    deliveryoption = "";
+                }
             }
         });
 
@@ -129,10 +134,10 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemAnimator(new DefaultItemAnimator());
-        if (cod){
+        if (cod) {
             tvCheckout.setText("Place Order");
 
-        }else{
+        } else {
             tvCheckout.setText("Confirm & Checkout");
         }
         fetchCart();
@@ -148,11 +153,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cod){
-                    Load(datasetcartlist,0);
+                if (cod) {
+                    Load(datasetcartlist, 0);
 
-                }else{
-                    Load(datasetcartlist,0);
+                } else {
+                    Load(datasetcartlist, 0);
                    /* long time= System.currentTimeMillis();
                     Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
                     *//*   *//*
@@ -173,15 +178,15 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         ibtn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                assert getFragmentManager() != null;
-                getFragmentManager().popBackStack();
+              onBackPressed();
             }
         });
 
         tvEditAddrs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //ChangeAddress();
+                ChangeAddresses("Address");
+
             }
         });
 
@@ -195,27 +200,26 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     private void fetchCart() {
-        cartoutid=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"cartoutid");
-      //  datasetcartlist = db.getAllContacts();
+        cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
+        //  datasetcartlist = db.getAllContacts();
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
-        String userid=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"userid");
-        Log.d("fetchCartfromServer", "fetchCartfromServer: "+cartoutid);
-        String json=  "{\"user_id\":" +Integer.parseInt(userid)+",\"outlet\":" + Integer.parseInt(cartoutid) +"}";
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+        Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
+        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
         JsonParser parser = new JsonParser();
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart>cartCall=apiService.FetchCart(mAccesstoken,"test", jsonObject);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
-                if (response.body()!=null&&response.code()==200){
-                    ResponseBrahmaCart responseBrahmaCart=response.body();
+                if (response.body() != null && response.code() == 200) {
+                    ResponseBrahmaCart responseBrahmaCart = response.body();
 
-                    datasetcartlist=responseBrahmaCart.getCartItems();
+                    datasetcartlist = responseBrahmaCart.getCartItems();
                     mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
                     menuRecycler.setAdapter(mCartAdapter);
-
 
 
                 }
@@ -413,8 +417,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     public void delete(String code) {
 
     }
+
     private void Load(List<CartItem> datasetAdd, int billid) {
-        String partnerid=   LocalPreferences.retrieveStringPreferences(getApplicationContext(),"partnerid");
+        String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
 
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"consumer_id\":" + partnerid +
@@ -442,6 +447,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
 
     }
+
     private void doGenerateBill(JsonObject jsonObject) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
 
@@ -457,15 +463,18 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         if (cod) {
 
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
-                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid","null").putExtra("paymode","cod"));
-                        }else {
-                            long time= System.currentTimeMillis();
+                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", "null").putExtra("paymode", "cod"));
+                        } else {
+                            Log.e("onResponse", "onResponse: " + getewaytotal);
+                            long time = System.currentTimeMillis();
                             Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
                             /*   */
+                            Log.e("onResponse", "onResponse: " + time);
+
                             intent.putExtra(Param.ORDER_ID, String.valueOf(time));
-                            intent.putExtra(Param.TRANSACTION_AMOUNT,getewaytotal );
+                            intent.putExtra(Param.TRANSACTION_AMOUNT, getewaytotal);
                             intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
-                            intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
+                            intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Foodorder");
                             intent.putExtra(Param.TRANSACTION_TYPE, "S");
                             startActivityForResult(intent, 101);
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
@@ -480,23 +489,21 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             }
 
 
-
             @Override
             public void onFailure(Call<ResponseCreateBill> call, Throwable t) {
 
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
 
 
         if (requestCode == 101) {
             Log.e("Payment", "onActivityResult: " + resultCode);
 
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK && data != null) {
                 String orderId = data.getStringExtra(Param.ORDER_ID);
                 String transactionRefNo = data.getStringExtra(Param.TRANSACTION_REFERENCE_NUMBER);
                 String rrn = data.getStringExtra(Param.RRN);
@@ -523,26 +530,178 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 Log.e("Payment", "onActivityResult: " + msg);
                 Log.e("txnid", "onActivityResult: " + orderId);
 
-                if (statusCode.equals("S")){
-                //  doConfirmOrder(transactionAmount,orderId);
-                 startActivity(new Intent(getApplicationContext(),PaymentSuccess.class).putExtra("trnxnid",orderId).putExtra("paymode","onlinepayment"));
+                if (statusCode.equals("S")) {
+                    //  doConfirmOrder(transactionAmount,orderId);
+                    startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", orderId).putExtra("paymode", "onlinepayment"));
 
-                }else{
-                   startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
-                  finishAffinity();
-                    Log.e("onActivityResult", "paymentfailure   : " );
+                } else {
+                    startActivity(new Intent(getApplicationContext(), PaymentFailureActivity.class));
+                    finishAffinity();
+                    Log.e("onActivityResult", "paymentfailure   : ");
                 }
                 // Utility.showAlertDialog(this, msg);
 
                 // Use data as per your need         }     } }
-            }else{
+            } else {
+                startActivity(new Intent(getApplicationContext(), PaymentFailureActivity.class));
+                finishAffinity();
                 Log.e("Payment", "cancelled: " + data);
                 // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
                 //  finishAffinity();
 
             }
         }
-        }
     }
+
+    private void ChangeAddresses(String addrsType) {
+        AlertDialog.Builder b = new AlertDialog.Builder(PaymentActivity.this);
+        String addTest = "Change " + addrsType + " Address";
+        b.setTitle(addTest);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.alert_chng_address, null);
+        final EditText edname = dialogView.findViewById(R.id.ed_name);
+        final EditText edmobile = dialogView.findViewById(R.id.ed_mobile);
+        final EditText edlandmark = dialogView.findViewById(R.id.ed_landmark);
+        final EditText edaddress = dialogView.findViewById(R.id.ed_address);
+        final EditText edstreet = dialogView.findViewById(R.id.ed_street);
+        final EditText edcity = dialogView.findViewById(R.id.ed_city);
+        final EditText edpin = dialogView.findViewById(R.id.ed_pin);
+        final EditText edemail = dialogView.findViewById(R.id.ed_email);
+
+        edname.setText(name);
+        edmobile.setText(mobile);
+        edlandmark.setText(landmark);
+        edaddress.setText(address);
+        edstreet.setText(street);
+        edcity.setText(city);
+        edpin.setText(pincode);
+        edemail.setText(email);
+        b.setView(dialogView);
+        b.setCancelable(false);
+        b.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("onClick: ", "+++++");
+                doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
+                        edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
+            }
+        });
+
+        b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.e("onClick: ", "-----");
+            }
+        });
+
+//        LinearLayout linCOD = (LinearLayout) dialogView.findViewById(R.id.linr_cod);
+//        LinearLayout linPaytm = (LinearLayout) dialogView.findViewById(R.id.linr_paytm);
+//
+        final AlertDialog alertDialog = b.create();
+//        linCOD.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//            }
+//        });
+//
+//        linPaytm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//            }
+//        });
+        alertDialog.show();
+    }
+
+    private void doUpdateProfile(String edname, String edmobile, String edlandmark,
+                                 String edaddress, String edstreet, String edcity, String edemail, String edpin) {
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("partner_id", Integer.parseInt(userid));
+        jsonObject.addProperty("name", edname);
+        jsonObject.addProperty("mobile", edmobile);
+        jsonObject.addProperty("landmark", edlandmark);
+        jsonObject.addProperty("address", edaddress);
+        jsonObject.addProperty("street", edstreet);
+        jsonObject.addProperty("city", edcity);
+        jsonObject.addProperty("email", edemail);
+        jsonObject.addProperty("pincode", edpin);
+
+
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<JsonObject> call = apiService.doUpdateProfile("test", mAccesstoken, jsonObject);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.body() != null && response.code() == 200) {
+                    doFetch();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void doFetch() {
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("partner_id", Integer.parseInt(userid));
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseFetchProfile> call = apiService.doFetchProfile("test", mAccesstoken, jsonObject);
+        call.enqueue(new Callback<ResponseFetchProfile>() {
+            @Override
+            public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
+                if (response.body() != null && response.code() == 200) {
+                    name = response.body().getName();
+                    mobile = response.body().getMobile();
+                    email = response.body().getEmail();
+                    address = response.body().getHouseNo();
+                    street = response.body().getStreet();
+                    city = response.body().getCity();
+                    landmark = response.body().getLandmark();
+                    pincode = response.body().getPincode().toString();
+
+                    String address = name+"\n"+response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
+                            + response.body().getDistrict() + " ,"
+                            + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
+                    LocalPreferences.storeStringPreference(getApplicationContext(), "Address", address);
+                    // binding.address1.setText(address);
+                    tvAddress.setText(address);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseFetchProfile> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("onResumepayment", ": onResumepayment" );
+  doFetch();
+        String address = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Address");
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+}
+
 
 

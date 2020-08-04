@@ -94,7 +94,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("authtoken/get_token")
-    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password);
+    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password,@Field("app_type") String app_type);
 
 @FormUrlEncoded
     @POST("outlet_stock/stock_available")
