@@ -40,6 +40,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class FragSignUpDetails extends Fragment {
     AppCompatSpinner spinner, spinnerdistrict, spinnerstate;
     View rootview;
@@ -218,7 +220,7 @@ public class FragSignUpDetails extends Fragment {
 
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Response_Signup> call = apiService.dosignup("test", vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, vastreet, vaCity, vaLandmark, Integer.parseInt(selecteditemstate), Integer.parseInt(selecteditemdistrict), vaemail, selecteditem);
+        Call<Response_Signup> call = apiService.dosignup(database, vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, vastreet, vaCity, vaLandmark, Integer.parseInt(selecteditemstate), Integer.parseInt(selecteditemdistrict), vaemail, selecteditem);
         call.enqueue(new Callback<Response_Signup>() {
             @Override
             public void onResponse(Call<Response_Signup> call, Response<Response_Signup> response) {
@@ -245,7 +247,7 @@ public class FragSignUpDetails extends Fragment {
 
     private void LoadZone() {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Signup_Zone> call = apiService.fetchzonesignup("test");
+        Call<Signup_Zone> call = apiService.fetchzonesignup(database);
         call.enqueue(new Callback<Signup_Zone>() {
             @Override
             public void onResponse(Call<Signup_Zone> call, Response<Signup_Zone> response) {
@@ -271,7 +273,7 @@ public class FragSignUpDetails extends Fragment {
     private void LoadStates() {
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseStates> call = apiService.doFetchStates("test");
+        Call<ResponseStates> call = apiService.doFetchStates(database);
         call.enqueue(new Callback<ResponseStates>() {
             @Override
             public void onResponse(Call<ResponseStates> call, Response<ResponseStates> response) {
@@ -299,7 +301,7 @@ public class FragSignUpDetails extends Fragment {
         jsonObject.addProperty("state", Integer.parseInt(selecteditemstate));
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseDistricts> call = apiService.doFetchDistricts("test", jsonObject);
+        Call<ResponseDistricts> call = apiService.doFetchDistricts(database, jsonObject);
         call.enqueue(new Callback<ResponseDistricts>() {
             @Override
             public void onResponse(Call<ResponseDistricts> call, Response<ResponseDistricts> response) {

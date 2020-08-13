@@ -38,6 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class FragMyOrder extends Fragment {
 
 
@@ -71,7 +73,7 @@ public class FragMyOrder extends Fragment {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, "test", partnerid);
+        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, partnerid);
         call.enqueue(new Callback<ResponseMyOrder>() {
             @Override
             public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {

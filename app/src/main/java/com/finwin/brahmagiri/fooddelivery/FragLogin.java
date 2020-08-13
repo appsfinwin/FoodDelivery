@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.Utilities.Constants;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -29,6 +30,8 @@ import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
 
 public class FragLogin extends Fragment {
 
@@ -102,7 +105,7 @@ public class FragLogin extends Fragment {
 
     private void doLogin(String username, String password) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseLogin> call = apiService.dologinoutlet("test", username, password, "consumer");
+        Call<ResponseLogin> call = apiService.dologinoutlet(database, username, password, "consumer");
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {

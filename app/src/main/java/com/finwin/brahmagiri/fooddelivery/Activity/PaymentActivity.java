@@ -25,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.billdesk.sdk.PaymentOptions;
 import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderModel;
@@ -57,6 +58,7 @@ import retrofit2.Response;
 
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.COD;
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.PAYTM;
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
 
 public class PaymentActivity extends AppCompatActivity implements showhide {
     private List<ConfirmOrderModel> homeListModelClassArrayList;
@@ -178,7 +180,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         ibtn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              onBackPressed();
+                onBackPressed();
             }
         });
 
@@ -210,7 +212,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
@@ -452,7 +454,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseCreateBill> call = apiService.postRawJSON(mAccesstoken, "test", jsonObject);
+        Call<ResponseCreateBill> call = apiService.postRawJSON(mAccesstoken, database, jsonObject);
         call.enqueue(new Callback<ResponseCreateBill>() {
             @Override
             public void onResponse(Call<ResponseCreateBill> call, Response<ResponseCreateBill> response) {
@@ -467,8 +469,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         } else {
                             Log.e("onResponse", "onResponse: " + getewaytotal);
                             long time = System.currentTimeMillis();
-                            Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
-                            /*   */
+                            /*  Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
+                             *//*   *//*
                             Log.e("onResponse", "onResponse: " + time);
 
                             intent.putExtra(Param.ORDER_ID, String.valueOf(time));
@@ -476,7 +478,18 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
                             intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Foodorder");
                             intent.putExtra(Param.TRANSACTION_TYPE, "S");
-                            startActivityForResult(intent, 101);
+                            startActivityForResult(intent, 101);*/
+                          /*  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
+                            String token = "ABCD|T12345|NA|500.00|NA|NA|NA|INR|NA|R|abcd|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://www.merchantdomain.com/billdesk/pg_resp.php|1480699352|CP1005!ABCD!12A6FE4478DD83BC927437FEE582A0B826C5439294E0333D6251E2A1E88A42E53E214C6F99CB31493683FF79FED2A2D9!NA!NA!NA";
+                            Intent intent = new Intent(PaymentActivity.this, PaymentOptions.class);
+                            intent.putExtra("msg", msg);
+                            intent.putExtra("token", token);
+                            intent.putExtra("user-email", "niyasnazar23@gmail.com");
+                            intent.putExtra("user-mobile", "7012297229");
+                            //  intent.putExtra("callback", < instance of callback object >);
+                            startActivity(intent);*/
+
+payNowCalled();
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
 
                         }
@@ -632,7 +645,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<JsonObject> call = apiService.doUpdateProfile("test", mAccesstoken, jsonObject);
+        Call<JsonObject> call = apiService.doUpdateProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -657,7 +670,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchProfile> call = apiService.doFetchProfile("test", mAccesstoken, jsonObject);
+        Call<ResponseFetchProfile> call = apiService.doFetchProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
@@ -671,7 +684,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                     landmark = response.body().getLandmark();
                     pincode = response.body().getPincode().toString();
 
-                    String address = name+"\n"+response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
+                    String address = name + "\n" + response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
                             + response.body().getDistrict() + " ,"
                             + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
                     LocalPreferences.storeStringPreference(getApplicationContext(), "Address", address);
@@ -691,8 +704,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("onResumepayment", ": onResumepayment" );
-  doFetch();
+        Log.e("onResumepayment", ": onResumepayment");
+        doFetch();
         String address = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Address");
 
     }
@@ -700,6 +713,27 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+
+    private void payNowCalled() {
+        // call BillDesk SDK
+
+        SampleCallBack objSampleCallBack = new SampleCallBack();
+
+        Intent sdkIntent = new Intent(this, PaymentOptions.class);
+        String strPGMsg="AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
+        sdkIntent.putExtra("msg",strPGMsg);
+        String strTokenMsg =null;
+        if(strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
+
+            sdkIntent.putExtra("token",strTokenMsg);
+        }
+        sdkIntent.putExtra("user-email","test@bd.com");
+        sdkIntent.putExtra("user-mobile","9800000000");
+        sdkIntent.putExtra("callback",objSampleCallBack);
+
+        startActivity(sdkIntent);
     }
 }
 

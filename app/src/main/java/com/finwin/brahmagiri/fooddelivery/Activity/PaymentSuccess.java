@@ -42,6 +42,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class PaymentSuccess extends AppCompatActivity {
     DatabaseHandler db;
     List<CartItem> datasetAdd;
@@ -122,7 +124,7 @@ public class PaymentSuccess extends AppCompatActivity {
         final String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseInvoiceGen> call = apiService.dogenerateinvoice(mAccesstoken, "test", jsonObject);
+        Call<ResponseInvoiceGen> call = apiService.dogenerateinvoice(mAccesstoken, database, jsonObject);
         call.enqueue(new Callback<ResponseInvoiceGen>() {
             @Override
             public void onResponse(Call<ResponseInvoiceGen> call, Response<ResponseInvoiceGen> response) {
@@ -130,7 +132,7 @@ public class PaymentSuccess extends AppCompatActivity {
                 if (response.body() != null && response.code() == 200) {
                     ResponseInvoiceGen responseInvoiceGen = response.body();
 
-                    String invoiceid = response.body().getInvoiceId().toString();
+                    String invoiceid = response.body().getInvoiceNo().toString();
                     if (invoiceid != null) {
                         List<Products> datasets = responseInvoiceGen.getProducts();
                         List<Tax>dataset=responseInvoiceGen.getTax();
@@ -184,7 +186,7 @@ public class PaymentSuccess extends AppCompatActivity {
 
         JsonObject jsonObject = (JsonObject) parser.parse(json);
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
@@ -216,5 +218,9 @@ public class PaymentSuccess extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(getApplicationContext(), ActivityMain.class));
         finishAffinity();
+    }
+
+    public void onBack(View view) {
+        onBackPressed();
     }
 }

@@ -24,6 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class OtpVerify extends BaseActivity {
     private OtpView otpView;
     Button btnext,Rsend;
@@ -80,7 +82,7 @@ public class OtpVerify extends BaseActivity {
         jsonObjects.addProperty("user_id",Integer.parseInt(id));
 
         ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject> call=apiService.Verifyotp("test",jsonObjects);
+        Call<JsonObject> call=apiService.Verifyotp(database,jsonObjects);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -127,7 +129,7 @@ public class OtpVerify extends BaseActivity {
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("mobile",mob);
         ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doSendOtp("test",jsonObject);
+        Call<JsonObject>call=apiService.doSendOtp(database,jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

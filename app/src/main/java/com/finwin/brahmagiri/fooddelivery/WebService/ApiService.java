@@ -94,9 +94,9 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("authtoken/get_token")
-    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password,@Field("app_type") String app_type);
+    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password, @Field("app_type") String app_type);
 
-@FormUrlEncoded
+    @FormUrlEncoded
     @POST("outlet_stock/stock_available")
     Call<ResponseFetchProducts> fetchproducts(@Field("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
 
@@ -165,32 +165,33 @@ public interface ApiService {
     Call<ResponseMyOrder> doFetchMyOrder(@Header("Access-Token") String Access_Token,
                                          @Header("database") String database,
                                          @Field("consumer_id") String cartbody);
+
     @POST("send/otp")
     Call<JsonObject> doSendOtp(@Header("database") String database,
-                                                                      @Body JsonObject cartbody);
+                               @Body JsonObject cartbody);
+
     @POST("otp/verification")
-    Call<JsonObject> Verifyotp( @Header("database") String database,
-                                @Body JsonObject cartbody);
+    Call<JsonObject> Verifyotp(@Header("database") String database,
+                               @Body JsonObject cartbody);
 
     @POST("change/password")
-    Call<JsonObject> doChangepwd( @Header("database") String database,
-                                @Body JsonObject cartbody);
+    Call<JsonObject> doChangepwd(@Header("database") String database,
+                                 @Body JsonObject cartbody);
+
     @POST("state/state_list")
     Call<ResponseStates> doFetchStates(@Header("database") String database);
+
     @POST("district/district_list")
-    Call<ResponseDistricts> doFetchDistricts(@Header("database") String database,@Body JsonObject cartbody);
+    Call<ResponseDistricts> doFetchDistricts(@Header("database") String database, @Body JsonObject cartbody);
+
     @POST("consumer/profile")
     Call<ResponseFetchProfile> doFetchProfile(@Header("database") String database,
-                                              @Header("Access-Token") String Access_Token,@Body JsonObject cartbody);
-
-
+                                              @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
     @POST("profile/edit")
     Call<JsonObject> doUpdateProfile(@Header("database") String database,
-                                              @Header("Access-Token") String Access_Token,@Body JsonObject cartbody);
-
-
+                                     @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
     @POST("version/controller")
-    Call<JsonObject> doFetchVersionControl(@Header("database") String database,@Body JsonObject cartbody);
+    Call<JsonObject> doFetchVersionControl(@Header("database") String database, @Body JsonObject cartbody);
 
 }
 

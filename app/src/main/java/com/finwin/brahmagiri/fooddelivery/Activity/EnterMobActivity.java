@@ -23,6 +23,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class EnterMobActivity extends BaseActivity {
 ActivityEnterMobBinding binding;
     @Override
@@ -51,7 +53,7 @@ ActivityEnterMobBinding binding;
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("mobile",mob);
         ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doSendOtp("test",jsonObject);
+        Call<JsonObject>call=apiService.doSendOtp(database,jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

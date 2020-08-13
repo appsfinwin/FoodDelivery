@@ -40,6 +40,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class CartActivity extends AppCompatActivity implements showhide {
     ActivityCartBinding binding;
     CartAdapter mCartAdapter;
@@ -88,7 +90,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         JsonObject jsonObject = (JsonObject) parser.parse(json);
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
@@ -296,7 +298,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         JsonObject jsonObject = (JsonObject) parser.parse(json);
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseRemove> cartCall = apiService.doremove(mAccesstoken, "test", jsonObject);
+        Call<ResponseRemove> cartCall = apiService.doremove(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseRemove>() {
             @Override
             public void onResponse(Call<ResponseRemove> call, Response<ResponseRemove> response) {

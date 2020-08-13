@@ -32,6 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class FragProfile extends Fragment {
     FragProfileBinding binding;
     View rootview;
@@ -84,7 +86,7 @@ public class FragProfile extends Fragment {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchProfile> call = apiService.doFetchProfile("test", mAccesstoken, jsonObject);
+        Call<ResponseFetchProfile> call = apiService.doFetchProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
@@ -204,7 +206,7 @@ public class FragProfile extends Fragment {
 
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doUpdateProfile("test",mAccesstoken,jsonObject);
+        Call<JsonObject>call=apiService.doUpdateProfile(database,mAccesstoken,jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

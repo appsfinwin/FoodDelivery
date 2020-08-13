@@ -1,1 +1,2 @@
+include ':BillDeskSDK_v2.1.3'
 include ':app'

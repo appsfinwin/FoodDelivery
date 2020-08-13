@@ -17,6 +17,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class SplashScreen extends AppCompatActivity {
 
     @Override
@@ -59,7 +61,7 @@ public class SplashScreen extends AppCompatActivity {
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("app_type","Consumer App");
         ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doFetchVersionControl("test",jsonObject);
+        Call<JsonObject>call=apiService.doFetchVersionControl(database,jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

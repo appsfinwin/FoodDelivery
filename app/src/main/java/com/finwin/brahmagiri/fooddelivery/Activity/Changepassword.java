@@ -23,6 +23,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class Changepassword extends BaseActivity {
 ActivityChangepasswordBinding binding;
     @Override
@@ -59,7 +61,7 @@ ActivityChangepasswordBinding binding;
 
 
         ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doChangepwd("test",jsonObject);
+        Call<JsonObject>call=apiService.doChangepwd(database,jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

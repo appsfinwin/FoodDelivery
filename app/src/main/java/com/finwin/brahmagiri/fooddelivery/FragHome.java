@@ -84,6 +84,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+
 public class FragHome extends Fragment implements NavigationView.OnNavigationItemSelectedListener, showhide {
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -265,7 +267,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<Signup_Zone> call = apiService.fetchzonesignup("test");
+        Call<Signup_Zone> call = apiService.fetchzonesignup(database);
         call.enqueue(new Callback<Signup_Zone>() {
             @Override
             public void onResponse(Call<Signup_Zone> call, Response<Signup_Zone> response) {
@@ -307,7 +309,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private void fechoutletbumyZOne(String firstzone) {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, "test", firstzone);
+        Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, database, firstzone);
         call.enqueue(new Callback<ResponseFetchOutlet>() {
             @Override
             public void onResponse(Call<ResponseFetchOutlet> call, Response<ResponseFetchOutlet> response) {
@@ -419,7 +421,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddcart> call = apiService.doAddtiocart(mAccesstoken, "test", jsonObject);
+        Call<ResponseAddcart> call = apiService.doAddtiocart(mAccesstoken, database, jsonObject);
         call.enqueue(new Callback<ResponseAddcart>() {
             @Override
             public void onResponse(Call<ResponseAddcart> call, Response<ResponseAddcart> response) {
@@ -454,7 +456,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
 
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchProducts> call = apiService.fetchproducts(outlet_id, mAccesstoken, "test");
+        Call<ResponseFetchProducts> call = apiService.fetchproducts(outlet_id, mAccesstoken, database);
         call.enqueue(new Callback<ResponseFetchProducts>() {
             @Override
             public void onResponse(Call<ResponseFetchProducts> call, Response<ResponseFetchProducts> response) {
@@ -499,7 +501,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         JsonObject jsonObject = (JsonObject) parser.parse(json);
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, "test", jsonObject);
+        Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
@@ -562,7 +564,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchProfile> call = apiService.doFetchProfile("test", mAccesstoken, jsonObject);
+        Call<ResponseFetchProfile> call = apiService.doFetchProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {

@@ -6,7 +6,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIClient {
-
+    /*http://45.114.245.117:7059/*/
+   /* http://52.253.94.14:8069/*///live
     private static Retrofit retrofit = null;
     private static  String baseurl="http://45.114.245.117:7059/";
    /* "http://192.168.0.221:212/"*/
