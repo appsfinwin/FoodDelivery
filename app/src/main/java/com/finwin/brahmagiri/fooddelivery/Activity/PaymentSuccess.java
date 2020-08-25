@@ -133,27 +133,29 @@ public class PaymentSuccess extends AppCompatActivity {
                     ResponseInvoiceGen responseInvoiceGen = response.body();
 
                     String invoiceid = response.body().getInvoiceNo().toString();
-                    if (invoiceid != null) {
+                   if (invoiceid != null) {
                         List<Products> datasets = responseInvoiceGen.getProducts();
-                        List<Tax>dataset=responseInvoiceGen.getTax();
-                        FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
-                        recyclerView.setAdapter(productAdapter);
-                        Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        String totalamt = response.body().getTotalAmount().toString();
-                        String sub_total = response.body().getSubtotal().toString();
-                        String taxamt = response.body().getTaxAmount().toString();
-                        TextViewsubtotal.setText("₹ " + sub_total);
-                        TextViewtotal.setText("₹ " + totalamt);
-                        TextViewtax.setText("₹ " + taxamt);
-                        TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
-                        Textviewcgstname.setText(dataset.get(0).getTax());
-                        Textviewcgstvalue.setText(""+Math.round(dataset.get(0).getTaxValue()));
-                        Textviewsgstname.setText(dataset.get(1).getTax());
-                        TextviewSgstvalue.setText(""+Math.round(dataset.get(1).getTaxValue()));
-                        //  LocalPreferences.clearPreferences(getApplicationContext());
-                        LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
-                        // new DatabaseHandler(getApplicationContext()).removeAll();
+                        List<Tax> dataset = responseInvoiceGen.getTax();
+                        if (!dataset.isEmpty() && dataset.size() != 0) {
+                            FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
+                            recyclerView.setAdapter(productAdapter);
+                            Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            String totalamt = response.body().getTotalAmount().toString();
+                            String sub_total = response.body().getSubtotal().toString();
+                            String taxamt = response.body().getTaxAmount().toString();
+                            TextViewsubtotal.setText("₹ " + sub_total);
+                            TextViewtotal.setText("₹ " + totalamt);
+                            TextViewtax.setText("₹ " + taxamt);
+                            TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
+                            Textviewcgstname.setText(dataset.get(0).getTax());
+                            Textviewcgstvalue.setText("" + dataset.get(0).getTaxValue());
+                            Textviewsgstname.setText(dataset.get(0).getTax());
+                            TextviewSgstvalue.setText("" + dataset.get(0).getTaxValue());
+                            //  LocalPreferences.clearPreferences(getApplicationContext());
+                            LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
+                            // new DatabaseHandler(getApplicationContext()).removeAll();
 
+                        }
                     }
 
 

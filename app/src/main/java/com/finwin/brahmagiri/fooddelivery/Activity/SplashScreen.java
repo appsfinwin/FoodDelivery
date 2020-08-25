@@ -7,9 +7,11 @@ import android.os.Bundle;
 
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
 import com.finwin.brahmagiri.fooddelivery.ActivityMain;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCheckVersion;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
+import com.finwin.brahmagiri.fooddelivery.fooddelivery.BuildConfig;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.google.gson.JsonObject;
 
@@ -20,14 +22,48 @@ import retrofit2.Response;
 import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
 
 public class SplashScreen extends AppCompatActivity {
-
+    String versionName;
+    int verCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
+        versionName = BuildConfig.VERSION_NAME;
+        verCode = BuildConfig.VERSION_CODE;
         dofetchVersion();
 
+
+    }
+
+    private void dofetchVersion() {
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("app_type","Consumer App");
+        ApiService apiService= APIClient.getClient().create(ApiService.class);
+        Call<ResponseCheckVersion>call=apiService.doFetchVersionControl(database,jsonObject);
+        call.enqueue(new Callback<ResponseCheckVersion>() {
+            @Override
+            public void onResponse(Call<ResponseCheckVersion> call, Response<ResponseCheckVersion> response) {
+                if (response.body()!=null&&response.code()==200){
+                    ResponseCheckVersion responseCheckVersion=response.body();
+
+                    int apiversioncode=Integer.parseInt(responseCheckVersion.getVersionCode());
+                    if (verCode<apiversioncode){
+                        startActivity(new Intent(getApplicationContext(),DemoSplash.class));
+                        finish();
+                    }else{
+                        setLogin();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseCheckVersion> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setLogin() {
         final boolean islooged= LocalPreferences.retrieveBooleanPreferences(getApplicationContext(),"isLoggedin");
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -55,25 +91,5 @@ public class SplashScreen extends AppCompatActivity {
                 //the current activity will get finished.
             }
         }, 1000);
-    }
-
-    private void dofetchVersion() {
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("app_type","Consumer App");
-        ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doFetchVersionControl(database,jsonObject);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.body()!=null&&response.code()==200){
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
     }
 }

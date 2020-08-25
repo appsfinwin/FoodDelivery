@@ -1,7 +1,9 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -23,8 +25,15 @@ public class StatusActivity extends Activity {
 
         Bundle bundle = this.getIntent().getExtras();
         mStatus = bundle.getString("status").toString().split("\\|");
+        Log.d("TAG", "paymentStatus: "+mStatus[14].toString());
+        String authstatus=mStatus[14].toString();
 
-        status.setText(bundle.getString("status"));
+        if (authstatus.equals("0300")){
+             startActivity(new Intent(getApplicationContext(), PaymentSuccessActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
+        }
+        if (authstatus.equals("0399")){
+             startActivity(new Intent(getApplicationContext(), PaymentFailureActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
+        }
 
     }
 

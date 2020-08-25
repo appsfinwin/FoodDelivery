@@ -8,6 +8,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
 import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCheckVersion;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
@@ -17,6 +18,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
@@ -191,7 +193,10 @@ public interface ApiService {
     Call<JsonObject> doUpdateProfile(@Header("database") String database,
                                      @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
     @POST("version/controller")
-    Call<JsonObject> doFetchVersionControl(@Header("database") String database, @Body JsonObject cartbody);
+    Call<ResponseCheckVersion> doFetchVersionControl(@Header("database") String database, @Body JsonObject cartbody);
+
+    @POST("payment/process")
+    Call<ResponsePay> doFetchpayment(@Header("database") String database, @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
 
 }
 

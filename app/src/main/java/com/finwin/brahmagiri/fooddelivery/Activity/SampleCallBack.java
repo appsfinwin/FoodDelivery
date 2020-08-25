@@ -27,11 +27,21 @@ public class SampleCallBack implements LibraryPaymentStatusProtocol, Parcelable 
                         + status);
         Toast.makeText(context, "PG Response:: " + status, Toast.LENGTH_LONG)
                 .show();
+        String mStatus[]=status.split("\\|");
 
-        Intent mIntent = new Intent(context, StatusActivity.class);
+        String authstatus=mStatus[14].toString();
+        if (authstatus.equals("0300")){
+           context. startActivity(new Intent(context, PaymentSuccessActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
+        }
+        if (authstatus.equals("0399")){
+           context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
+        }
+
+
+      /* Intent mIntent = new Intent(context, StatusActivity.class);
         mIntent.putExtra("status", status);
         context.startActivity(mIntent);
-        context.finish();
+        context.finish();*/
     }
 
     @Override

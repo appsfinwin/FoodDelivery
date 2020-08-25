@@ -37,6 +37,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
 import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -48,6 +49,7 @@ import com.google.gson.JsonParser;
 import com.worldline.in.constant.Param;
 import com.worldline.in.ipg.PaymentStandard;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -489,7 +491,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             //  intent.putExtra("callback", < instance of callback object >);
                             startActivity(intent);*/
 
-payNowCalled();
+                            payNowCalled(mbillid);
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
 
                         }
@@ -509,62 +511,6 @@ payNowCalled();
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
-        if (requestCode == 101) {
-            Log.e("Payment", "onActivityResult: " + resultCode);
-
-            if (resultCode == RESULT_OK && data != null) {
-                String orderId = data.getStringExtra(Param.ORDER_ID);
-                String transactionRefNo = data.getStringExtra(Param.TRANSACTION_REFERENCE_NUMBER);
-                String rrn = data.getStringExtra(Param.RRN);
-                String statusCode = data.getStringExtra(Param.STATUS_CODE);
-                String statusDescription = data.getStringExtra(Param.STATUS_DESCRIPTION);
-                String transactionAmount = data.getStringExtra(Param.TRANSACTION_AMOUNT);
-                String requestDate = data.getStringExtra(Param.TRANSACTION_REQUEST_DATE);
-                String authNStatus = data.getStringExtra(Param.AUTH_N_STATUS);
-                String authZstatus = data.getStringExtra(Param.AUTH_Z_STATUS);
-                String captureStatus = data.getStringExtra(Param.CAPTURE_STATUS);
-                String pgRefCancelReqId = data.getStringExtra(Param.PG_REF_CANCEL_REQ_ID);
-                String refundAmount = data.getStringExtra(Param.REFUND_AMOUNT);
-                String addField1 = data.getStringExtra(Param.ADDL_FIELD_1);
-                String addField2 = data.getStringExtra(Param.ADDL_FIELD_2);
-                String addField3 = data.getStringExtra(Param.ADDL_FIELD_3);
-                String addField4 = data.getStringExtra(Param.ADDL_FIELD_4);
-                String addField5 = data.getStringExtra(Param.ADDL_FIELD_5);
-                String addField6 = data.getStringExtra(Param.ADDL_FIELD_6);
-                String addField7 = data.getStringExtra(Param.ADDL_FIELD_7);
-                String addField8 = data.getStringExtra(Param.ADDL_FIELD_8);
-                String addField9 = data.getStringExtra(Param.ADDL_FIELD_9);
-
-                String msg = "Status transactionAmount: " + statusCode + "\nRef No: " + statusDescription + "\nOrder id: " + orderId;
-                Log.e("Payment", "onActivityResult: " + msg);
-                Log.e("txnid", "onActivityResult: " + orderId);
-
-                if (statusCode.equals("S")) {
-                    //  doConfirmOrder(transactionAmount,orderId);
-                    startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", orderId).putExtra("paymode", "onlinepayment"));
-
-                } else {
-                    startActivity(new Intent(getApplicationContext(), PaymentFailureActivity.class));
-                    finishAffinity();
-                    Log.e("onActivityResult", "paymentfailure   : ");
-                }
-                // Utility.showAlertDialog(this, msg);
-
-                // Use data as per your need         }     } }
-            } else {
-                startActivity(new Intent(getApplicationContext(), PaymentFailureActivity.class));
-                finishAffinity();
-                Log.e("Payment", "cancelled: " + data);
-                // startActivity(new Intent(getApplicationContext(),PaymentFailureActivity.class));
-                //  finishAffinity();
-
-            }
-        }
-    }
 
     private void ChangeAddresses(String addrsType) {
         AlertDialog.Builder b = new AlertDialog.Builder(PaymentActivity.this);
@@ -716,25 +662,85 @@ payNowCalled();
     }
 
 
-    private void payNowCalled() {
+    private void payNowCalled(String Billid) {
         // call BillDesk SDK
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("bill_id",Integer.parseInt(Billid));
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponsePay> call = apiService.doFetchpayment(database, mAccesstoken, jsonObject);
+        call.enqueue(new Callback<ResponsePay>() {
+            @Override
+            public void onResponse(Call<ResponsePay> call, Response<ResponsePay> response) {
+                SampleCallBack objSampleCallBack = new SampleCallBack();
+                Intent sdkIntent = new Intent(getApplicationContext(), PaymentOptions.class);
+                String strPGMsg = response.body().getStringStrPGMsg();
+              //  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
+                sdkIntent.putExtra("msg", strPGMsg);
+                String strTokenMsg = null;
+                if (strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
 
-        SampleCallBack objSampleCallBack = new SampleCallBack();
+                    sdkIntent.putExtra("token", strTokenMsg);
+                }
+                sdkIntent.putExtra("user-email", "niyasnazar23@gmail.com");
+                sdkIntent.putExtra("user-mobile", "9747337738");
+                sdkIntent.putExtra("callback", objSampleCallBack);
+                startActivity(sdkIntent);
+            }
 
-        Intent sdkIntent = new Intent(this, PaymentOptions.class);
-        String strPGMsg="AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
-        sdkIntent.putExtra("msg",strPGMsg);
-        String strTokenMsg =null;
-        if(strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
+            @Override
+            public void onFailure(Call<ResponsePay> call, Throwable t) {
 
-            sdkIntent.putExtra("token",strTokenMsg);
-        }
-        sdkIntent.putExtra("user-email","test@bd.com");
-        sdkIntent.putExtra("user-mobile","9800000000");
-        sdkIntent.putExtra("callback",objSampleCallBack);
+            }
+        });
 
-        startActivity(sdkIntent);
+
+
     }
+
+    public static String checkSumSHA256(String plaintext) {
+
+        MessageDigest md = null;
+
+        try {
+
+            md = MessageDigest.getInstance("SHA-256"); // step 2
+
+            md.update(plaintext.getBytes("UTF-8")); // step 3
+
+        } catch (Exception e) {
+
+            md = null;
+
+        }
+
+
+        StringBuffer ls_sb = new StringBuffer();
+
+        byte raw[] = md.digest(); // step 4
+
+        for (int i = 0; i < raw.length; i++)
+
+            ls_sb.append(char2hex(raw[i]));
+
+        return ls_sb.toString(); // step 6
+
+    }
+
+    public static String char2hex(byte x) {
+
+        char arr[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
+
+                'B', 'C', 'D', 'E', 'F'};
+
+
+        char c[] = {arr[(x & 0xF0) >> 4], arr[x & 0x0F]};
+
+        return (new String(c));
+
+    }
+
+
 }
 
 
