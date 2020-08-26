@@ -7,10 +7,6 @@ public class CartItem {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("product_image_url")
-    @Expose
-    private String product_image_url;
-
     @SerializedName("user_id")
     @Expose
     private Integer userId;
@@ -23,6 +19,9 @@ public class CartItem {
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+    @SerializedName("product_image_url")
+    @Expose
+    private Boolean productImageUrl;
     @SerializedName("product_name")
     @Expose
     private String productName;
@@ -73,6 +72,14 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public Boolean getProductImageUrl() {
+        return productImageUrl;
+    }
+
+    public void setProductImageUrl(Boolean productImageUrl) {
+        this.productImageUrl = productImageUrl;
+    }
+
     public String getProductName() {
         return productName;
     }
@@ -97,12 +104,5 @@ public class CartItem {
         this.outlet = outlet;
     }
 
-    public String getProduct_image_url() {
-        return product_image_url;
-    }
-
-    public void setProduct_image_url(String product_image_url) {
-        this.product_image_url = product_image_url;
-    }
 }
 

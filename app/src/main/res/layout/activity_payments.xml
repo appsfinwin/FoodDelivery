@@ -107,6 +107,81 @@
                     android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
+                <LinearLayout
+                    android:id="@+id/layout_totalamt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="22dp"
+                        android:layout_weight="1"
+                        android:text="Total Amount "
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/rupee"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_totalamt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="18dp"
+                        android:text="-"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/laytdeliverycharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="22dp"
+                        android:layout_weight="1"
+                        android:text="Delivery Charge "
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/rupee"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_delivery_charge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="18dp"
+                        android:text="-"
+                        android:textColor="@color/textColor"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -117,6 +192,7 @@
                     android:paddingBottom="16dp">
 
                     <TextView
+                        android:id="@+id/tvheader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="22dp"
@@ -234,6 +310,7 @@
                     android:orientation="vertical"
                     android:paddingLeft="21.1dp"
                     android:paddingBottom="10dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -241,6 +318,7 @@
                         android:text="Delivery Option"
                         android:textColor="@color/textColor"
                         android:textSize="13.3sp" />
+
                     <RadioGroup
                         android:id="@+id/radiogrp"
                         android:layout_marginRight="10dp"
@@ -257,6 +335,7 @@
                             android:layout_height="wrap_content">
 
                         </androidx.appcompat.widget.AppCompatRadioButton>
+
                         <androidx.appcompat.widget.AppCompatRadioButton
                             android:id="@+id/homedelivery"
                             android:layout_marginLeft="10dp"
@@ -267,6 +346,7 @@
                         </androidx.appcompat.widget.AppCompatRadioButton>
 
                     </RadioGroup>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

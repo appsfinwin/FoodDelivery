@@ -72,6 +72,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     String cartoutid;
     String name;
     String mobile;
+    String totalamtwithdelcharge;
     String email, address, street, city, pincode, landmark;
     View rootview;
     Double totalamt;
@@ -86,7 +87,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             StrBndlTotal = "";
     private RadioGroup collection;
     private RadioButton radioButton;
-    String deliveryoption;
+    String deliveryoption,deliverycharge;
+    LinearLayout laytdelcharge,layttotamt;
+    TextView header,delcharges,totamamount;
 
 
     @Override
@@ -96,7 +99,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvTotal_co = findViewById(R.id.tv_total_co);
         tvAddressName = findViewById(R.id.tv_addressName);
         tvAddress = findViewById(R.id.tv_address);
+        header = findViewById(R.id.tvheader);
+        delcharges = findViewById(R.id.tv_delivery_charge);
+        totamamount = findViewById(R.id.tv_totalamt);
         collection = (RadioGroup) findViewById(R.id.radiogrp);
+
+        laytdelcharge =  findViewById(R.id.laytdeliverycharge);
+        layttotamt =  findViewById(R.id.layout_totalamt);
+
 
         tvCheckout = findViewById(R.id.tv_checkout);
         ibtn_back = findViewById(R.id.ibtn_back_co);
@@ -112,7 +122,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
 
-
+        tvTotal_co.setText(""+total);
+        delcharges.setText("0");
         collection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -121,10 +132,13 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 if (radioButton.getText().equals("Collect from outlet")) {
                     Log.d("onCheckedChanged", "out: ");
                     deliveryoption = "by_customer";
+                    tvTotal_co.setText(""+total);
+                    delcharges.setText("0");
 
                 } else if (radioButton.getText().equals("Home Delivery")) {
                     deliveryoption = "take_away";
-
+                    tvTotal_co.setText(""+totalamtwithdelcharge);
+                    delcharges.setText(""+deliverycharge);
                     Log.d("onCheckedChanged", "home: ");
 
                 } else {
@@ -152,7 +166,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         if (TextUtils.isEmpty(StrBndlTotal)) {
             StrBndlTotal = "";
         }
-        tvTotal_co.setText(total);
+        totamamount.setText(total);
 
         tvCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,18 +176,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                 } else {
                     Load(datasetcartlist, 0);
-                   /* long time= System.currentTimeMillis();
-                    Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
-                    *//*   *//*
-                    intent.putExtra(Param.ORDER_ID, String.valueOf(time));
-                    intent.putExtra(Param.TRANSACTION_AMOUNT,"2000" );
-                    intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
-                    intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Sock money");
-                    intent.putExtra(Param.TRANSACTION_TYPE, "S");
-                    startActivityForResult(intent, 101);*/
-                   /* Intent is = new Intent(getApplicationContext(), PayMentGateWay.class);
-                    is.putExtra("total", total);
-                    startActivity(is);*/
+
                 }
 
             }
@@ -220,8 +223,12 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
                 if (response.body() != null && response.code() == 200) {
                     ResponseBrahmaCart responseBrahmaCart = response.body();
+                     totalamtwithdelcharge=String .valueOf(response.body().getTotalAmnt());
+                     deliverycharge=String .valueOf(response.body().getDeliveryCharge());
+                 //   delcharges.setText(""+deliverycharge);
 
                     datasetcartlist = responseBrahmaCart.getCartItems();
+
                     mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this, true);
                     menuRecycler.setAdapter(mCartAdapter);
 
@@ -364,30 +371,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                     Log.d("cartsummary", "onFailure: " + mCartAdapter.getItemCount());
                     tvTotal_co.setText("" + dataset.get(0).getGrandTotal());
                     totalamt = dataset.get(0).getGrandTotal();
-                   /* if (mCartAdapter.getItemCount()==0){
-                        binding.emptyCart.setVisibility(View.VISIBLE);
-                        binding.parent.setVisibility(View.GONE);
-                        binding.lnrlayConfmpay.setVisibility(View.GONE);
-
-
-                    }else{
-                        binding.emptyCart.setVisibility(View.GONE);
-                        binding.parent.setVisibility(View.VISIBLE);
-                        binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
-                    }
-*/
-                    //   binding.tvCartChrg.setText("" + dataset.get(0).getDeliveryCharge());
-                    //   binding.tvCartGst.setText("" + dataset.get(0).getTax());
-                    //   binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
-                    //  binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
-                       /* binding.parent.setVisibility(View.GONE);
-                        binding.lnrlayConfmpay.setVisibility(View.GONE);
-                        Toast.makeText(CartActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();*/
-
-
-                    //Double total = dataset.get(0).getTotal();
-                    // int count=dataset.get(0).getQuantity();
-                    //   Log.d("cartsummary", "onFailure: "+count);
 
 
                 }

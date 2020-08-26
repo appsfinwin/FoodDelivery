@@ -83,7 +83,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
 
 
         Glide.with(context)
-                .load(lists.getProduct_image_url())
+                .load(lists.getProductImageUrl().toString().trim())
                 .placeholder(R.drawable.noimage)
                 .into(holder.ItemImage);
 

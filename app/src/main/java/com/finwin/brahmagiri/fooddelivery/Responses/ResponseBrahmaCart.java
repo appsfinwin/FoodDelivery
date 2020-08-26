@@ -9,9 +9,15 @@ public class ResponseBrahmaCart {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("delivery_charge")
+    @Expose
+    private Double deliveryCharge;
     @SerializedName("Cart_items")
     @Expose
     private List<CartItem> cartItems = null;
+    @SerializedName("total_amnt")
+    @Expose
+    private Double totalAmnt;
 
     public String getMessage() {
         return message;
@@ -21,6 +27,14 @@ public class ResponseBrahmaCart {
         this.message = message;
     }
 
+    public Double getDeliveryCharge() {
+        return deliveryCharge;
+    }
+
+    public void setDeliveryCharge(Double deliveryCharge) {
+        this.deliveryCharge = deliveryCharge;
+    }
+
     public List<CartItem> getCartItems() {
         return cartItems;
     }
@@ -28,5 +42,14 @@ public class ResponseBrahmaCart {
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
+
+    public Double getTotalAmnt() {
+        return totalAmnt;
+    }
+
+    public void setTotalAmnt(Double totalAmnt) {
+        this.totalAmnt = totalAmnt;
+    }
+
 
 }
