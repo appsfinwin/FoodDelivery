@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
 import com.finwin.brahmagiri.fooddelivery.ActivityMain;
@@ -30,6 +31,8 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         versionName = BuildConfig.VERSION_NAME;
         verCode = BuildConfig.VERSION_CODE;
+        TextView tvver=findViewById(R.id.tvversion);
+        tvver.setText(""+versionName);
         dofetchVersion();
 
 

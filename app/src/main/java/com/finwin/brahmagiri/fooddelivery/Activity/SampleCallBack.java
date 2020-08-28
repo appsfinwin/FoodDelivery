@@ -25,8 +25,7 @@ public class SampleCallBack implements LibraryPaymentStatusProtocol, Parcelable 
         Log.v(TAG,
                 "paymentStatus(String status, Activity context)....::::status:::::"
                         + status);
-        Toast.makeText(context, "PG Response:: " + status, Toast.LENGTH_LONG)
-                .show();
+
         String mStatus[]=status.split("\\|");
 
         String authstatus=mStatus[14].toString();

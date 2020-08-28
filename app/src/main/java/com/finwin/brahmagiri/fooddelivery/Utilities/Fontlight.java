@@ -11,19 +11,19 @@ public class Fontlight extends AppCompatTextView {
 
     public Fontlight(Context context) {
         super(context);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/JTMarnie-Medium.otf");
         this.setTypeface(face);
     }
 
     public Fontlight(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/JTMarnie-Medium.otf");
         this.setTypeface(face);
     }
 
     public Fontlight(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Light.ttf");
+        Typeface face=Typeface.createFromAsset(context.getAssets(), "fonts/JTMarnie-Medium.otf");
         this.setTypeface(face);
     }
 

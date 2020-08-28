@@ -38,6 +38,7 @@
     </LinearLayout>
 
     <TextView
+        android:textColor="#1e1e1e"
         android:textStyle="bold"
         android:id="@+id/tv_orderhist"
         android:textSize="16sp"
@@ -72,7 +73,8 @@
     </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
-android:layout_marginTop="20dp"        android:id="@+id/nstd_scrl"
+        android:layout_marginTop="20dp"
+        android:id="@+id/nstd_scrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_orderhist"

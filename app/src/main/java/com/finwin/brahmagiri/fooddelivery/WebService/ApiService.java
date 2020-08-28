@@ -18,6 +18,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseOrderDetails;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
@@ -197,6 +198,8 @@ public interface ApiService {
 
     @POST("payment/process")
     Call<ResponsePay> doFetchpayment(@Header("database") String database, @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
-
+    @POST("invoice/get_details")
+    Call<ResponseOrderDetails> dofetchorderdetails(@Header("Access-Token") String Access_Token,
+                                                   @Header("database") String database, @Body JsonObject locationPost);
 }
 

@@ -28,7 +28,7 @@ import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
 
 public class OtpVerify extends BaseActivity {
     private OtpView otpView;
-    Button btnext,Rsend;
+    Button btnext, Rsend;
     TextView mTextField;
 
     @Override
@@ -36,10 +36,10 @@ public class OtpVerify extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp_verify);
         otpView = findViewById(R.id.otp_view);
-        mTextField=findViewById(R.id.otptimer);
-        btnext=findViewById(R.id.btn_next);
-        Rsend=findViewById(R.id.btndresend);
-        final String mob=getIntent().getStringExtra("mob");
+        mTextField = findViewById(R.id.otptimer);
+        btnext = findViewById(R.id.btn_next);
+        Rsend = findViewById(R.id.btndresend);
+        final String mob = getIntent().getStringExtra("mob");
         Rsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,18 +48,22 @@ public class OtpVerify extends BaseActivity {
             }
         });
 
-        final String id=getIntent().getStringExtra("user_id");
+        final String id = getIntent().getStringExtra("user_id");
         btnext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String otp=otpView.getText().toString();
-                if(otp.equals("")){
+                String otp = otpView.getText().toString();
+                if (otp.equals("")) {
                     Toast.makeText(OtpVerify.this, "Please Enter Otp", Toast.LENGTH_SHORT).show();
-                }else{
-                    Validateotp(otp,id);
+                } else {
+                    Validateotp(otp, id);
                 }
             }
         });
+        startcount();
+    }
+
+    private void startcount() {
         new CountDownTimer(60000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -69,7 +73,7 @@ public class OtpVerify extends BaseActivity {
 
             public void onFinish() {
                 Rsend.setVisibility(View.VISIBLE);
-              //  mTextField.setText("done!");
+                //  mTextField.setText("done!");
             }
 
         }.start();
@@ -77,28 +81,29 @@ public class OtpVerify extends BaseActivity {
 
     private void Validateotp(String otp, String id) {
         showdialog();
-        JsonObject jsonObjects=new JsonObject();
-        jsonObjects.addProperty("otp",otp);
-        jsonObjects.addProperty("user_id",Integer.parseInt(id));
+        JsonObject jsonObjects = new JsonObject();
+        jsonObjects.addProperty("otp", otp);
+        jsonObjects.addProperty("user_id", Integer.parseInt(id));
 
-        ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject> call=apiService.Verifyotp(database,jsonObjects);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<JsonObject> call = apiService.Verifyotp(database, jsonObjects);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 dismissdialog();
-                if (response.body()!=null&&response.code()==200){
+                if (response.body() != null && response.code() == 200) {
                     try {
                         JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                     String  msg = jsonObject.getString("message");
-                        String  id = jsonObject.getString("user_id");
+                        String msg = jsonObject.getString("message");
+                        String id = jsonObject.getString("user_id");
 
-                        if (msg.equalsIgnoreCase("OTP Verified")){
-                     startActivity(new Intent(getApplicationContext(),Changepassword.class).putExtra("user_id",id));
+                        if (msg.equalsIgnoreCase("OTP Verified")) {
+                            startActivity(new Intent(getApplicationContext(), Changepassword.class).putExtra("user_id", id));
 
-                    }else{
+                        } else {
+                            Toast.makeText(getApplicationContext(), "" + msg, Toast.LENGTH_SHORT).show();
 
-                    }
+                        }
 //
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -123,21 +128,23 @@ public class OtpVerify extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
     private void doSend(String mob) {
         showdialog();
 
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("mobile",mob);
-        ApiService apiService= APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doSendOtp(database,jsonObject);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("mobile", mob);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<JsonObject> call = apiService.doSendOtp(database, jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 dismissdialog();
-                if (response.body()!=null&&response.code()==200){
+                startcount();
+                if (response.body() != null && response.code() == 200) {
                     try {
                         JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                        String  msg = jsonObject.getString("user_id");
+                        String msg = jsonObject.getString("user_id");
                         //startActivity(new Intent(getApplicationContext(),OtpVerify.class).putExtra("user_id",msg));
 
                     } catch (JSONException e) {

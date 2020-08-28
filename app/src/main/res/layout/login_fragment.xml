@@ -31,6 +31,8 @@
             android:visibility="gone" />
 
 
+
+
     </FrameLayout>
 
     <LinearLayout
@@ -59,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="27dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="5dp"
                     android:text="Username"
                     android:textColor="#969696"
                     android:textSize="15sp" />
@@ -142,7 +144,7 @@
                 </LinearLayout>
 
                 <TextView
-                 android:id="@+id/tv_changepwd"
+                    android:id="@+id/tv_changepwd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="27dp"
@@ -243,5 +245,3 @@
     <!--    </LinearLayout>-->
 
 </RelativeLayout>
-
-

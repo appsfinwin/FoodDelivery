@@ -7,7 +7,7 @@
         android:id="@+id/linear_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="#222129"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="5dp">
@@ -16,7 +16,7 @@
             android:id="@+id/ibtn_signup_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_black"
+            android:background="@drawable/ic_back_white"
             android:orientation="horizontal"
             android:padding="20dp" />
 
@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="-40.7dp"
-            android:text="@string/sign_up"
+            android:text=""
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="#FFF"
             android:textSize="15.7sp"
             android:textStyle="bold" />
 

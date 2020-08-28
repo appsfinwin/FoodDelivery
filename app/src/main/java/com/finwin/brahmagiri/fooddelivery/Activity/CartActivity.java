@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import androidx.databinding.DataBindingUtil;
@@ -50,6 +51,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     List<CartItem> totallist;
     double totalsum = 0.0;
     String cartoutid;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +59,16 @@ public class CartActivity extends AppCompatActivity implements showhide {
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         binding.toolbarLayout.toolbartext.setText("Cart");
         totallist = new ArrayList<>();
-        // dofetchcartSummary(0,"","CART_SUMMARY");
+        progressDialog=new ProgressDialog(CartActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
         //db.getquantity("11");
         Log.d("fetchquantity", ": " + db.getFromDb("11"));
         //  fetchCart();
-    cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
+        cartoutid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
         if (cartoutid != null && !cartoutid.equals("")) {
             fetchCartfromServer(cartoutid);
         } else {
@@ -80,6 +85,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     }
 
     private void fetchCartfromServer(String cartoutid) {
+        progressDialog.show();
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
@@ -94,6 +100,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
+                progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     ResponseBrahmaCart responseBrahmaCart = response.body();
 
@@ -115,7 +122,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
                     }
 
 
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
 
                 }
@@ -123,21 +130,13 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseBrahmaCart> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
 
     }
 
-    private void fetchCart() {
-        datasetcartlist = db.getAllContacts();
 
-       /* mCartAdapter = new CartAdapter(getApplication(), datasetcartlist, CartActivity.this, false);
-
-        binding.cartRecycler.setAdapter(mCartAdapter);*/
-
-
-    }
 
     public void GotoPayment(View view) {
         startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("total", Double.toString(totalsum)));
@@ -243,7 +242,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     public void delete(String code) {
         //   doUpdateCart(0, code, "DELETE");
         //db.deleteEntry(Integer.parseInt(code));
-        deletefromServer(cartoutid , Integer.parseInt(code));
+        deletefromServer(cartoutid, Integer.parseInt(code));
         mCartAdapter.notifyDataSetChanged();
         //calculatetotal();
         Log.e("delete", "delete: " + mCartAdapter.getItemCount());

@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -87,10 +88,11 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             StrBndlTotal = "";
     private RadioGroup collection;
     private RadioButton radioButton;
-    String deliveryoption,deliverycharge;
-    LinearLayout laytdelcharge,layttotamt;
-    TextView header,delcharges,totamamount;
-
+    String deliveryoption, deliverycharge;
+    LinearLayout laytdelcharge, layttotamt;
+    TextView header, delcharges, totamamount;
+    String paymentmode = "cod";
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +106,13 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         totamamount = findViewById(R.id.tv_totalamt);
         collection = (RadioGroup) findViewById(R.id.radiogrp);
 
-        laytdelcharge =  findViewById(R.id.laytdeliverycharge);
-        layttotamt =  findViewById(R.id.layout_totalamt);
+        laytdelcharge = findViewById(R.id.laytdeliverycharge);
+        layttotamt = findViewById(R.id.layout_totalamt);
 
-
+        progressDialog=new ProgressDialog(PaymentActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         tvCheckout = findViewById(R.id.tv_checkout);
         ibtn_back = findViewById(R.id.ibtn_back_co);
         tvEditAddrs = findViewById(R.id.tv_edit_addrs);
@@ -122,8 +127,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
 
-        tvTotal_co.setText(""+total);
+        tvTotal_co.setText("" + total);
         delcharges.setText("0");
+        deliveryoption = "by_customer";
         collection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -132,17 +138,17 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 if (radioButton.getText().equals("Collect from outlet")) {
                     Log.d("onCheckedChanged", "out: ");
                     deliveryoption = "by_customer";
-                    tvTotal_co.setText(""+total);
+                    tvTotal_co.setText("" + total);
                     delcharges.setText("0");
 
                 } else if (radioButton.getText().equals("Home Delivery")) {
                     deliveryoption = "take_away";
-                    tvTotal_co.setText(""+totalamtwithdelcharge);
-                    delcharges.setText(""+deliverycharge);
+                    tvTotal_co.setText("" + totalamtwithdelcharge);
+                    delcharges.setText("" + deliverycharge);
                     Log.d("onCheckedChanged", "home: ");
 
                 } else {
-                    deliveryoption = "";
+                    deliveryoption = "by_customer";
                 }
             }
         });
@@ -223,9 +229,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
                 if (response.body() != null && response.code() == 200) {
                     ResponseBrahmaCart responseBrahmaCart = response.body();
-                     totalamtwithdelcharge=String .valueOf(response.body().getTotalAmnt());
-                     deliverycharge=String .valueOf(response.body().getDeliveryCharge());
-                 //   delcharges.setText(""+deliverycharge);
+                    totalamtwithdelcharge = String.valueOf(response.body().getTotalAmnt());
+                    deliverycharge = String.valueOf(response.body().getDeliveryCharge());
+                    //   delcharges.setText(""+deliverycharge);
 
                     datasetcartlist = responseBrahmaCart.getCartItems();
 
@@ -283,106 +289,24 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             imgChngPymnt.setImageResource(R.drawable.credit_card);
             tvChngPymnt.setText(R.string.s_paytm);
             cod = false;
+            paymentmode = "op";
         } else if (type.equals(COD)) {
             imgChngPymnt.setImageResource(R.drawable.cash);
             tvChngPymnt.setText(R.string.s_cod);
             cod = true;
+            paymentmode = "cod";
         }
     }
 
     //========
 
-    public void ChangeAddress() {
-        AlertDialog.Builder b = new AlertDialog.Builder(Objects.requireNonNull(getApplicationContext()));
-        b.setTitle("Select Delivery Address");
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.alert_address_view, null);
-        b.setView(dialogView);
 
-        final TextView tvAddrs = (TextView) dialogView.findViewById(R.id.tv_addrs);
-        TextView tvAddrsOfc = (TextView) dialogView.findViewById(R.id.tv_adds_ofc);
-        LinearLayout linHome = (LinearLayout) dialogView.findViewById(R.id.linrlay_home);
-        LinearLayout linOffice = (LinearLayout) dialogView.findViewById(R.id.linrlay_ofc);
-
-        final String Strhome = "KPM Complex 30/1356A1, Opposite The Hindu, 30/1356A1, National Hwy Byepass, Opposite The Hindu";
-        final String StrOffice = "S02, India bulls mega mall, near dinesh mill, Jetalpur Road, Vadodara, 390020";
-
-        tvAddrs.setText(Strhome);
-        tvAddrsOfc.setText(StrOffice);
-
-        final AlertDialog alertDialog = b.create();
-
-        linHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                setAddress("Home", Strhome);
-            }
-        });
-
-        linOffice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                setAddress("Office", StrOffice);
-            }
-        });
-
-
-        alertDialog.show();
-
-//        final String[] types = {"By Zip", "By Table"};
-//        b.setItems(types, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                switch (which) {
-//                    case 0:
-//                        Log.e("onClick: ", String.valueOf(types));
-//                        break;
-//                    case 1:
-//                        Log.e("onClick: ", String.valueOf(types));
-//                        break;
-//                }
-//            }
-//        });
-//        b.show();
-    }
 
     private void setAddress(String head, String address) {
         tvAddressName.setText(head);
         tvAddress.setText(address);
     }
 
-    private void dofetchcartSummary(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchCart> call = apiService.doCartSummary("", "", flag, 0, "string", code, String.valueOf(value), "44402");
-        call.enqueue(new Callback<ResponseFetchCart>() {
-            @Override
-            public void onResponse(Call<ResponseFetchCart> call, Response<ResponseFetchCart> response) {
-                if (response.body() != null && response.code() == 200) {
-
-                    ResponseFetchCart responseAddtoCart = response.body();
-                    List<TableSummaryCart> dataset = responseAddtoCart.getData().getTable1();
-                    List<TableFetchCart> datasetcartlist = responseAddtoCart.getData().getTable();
-//                    mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, PaymentActivity.this,false);
-
-                    menuRecycler.setAdapter(mCartAdapter);
-                    Log.d("cartsummary", "onFailure: " + mCartAdapter.getItemCount());
-                    tvTotal_co.setText("" + dataset.get(0).getGrandTotal());
-                    totalamt = dataset.get(0).getGrandTotal();
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseFetchCart> call, Throwable t) {
-
-
-            }
-        });
-    }
 
 
     @Override
@@ -411,6 +335,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"consumer_id\":" + partnerid +
                 ",\"collecting_option\":" + deliveryoption +
+                ",\"payment_mode\":" + paymentmode +
                 " ,\"productlist\": [";
 
         for (int i = 0; i < datasetAdd.size(); i++) {
@@ -453,26 +378,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", "null").putExtra("paymode", "cod"));
                         } else {
                             Log.e("onResponse", "onResponse: " + getewaytotal);
-                            long time = System.currentTimeMillis();
-                            /*  Intent intent = new Intent(PaymentActivity.this, PaymentStandard.class);
-                             *//*   *//*
-                            Log.e("onResponse", "onResponse: " + time);
 
-                            intent.putExtra(Param.ORDER_ID, String.valueOf(time));
-                            intent.putExtra(Param.TRANSACTION_AMOUNT, getewaytotal);
-                            intent.putExtra(Param.TRANSACTION_CURRENCY, "INR");
-                            intent.putExtra(Param.TRANSACTION_DESCRIPTION, "Foodorder");
-                            intent.putExtra(Param.TRANSACTION_TYPE, "S");
-                            startActivityForResult(intent, 101);*/
-                          /*  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
-                            String token = "ABCD|T12345|NA|500.00|NA|NA|NA|INR|NA|R|abcd|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://www.merchantdomain.com/billdesk/pg_resp.php|1480699352|CP1005!ABCD!12A6FE4478DD83BC927437FEE582A0B826C5439294E0333D6251E2A1E88A42E53E214C6F99CB31493683FF79FED2A2D9!NA!NA!NA";
-                            Intent intent = new Intent(PaymentActivity.this, PaymentOptions.class);
-                            intent.putExtra("msg", msg);
-                            intent.putExtra("token", token);
-                            intent.putExtra("user-email", "niyasnazar23@gmail.com");
-                            intent.putExtra("user-mobile", "7012297229");
-                            //  intent.putExtra("callback", < instance of callback object >);
-                            startActivity(intent);*/
 
                             payNowCalled(mbillid);
                             LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
@@ -592,6 +498,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     private void doFetch() {
+        progressDialog.show();
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
@@ -603,6 +510,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
+                progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     name = response.body().getName();
                     mobile = response.body().getMobile();
@@ -624,7 +532,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseFetchProfile> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
 
@@ -649,7 +557,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         // call BillDesk SDK
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("bill_id",Integer.parseInt(Billid));
+        jsonObject.addProperty("bill_id", Integer.parseInt(Billid));
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponsePay> call = apiService.doFetchpayment(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<ResponsePay>() {
@@ -658,7 +566,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 SampleCallBack objSampleCallBack = new SampleCallBack();
                 Intent sdkIntent = new Intent(getApplicationContext(), PaymentOptions.class);
                 String strPGMsg = response.body().getStringStrPGMsg();
-              //  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
+                //  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
                 sdkIntent.putExtra("msg", strPGMsg);
                 String strTokenMsg = null;
                 if (strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
@@ -676,7 +584,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
             }
         });
-
 
 
     }

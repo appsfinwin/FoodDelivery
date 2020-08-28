@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,9 +36,13 @@ import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,11 +55,14 @@ public class PaymentSuccess extends AppCompatActivity {
     RecyclerView recyclerView;
     Button btninvoice;
     String cartoutid;
-    TextView TextViewtotal, TextViewsubtotal, TextViewtax, TextViewinvoiceid,Textviewcgstname,Textviewcgstvalue,Textviewsgstname,TextviewSgstvalue;
+    TextView TextViewtotal, TextViewsubtotal, TextViewDcharge, TextViewinvoiceid,Textviewcgstname,Textviewcgstvalue,Textviewsgstname,TextviewSgstvalue;
     ProgressDialog mProgressDialog;
     LinearLayout mainparent;
     String transactionid;
     String paymentmode;
+    final String[][] DATA_TO_SHOW = { { "This", "is", "a", "test" },
+            { "and", "a", "second", "test" } };
+    TextView tvadderss,tvtotalamount2,tvinvoicedate;
 
 
     @Override
@@ -69,8 +77,12 @@ public class PaymentSuccess extends AppCompatActivity {
         Textviewcgstvalue = findViewById(R.id.tv_gstvalue1);
         Textviewsgstname = findViewById(R.id.tv_gstname2);
         TextviewSgstvalue = findViewById(R.id.tv_gstvalue2);
+        tvadderss=findViewById(R.id.tv_address);
+        tvinvoicedate=findViewById(R.id.tv_invoicedate);
 
-        TextViewtax = findViewById(R.id.tv_taxamt);
+
+        tvtotalamount2=findViewById(R.id.total_amt2);
+        TextViewDcharge = findViewById(R.id.tv_deliverycharges);
         mainparent = findViewById(R.id.mainparent);
         mProgressDialog = new ProgressDialog(PaymentSuccess.this);
         mProgressDialog.setMessage("Loading...");
@@ -78,9 +90,9 @@ public class PaymentSuccess extends AppCompatActivity {
         mProgressDialog.show();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PaymentSuccess.this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+       /* DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addItemDecoration(dividerItemDecoration);*/
         datasetAdd = new ArrayList<>();
         fetchCart();
         //  datasetAdd = db.getAllContacts();
@@ -122,6 +134,8 @@ public class PaymentSuccess extends AppCompatActivity {
 
     private void doGenerateInvoice(JsonObject jsonObject) {
         final String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        final String adderss=LocalPreferences.retrieveStringPreferences(getApplicationContext(),"Address");
+
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseInvoiceGen> call = apiService.dogenerateinvoice(mAccesstoken, database, jsonObject);
@@ -135,22 +149,49 @@ public class PaymentSuccess extends AppCompatActivity {
                     String invoiceid = response.body().getInvoiceNo().toString();
                    if (invoiceid != null) {
                         List<Products> datasets = responseInvoiceGen.getProducts();
-                        List<Tax> dataset = responseInvoiceGen.getTax();
+                       List<Tax> dataset = responseInvoiceGen.getTax();
                         if (!dataset.isEmpty() && dataset.size() != 0) {
                             FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
                             recyclerView.setAdapter(productAdapter);
+                            tvadderss.setText(adderss);
+
+
+
+
+
                             Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             String totalamt = response.body().getTotalAmount().toString();
                             String sub_total = response.body().getSubtotal().toString();
-                            String taxamt = response.body().getTaxAmount().toString();
+                            String delcharge = response.body().getDelivery_charge().toString();
+
+                            for (int i=0;i<dataset.size();i++){
+                           String taxname=     dataset.get(i).getTax();
+                           if (taxname.equalsIgnoreCase("SGST@2.5%")){
+                               Textviewsgstname.setText(dataset.get(i).getTax());
+                               TextviewSgstvalue.setText("" + dataset.get(i).getTaxValue());
+                               Textviewcgstname.setVisibility(View.GONE);
+                               Textviewcgstvalue.setVisibility(View.GONE);
+                           }else if (taxname.equalsIgnoreCase("CGST@2.5%")){
+                               Textviewcgstname.setText(dataset.get(i).getTax());
+                               Textviewcgstvalue.setText("" + dataset.get(i).getTaxValue());
+                               Textviewsgstname.setVisibility(View.GONE);
+                               TextviewSgstvalue.setVisibility(View.GONE);
+                           }
+
+
+
+
+
+                                }
+
+
+tvinvoicedate.setText(getDateTime());
+                            tvtotalamount2.setText("₹ "+totalamt);
                             TextViewsubtotal.setText("₹ " + sub_total);
                             TextViewtotal.setText("₹ " + totalamt);
-                            TextViewtax.setText("₹ " + taxamt);
-                            TextViewinvoiceid.setText("Invoice Id : " + invoiceid);
-                            Textviewcgstname.setText(dataset.get(0).getTax());
-                            Textviewcgstvalue.setText("" + dataset.get(0).getTaxValue());
-                            Textviewsgstname.setText(dataset.get(0).getTax());
-                            TextviewSgstvalue.setText("" + dataset.get(0).getTaxValue());
+                            TextViewDcharge.setText("₹ " + delcharge);
+                            TextViewinvoiceid.setText("Invoice No. : " + invoiceid);
+
                             //  LocalPreferences.clearPreferences(getApplicationContext());
                             LocalPreferences.storeStringPreference(getApplicationContext(), "Accesstoken", mAccesstoken);
                             // new DatabaseHandler(getApplicationContext()).removeAll();
@@ -224,5 +265,11 @@ public class PaymentSuccess extends AppCompatActivity {
 
     public void onBack(View view) {
         onBackPressed();
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy ");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

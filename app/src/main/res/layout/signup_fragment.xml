@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".4"
+        android:scaleType="centerCrop"
+        android:src="@drawable/qw"
+        android:tint="@color/tint_black" />
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ScrollView
@@ -16,7 +30,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+
             android:orientation="vertical"
             android:paddingTop="15dp">
 
@@ -489,7 +503,7 @@
                     android:background="@drawable/rect_grayoutline"
                     android:fontFamily="sans-serif"
                     android:inputType="textPassword"
-                    android:maxLength="6"
+
                     android:paddingLeft="16.3dp"
                     android:paddingTop="15.7dp"
                     android:paddingBottom="15.7dp"
@@ -532,7 +546,7 @@
                         android:background="@drawable/rect_grayoutline"
                         android:fontFamily="sans-serif"
                         android:inputType="textPassword"
-                        android:maxLength="6"
+
                         android:paddingLeft="16.3dp"
                         android:paddingTop="15.7dp"
                         android:paddingBottom="15.7dp"
@@ -626,3 +640,4 @@
     </ScrollView>
 
 </LinearLayout>
+</RelativeLayout>

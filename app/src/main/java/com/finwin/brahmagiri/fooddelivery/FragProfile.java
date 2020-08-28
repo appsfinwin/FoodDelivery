@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -42,15 +43,19 @@ public class FragProfile extends Fragment {
     ImageView img_Chng_homeAdd, img_Chng_ofcAdd;
     String name;
     String mobile;
-    String email,address,street,city,pincode,landmark;
+    String email, address, street, city, pincode, landmark;
+    ProgressDialog progressDialog;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // View view= rootview = inflater.inflate(R.layout.frag_profile, container, false);
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.frag_profile, container, false);
-
-
+progressDialog=new ProgressDialog(getActivity());
+progressDialog.setMessage("Loading...");
+progressDialog.setCancelable(false);
+progressDialog.setCanceledOnTouchOutside(false);
 
         binding.ibtnBackProf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +84,7 @@ public class FragProfile extends Fragment {
     }
 
     private void doFetch() {
+        progressDialog.show();
         String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
@@ -90,21 +96,22 @@ public class FragProfile extends Fragment {
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
+               progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
-                     name = response.body().getName();
-                     mobile=response.body().getMobile();
-                     email=response.body().getEmail();
-                     address=response.body().getHouseNo();
-                     street=response.body().getStreet();
-                     city=response.body().getCity();
-                     landmark=response.body().getLandmark();
-                     pincode=response.body().getPincode().toString();
+                    name = response.body().getName();
+                    mobile = response.body().getMobile();
+                    email = response.body().getEmail();
+                    address = response.body().getHouseNo();
+                    street = response.body().getStreet();
+                    city = response.body().getCity();
+                    landmark = response.body().getLandmark();
+                    pincode = response.body().getPincode().toString();
                     binding.tvname.setText(name);
                     binding.tvEmail.setText(email);
                     binding.tvMobile.setText(mobile);
-                    String address=response.body().getHouseNo()+" ,"+response.body().getStreet()+" ,"+response.body().getCity()+"  ,"
-                            +response.body().getDistrict()+" ,"
-                            +response.body().getState()+" ,"+ "\n"+"Landmark - "+response.body().getLandmark()+ "\n"+"Pincode - "+response.body().getPincode();
+                    String address = response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
+                            + response.body().getDistrict() + " ,"
+                            + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
 
                     binding.address1.setText(address);
                 }
@@ -112,7 +119,7 @@ public class FragProfile extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseFetchProfile> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
 
@@ -131,14 +138,14 @@ public class FragProfile extends Fragment {
         b.setTitle(addTest);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_chng_address, null);
-        final EditText edname=dialogView.findViewById(R.id.ed_name);
-        final EditText edmobile=dialogView.findViewById(R.id.ed_mobile);
-        final EditText edlandmark=dialogView.findViewById(R.id.ed_landmark);
-        final EditText edaddress=dialogView.findViewById(R.id.ed_address);
-        final EditText edstreet=dialogView.findViewById(R.id.ed_street);
-        final EditText edcity=dialogView.findViewById(R.id.ed_city);
-        final EditText edpin=dialogView.findViewById(R.id.ed_pin);
-        final EditText edemail=dialogView.findViewById(R.id.ed_email);
+        final EditText edname = dialogView.findViewById(R.id.ed_name);
+        final EditText edmobile = dialogView.findViewById(R.id.ed_mobile);
+        final EditText edlandmark = dialogView.findViewById(R.id.ed_landmark);
+        final EditText edaddress = dialogView.findViewById(R.id.ed_address);
+        final EditText edstreet = dialogView.findViewById(R.id.ed_street);
+        final EditText edcity = dialogView.findViewById(R.id.ed_city);
+        final EditText edpin = dialogView.findViewById(R.id.ed_pin);
+        final EditText edemail = dialogView.findViewById(R.id.ed_email);
 
         edname.setText(name);
         edmobile.setText(mobile);
@@ -154,8 +161,8 @@ public class FragProfile extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.e("onClick: ", "+++++");
-                doUpdateProfile(edname.getText().toString(),edmobile.getText().toString(),edlandmark.getText().toString(),
-                        edaddress.getText().toString(),edstreet.getText().toString(),edcity.getText().toString(),edemail.getText().toString(),edpin.getText().toString());
+                doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
+                        edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
             }
         });
 
@@ -186,8 +193,8 @@ public class FragProfile extends Fragment {
         alertDialog.show();
     }
 
-    private void doUpdateProfile(String edname,String edmobile,String edlandmark,
-                                 String edaddress,String edstreet,String edcity,String edemail,String edpin){
+    private void doUpdateProfile(String edname, String edmobile, String edlandmark,
+                                 String edaddress, String edstreet, String edcity, String edemail, String edpin) {
         String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
@@ -202,15 +209,14 @@ public class FragProfile extends Fragment {
         jsonObject.addProperty("pincode", edpin);
 
 
-
-
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
-        ApiService apiService=APIClient.getClient().create(ApiService.class);
-        Call<JsonObject>call=apiService.doUpdateProfile(database,mAccesstoken,jsonObject);
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<JsonObject> call = apiService.doUpdateProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if (response.body()!=null&&response.code()==200){
+                if (response.body() != null && response.code() == 200) {
+                    doFetch();
 
                 }
             }

@@ -32,6 +32,11 @@ public class ResponseInvoiceGen {
     @Expose
     private Double subtotal;
 
+    @SerializedName("delivery_charge")
+    @Expose
+    private Double delivery_charge;
+
+
     public Double getTaxAmount() {
         return taxAmount;
     }
@@ -94,5 +99,13 @@ public class ResponseInvoiceGen {
 
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    public Double getDelivery_charge() {
+        return delivery_charge;
+    }
+
+    public void setDelivery_charge(Double delivery_charge) {
+        this.delivery_charge = delivery_charge;
     }
 }

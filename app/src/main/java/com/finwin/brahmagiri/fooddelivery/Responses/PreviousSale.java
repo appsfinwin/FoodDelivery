@@ -28,6 +28,10 @@ public  class PreviousSale {
      @SerializedName("total_amount")
      @Expose
      private Double totalAmount;
+    @SerializedName("invoice_id")
+    @Expose
+    private Integer invoice_id;
+
 
      public String getStatus() {
          return status;
@@ -92,4 +96,12 @@ public  class PreviousSale {
      public void setTotalAmount(Double totalAmount) {
          this.totalAmount = totalAmount;
      }
+
+    public Integer getInvoice_id() {
+        return invoice_id;
+    }
+
+    public void setInvoice_id(Integer invoice_id) {
+        this.invoice_id = invoice_id;
+    }
 }

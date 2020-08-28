@@ -2,7 +2,7 @@
 package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,34 +10,34 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
-import com.finwin.brahmagiri.fooddelivery.Responses.Products;
+
+import com.finwin.brahmagiri.fooddelivery.Responses.LineItem;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.Onclick;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.ProductViewHolder> {
+public class OrderdetailAdapter extends RecyclerView.Adapter<OrderdetailAdapter.ProductViewHolder> {
 
     Onclick mclick;
     //this context we will use to inflate the layout
     private Context mCtx;
 
     //we are storing all the products in a list
-    private List<Products> productList;
+    private List<LineItem> productList;
 
     //getting the context and product list with constructor
 
-    public FinalbillAdapter(Context mCtx, List<Products> productList) {
+    public OrderdetailAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.productList = productList;
     }
 
-    public FinalbillAdapter(Context mCtx, List<Products> productList, Onclick mclick) {
+    public OrderdetailAdapter(Context mCtx, List<LineItem> productList) {
         this.mCtx = mCtx;
         this.productList = productList;
-        this.mclick = mclick;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         //getting the product of the specified position
-        Products product = productList.get(position);
+       LineItem product = productList.get(position);
         if (position==0){
             holder.header.setVisibility(View.VISIBLE);
         }else {
@@ -61,13 +61,10 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
         //binding the data with the viewholder views
         holder.textViewTitle.setText(product.getProductName());
         holder.textViewPrice.setText("₹ " + product.getPrice());
-        holder.textViewQnty.setText("" + product.getQuantity());
+        holder.textViewQnty.setText("" +  Math.round(product.getQuantity()));
         Double subtotal = product.getPrice() * product.getQuantity();
-        holder.textViewSubtotal.setText("₹ " + subtotal);
-        //holder.textViewRating.setText(String.valueOf(product.getRating()));
-        // holder.textViewPrice.setText(String.valueOf(product.getPrice()));
+        holder.textViewSubtotal.setText("₹ " + (new DecimalFormat("##.##").format(subtotal)));
 
-        //holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(product.getImage()));
 
     }
 
@@ -92,7 +89,6 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
             textViewPrice = itemView.findViewById(R.id.tv_cost);
             textViewDelete = itemView.findViewById(R.id.tv_delete);
             header=itemView.findViewById(R.id.billheader);
-
             // imageView = itemView.findViewById(R.id.imageView);
         }
     }

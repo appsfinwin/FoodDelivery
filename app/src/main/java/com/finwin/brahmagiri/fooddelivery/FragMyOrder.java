@@ -1,5 +1,6 @@
 package com.finwin.brahmagiri.fooddelivery;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.PreviousSale;
@@ -51,6 +53,7 @@ public class FragMyOrder extends Fragment {
     ImageButton ibtn_back;
     View rootview;
     TextView tvOK;
+    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,20 +66,25 @@ public class FragMyOrder extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         frameLayout = rootview.findViewById(R.id.emptyorder);
         menuRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
-      LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         menuRecycler.setLayoutManager(layoutManager);
-     //   menuRecycler.setItemAnimator(new DefaultItemAnimator());
+        //   menuRecycler.setItemAnimator(new DefaultItemAnimator());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(menuRecycler.getContext(),
                 layoutManager.getOrientation());
         menuRecycler.addItemDecoration(dividerItemDecoration);
         String partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
-
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, partnerid);
         call.enqueue(new Callback<ResponseMyOrder>() {
             @Override
             public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
+                progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     ResponseMyOrder responseMyOrder = response.body();
                     List<PreviousSale> dataset = responseMyOrder.getPreviousSales();
@@ -90,7 +98,7 @@ public class FragMyOrder extends Fragment {
                     menuRecycler.setVisibility(View.VISIBLE);
 
 
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
 
                 }
@@ -98,7 +106,7 @@ public class FragMyOrder extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
 
