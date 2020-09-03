@@ -1,4 +1,4 @@
-package com.finwin.brahmagiri.fooddelivery.Utilities;
+package com.finwin.brahmagiri.fooddelivery.utilities;
 
 import android.content.Context;
 import android.graphics.Canvas;

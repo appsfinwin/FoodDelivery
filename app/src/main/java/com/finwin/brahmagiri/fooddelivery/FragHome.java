@@ -4,16 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.Outlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
@@ -28,13 +25,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -45,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
-import com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll;
 import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
 import com.finwin.brahmagiri.fooddelivery.Activity.Product;
 import com.finwin.brahmagiri.fooddelivery.Adapter.BestSellingAdapter;
@@ -53,22 +46,15 @@ import com.finwin.brahmagiri.fooddelivery.Adapter.FoodForYouModel;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ItemlistingBrahmaAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemModel;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MenuItemRecyAdapter;
-import com.finwin.brahmagiri.fooddelivery.Adapter.TopSellingAdapter;
-import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomePageCat;
-import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.HomeTopselling;
-import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
-import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchZone;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
-import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -84,7 +70,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragHome extends Fragment implements NavigationView.OnNavigationItemSelectedListener, showhide {
 
@@ -277,7 +263,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     String firstzone = dataset.get(0).getId().toString();
 //                    LocalPreferences.storeStringPreference(getActivity(), "firstzone", firstzone);
 
-                    adapters = new ArrayAdapter<Zone>(Objects.requireNonNull(getActivity()), R.layout.zone_spinner_items, dataset);
+                    adapters = new ArrayAdapter<Zone>(getActivity(), R.layout.zone_spinner_items, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerzone.setAdapter(adapters);
                     String zones = LocalPreferences.retrieveStringPreferences(getActivity(), "zone");

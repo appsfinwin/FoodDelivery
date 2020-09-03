@@ -1,17 +1,19 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.databinding.DataBindingUtil;
+
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
+import com.finwin.brahmagiri.fooddelivery.ActivityMain;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityChangepasswordBinding;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -24,7 +26,7 @@ import retrofit2.Response;
 
 import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
-public class Changepassword extends BaseActivity {
+public class ChangepasswordLoggedIn extends BaseActivity {
 ActivityChangepasswordBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,9 @@ ActivityChangepasswordBinding binding;
 
     }
 
-    private void doChangePass(String pass, String edcpass,String userid) {
+    private void doChangePass(String pass, String edcpass,String aa) {
+   String userid=     LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+
         showdialog();
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("enter_password",pass);
@@ -71,9 +75,9 @@ ActivityChangepasswordBinding binding;
                         JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                         String  msg = jsonObject.getString("message");
                         Toast.makeText(getApplicationContext(),""+msg,Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), ActivityInitial.class));
+                        startActivity(new Intent(getApplicationContext(), ActivityMain.class));
                         finish();
-                        finishAffinity();
+                      //  finishAffinity();
 
 //
                     } catch (JSONException e) {

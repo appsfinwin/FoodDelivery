@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,26 +20,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity;
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderAdapter;
-import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.PreviousSale;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
-import com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragMyOrder extends Fragment {
 

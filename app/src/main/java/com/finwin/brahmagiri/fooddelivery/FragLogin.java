@@ -20,8 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
-import com.finwin.brahmagiri.fooddelivery.Utilities.Constants;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
@@ -31,7 +30,7 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragLogin extends Fragment {
 

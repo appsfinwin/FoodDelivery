@@ -1,4 +1,4 @@
-package com.finwin.brahmagiri.fooddelivery.Utilities;
+package com.finwin.brahmagiri.fooddelivery.utilities;
 
 import android.app.Activity;
 import android.content.Context;

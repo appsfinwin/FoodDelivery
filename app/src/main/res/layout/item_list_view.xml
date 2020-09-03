@@ -48,7 +48,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/ic_like_uncheck" />
 
-                <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
 
                     android:visibility="gone"
                     android:id="@+id/tv_offer"
@@ -65,7 +65,7 @@
 
             </FrameLayout>
 
-            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                 android:id="@+id/tvName"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
@@ -81,7 +81,7 @@
 
                 android:textColor="#2d2d2d"
                 android:textSize="15sp" />
-            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                 android:id="@+id/tvdesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
@@ -144,7 +144,7 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
-                        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                             android:id="@+id/tv_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -175,7 +175,7 @@
                         app:textColor="@color/white"
                         app:textSize="6sp" />
 
-                    <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                    <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                         android:layout_marginBottom="5dp"
                         android:id="@+id/btn_add_ofr"
                         android:layout_width="90dp"

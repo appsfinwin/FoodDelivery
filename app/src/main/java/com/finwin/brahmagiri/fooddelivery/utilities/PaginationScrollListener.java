@@ -1,4 +1,4 @@
-package com.finwin.brahmagiri.fooddelivery.Utilities;
+package com.finwin.brahmagiri.fooddelivery.utilities;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

@@ -18,20 +18,16 @@
         </include>
 
         <!-- TODO: Update blank fragment layout -->
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
+            android:id="@+id/billparent"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:nestedScrollingEnabled="false">
+            android:fillViewport="true">
 
-            <androidx.cardview.widget.CardView
-                app:cardUseCompatPadding="true"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                app:cardCornerRadius="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -39,7 +35,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -51,41 +47,45 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:scaleType="centerInside"
+
                                 android:layout_marginTop="10dp"
+                                android:layout_marginLeft="15dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/prinlogo"
-                                android:layout_width="200dp"
-                                android:layout_height="200dp">
+                                android:layout_width="160dp"
+                                android:layout_height="160dp">
 
                             </ImageView>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:textColor="#1e1e1e"
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginTop="10dp"
+                                android:id="@+id/tnxn"
+
                                 android:layout_width="wrap_content"
 
                                 android:text="Farmers Trade Market"
-                                android:textStyle="bold"
+
                                 android:layout_height="wrap_content">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/invoice_id"
                                 android:layout_marginLeft="15dp"
+
                                 android:layout_width="wrap_content"
                                 android:layout_below="@+id/tv_invoice"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="3dp"
-                                android:text="sssss"
+                                android:layout_marginTop="8dp"
+                                android:text=""
                                 android:textColor="#2d2d2d"
                                 android:textSize="13sp">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>>
 
                         </LinearLayout>
 
@@ -96,7 +96,7 @@
 
                             android:orientation="vertical">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
@@ -108,10 +108,10 @@
                                 android:textColor="#2d2d2d"
                                 android:textSize="35sp">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_below="@id/tv_invoice"
                                 android:layout_marginTop="8dp"
                                 android:id="@+id/totaltext"
@@ -127,7 +127,7 @@
                                 android:text="Total Amount"
                                 android:textColor="#2d2d2d" />
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_below="@id/totaltext"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginRight="10dp"
@@ -150,7 +150,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -161,7 +161,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:textColor="#1e1e1e"
                                 android:id="@+id/tv_addressheader"
                                 android:layout_marginLeft="15dp"
@@ -171,9 +171,9 @@
                                 android:textStyle="bold"
                                 android:layout_height="wrap_content">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:textColor="#1e1e1e"
                                 android:id="@+id/tv_address"
                                 android:text=""
@@ -184,7 +184,7 @@
 
                                 android:layout_height="wrap_content">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
                         </LinearLayout>
 
@@ -195,7 +195,7 @@
 
                             android:orientation="vertical">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
@@ -209,7 +209,7 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
                         </RelativeLayout>
                     </LinearLayout>
@@ -217,6 +217,9 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:visibility="visible"
                         android:id="@+id/recyvfinal"
+
+
+                        android:nestedScrollingEnabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="0dp"
@@ -246,12 +249,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginTop="50dp"
+                        android:layout_marginTop="30dp"
                         android:layout_marginRight="15dp"
                         android:layout_marginBottom="8dp"
                         android:orientation="vertical">
 
-                        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                             android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -259,7 +262,7 @@
                             android:textColor="#2d2d2d"
                             android:textStyle="bold">
 
-                        </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
 
                         <View
@@ -277,7 +280,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -286,7 +289,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_subtotal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -302,9 +305,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="5dp">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_gstname1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -314,7 +317,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_gstvalue1"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -330,9 +333,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="5dp">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_gstname2"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -342,7 +345,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_gstvalue2"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -359,10 +362,10 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="5dp"
                             android:visibility="visible">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -371,7 +374,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/tv_deliverycharges"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -390,7 +393,7 @@
                             android:layout_marginTop="10dp"
                             android:visibility="gone">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -398,9 +401,9 @@
                                 android:text="Total before discount"
                                 android:textColor="#2d2d2d">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -419,7 +422,7 @@
                             android:layout_marginTop="10dp"
                             android:visibility="gone">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -428,7 +431,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -447,7 +450,7 @@
                             android:layout_marginTop="10dp"
                             android:visibility="gone">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
 
@@ -456,7 +459,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -475,7 +478,7 @@
                             android:layout_marginTop="10dp"
                             android:visibility="gone">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -484,7 +487,7 @@
                                 android:textColor="#2d2d2d" />
 
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -514,7 +517,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="100dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_height="wrap_content"
@@ -525,9 +528,9 @@
 
                                 android:textColor="#2d2d2d">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/total_amt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -551,7 +554,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp">
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:layout_width="100dp"
 
                                 android:layout_height="wrap_content"
@@ -561,9 +564,9 @@
                                 android:text="Balance"
                                 android:textColor="#2d2d2d">
 
-                            </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+                            </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-                            <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+                            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                                 android:id="@+id/balance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -584,9 +587,9 @@
                     </LinearLayout>
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
-        </ScrollView>
+
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
 

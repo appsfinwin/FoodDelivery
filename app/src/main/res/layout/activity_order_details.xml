@@ -139,7 +139,33 @@
 
                         </TextView>
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:visibility="visible">
 
+                        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+
+                            android:text="Delivery Charge"
+                            android:textColor="#2d2d2d" />
+
+
+                        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+                            android:id="@+id/tv_deliverychargess"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+
+                            android:text=""
+                            android:textColor="#2d2d2d" />
+
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

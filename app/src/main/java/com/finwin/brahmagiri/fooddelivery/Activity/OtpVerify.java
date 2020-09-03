@@ -1,7 +1,5 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -24,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class OtpVerify extends BaseActivity {
     private OtpView otpView;

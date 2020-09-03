@@ -15,7 +15,7 @@ import com.finwin.brahmagiri.fooddelivery.Adapter.BestSellingAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ItemCat;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.ResponseFetchCategory;
 import com.finwin.brahmagiri.fooddelivery.Responses.Fetch_category.Tablecattotal;
-import com.finwin.brahmagiri.fooddelivery.Utilities.PaginationScrollListener;
+import com.finwin.brahmagiri.fooddelivery.utilities.PaginationScrollListener;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;

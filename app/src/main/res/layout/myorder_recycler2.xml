@@ -16,7 +16,7 @@
         android:layout_toLeftOf="@id/totalamt"
         android:orientation="vertical">
 
-        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
             android:id="@+id/outletname"
 
             android:layout_width="wrap_content"
@@ -26,9 +26,9 @@
             android:textColor="@color/black"
             android:textSize="15sp">
 
-        </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+        </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
             android:id="@+id/invoice_no"
 
             android:layout_width="wrap_content"
@@ -39,10 +39,10 @@
             android:textColor="@color/black"
             android:textSize="12sp">
 
-        </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+        </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
 
-        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
             android:id="@+id/invoicedate"
 
             android:layout_width="wrap_content"
@@ -53,8 +53,8 @@
             android:textColor="@color/black"
             android:textSize="12sp">
 
-        </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
-        <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+        </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
+        <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
             android:id="@+id/Orderstats"
 
             android:layout_width="wrap_content"
@@ -65,11 +65,11 @@
             android:textColor="@color/black"
             android:textSize="12sp">
 
-        </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+        </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
     </LinearLayout>
 
-    <com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight
+    <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
@@ -85,5 +85,5 @@ android:layout_alignParentEnd="true"
         android:textColor="@color/black"
         android:textSize="12sp">
 
-    </com.finwin.brahmagiri.fooddelivery.Utilities.Fontlight>
+    </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 </RelativeLayout>

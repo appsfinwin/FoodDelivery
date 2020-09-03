@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +31,14 @@ import com.billdesk.sdk.PaymentOptions;
 import com.finwin.brahmagiri.fooddelivery.Adapter.CartAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.ConfirmOrderModel;
+import com.finwin.brahmagiri.fooddelivery.Adapter.OutofstockAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
-import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
-import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableFetchCart;
-import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
-import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
+import com.finwin.brahmagiri.fooddelivery.Responses.OutStockProduct;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.database.DatabaseHandler;
@@ -47,8 +46,6 @@ import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.worldline.in.constant.Param;
-import com.worldline.in.ipg.PaymentStandard;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -61,7 +58,7 @@ import retrofit2.Response;
 
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.COD;
 import static com.finwin.brahmagiri.fooddelivery.SupportClass.ConstantClass.PAYTM;
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class PaymentActivity extends AppCompatActivity implements showhide {
     private List<ConfirmOrderModel> homeListModelClassArrayList;
@@ -84,6 +81,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     CartAdapter mCartAdapter;
     String total, getewaytotal;
 
+
     String itemArryId, itemArryName, itemArryCount, itemArryAmount,
             StrBndlTotal = "";
     private RadioGroup collection;
@@ -105,6 +103,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         delcharges = findViewById(R.id.tv_delivery_charge);
         totamamount = findViewById(R.id.tv_totalamt);
         collection = (RadioGroup) findViewById(R.id.radiogrp);
+
 
         laytdelcharge = findViewById(R.id.laytdeliverycharge);
         layttotamt = findViewById(R.id.layout_totalamt);
@@ -370,7 +369,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             public void onResponse(Call<ResponseCreateBill> call, Response<ResponseCreateBill> response) {
                 if (response.body() != null && response.code() == 200) {
 
-                    if (response.body().getBillId().toString() != null) {
+                    if (response.body().getBillId() != 0) {
                         String mbillid = response.body().getBillId().toString();
                         if (cod) {
 
@@ -385,6 +384,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                         }
                         // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
+                    }else{
+
+
+                        ResponseCreateBill responseCreateBill=response.body();
+
+                        List <OutStockProduct>dataset=responseCreateBill.getProducts();
+                        showpopup(dataset);
+                        Toast.makeText(getApplicationContext(),""+response.body().getMessage(),Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -398,6 +405,37 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
             }
         });
+    }
+
+    private void showpopup(List<OutStockProduct> dataset) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
+        final RecyclerView recyclerView = alertLayout.findViewById(R.id.recyvoutstock);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setAdapter(new OutofstockAdapter(getApplicationContext(),dataset));
+
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage("Your cart has quantity less than available quantity please choose quantity less for below products");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+    /*    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });*/
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
 
@@ -563,18 +601,17 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         call.enqueue(new Callback<ResponsePay>() {
             @Override
             public void onResponse(Call<ResponsePay> call, Response<ResponsePay> response) {
-                SampleCallBack objSampleCallBack = new SampleCallBack();
+              SampleCallBack objSampleCallBack = new SampleCallBack();
                 Intent sdkIntent = new Intent(getApplicationContext(), PaymentOptions.class);
                 String strPGMsg = response.body().getStringStrPGMsg();
-                //  String msg = "AIRMTST|ARP1523968042763|NA|2|NA|NA|NA|INR|NA|R|airmtst|NA|NA|F|NA|NA|NA|NA|NA|NA|NA|https://uat.billdesk.com/pgidsk/pgmerc/pg_dump.jsp|3277831407";
                 sdkIntent.putExtra("msg", strPGMsg);
                 String strTokenMsg = null;
                 if (strTokenMsg != null && strTokenMsg.length() > strPGMsg.length()) {
 
                     sdkIntent.putExtra("token", strTokenMsg);
                 }
-                sdkIntent.putExtra("user-email", "niyasnazar23@gmail.com");
-                sdkIntent.putExtra("user-mobile", "9747337738");
+                sdkIntent.putExtra("user-email", email);
+                sdkIntent.putExtra("user-mobile", mobile);
                 sdkIntent.putExtra("callback", objSampleCallBack);
                 startActivity(sdkIntent);
             }

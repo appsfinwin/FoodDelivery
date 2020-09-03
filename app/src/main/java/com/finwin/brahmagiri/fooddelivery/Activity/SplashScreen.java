@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
 import com.finwin.brahmagiri.fooddelivery.ActivityMain;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCheckVersion;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.BuildConfig;
@@ -20,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class SplashScreen extends AppCompatActivity {
     String versionName;

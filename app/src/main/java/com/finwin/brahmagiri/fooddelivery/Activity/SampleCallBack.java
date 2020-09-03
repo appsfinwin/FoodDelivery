@@ -29,11 +29,22 @@ public class SampleCallBack implements LibraryPaymentStatusProtocol, Parcelable 
         String mStatus[]=status.split("\\|");
 
         String authstatus=mStatus[14].toString();
+        String tnxid=mStatus[1].toString();
+
         if (authstatus.equals("0300")){
-           context. startActivity(new Intent(context, PaymentSuccessActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
-        }
-        if (authstatus.equals("0399")){
-           context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", "orderId").putExtra("paymode", "onlinepayment"));
+
+           context. startActivity(new Intent(context, PaymentSuccessActivity.class).putExtra("trnxnid", tnxid).putExtra("paymode", "op"));
+        }else  if (authstatus.equals("0399")){
+           context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", tnxid).putExtra("message", "Failed Transaction"));
+        } else if (authstatus.equalsIgnoreCase("NA")){
+            context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", tnxid).putExtra("message", "Cancel Transaction"));
+
+        }else if(authstatus.equalsIgnoreCase("0002")){
+            context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", tnxid).putExtra("message", "Pending Transaction"));
+
+        }else if(authstatus.equalsIgnoreCase("0001”")){
+            context. startActivity(new Intent(context, PaymentFailureActivity.class).putExtra("trnxnid", tnxid).putExtra("message", "Cancel Transaction"));
+
         }
 
 

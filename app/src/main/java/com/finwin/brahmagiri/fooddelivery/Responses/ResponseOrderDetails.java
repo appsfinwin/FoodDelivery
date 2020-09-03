@@ -37,6 +37,9 @@ public class ResponseOrderDetails {
     @SerializedName("collecting_option")
     @Expose
     private String  collecting_option;
+    @SerializedName("delivery_charges")
+    @Expose
+    private Double   delivery_charges;
 
 
     public String getStatus() {
@@ -121,5 +124,13 @@ public class ResponseOrderDetails {
 
     public void setCollecting_option(String collecting_option) {
         this.collecting_option = collecting_option;
+    }
+
+    public Double getDelivery_charges() {
+        return delivery_charges;
+    }
+
+    public void setDelivery_charges(Double delivery_charges) {
+        this.delivery_charges = delivery_charges;
     }
 }

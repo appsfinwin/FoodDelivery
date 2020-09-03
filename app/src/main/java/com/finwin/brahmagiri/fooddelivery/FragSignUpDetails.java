@@ -26,7 +26,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.finwin.brahmagiri.fooddelivery.Responses.States;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
-import com.finwin.brahmagiri.fooddelivery.Utilities.AppUtility;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.finwin.brahmagiri.fooddelivery.Utilities.Constants.database;
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragSignUpDetails extends Fragment {
     AppCompatSpinner spinner, spinnerdistrict, spinnerstate;

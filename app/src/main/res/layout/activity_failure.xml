@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
         android:layout_centerInParent="true"
-        android:src="@drawable/payment_failed"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:id="@+id/paymessage"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text=""
+        android:textColor="#1e1e1e"
+        android:textSize="28sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ImageView>
+    </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
 
-</RelativeLayout>
+    <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+        android:id="@+id/txnid"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+
+        android:textColor="#1e1e1e"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
+
+    <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+        android:id="@+id/txniddateandtime"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+
+        android:textColor="#1e1e1e"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.finwin.brahmagiri.fooddelivery.utilities.Fontlight>
+
+</LinearLayout>

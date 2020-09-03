@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.finwin.brahmagiri.fooddelivery.fooddelivery">
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,6 +45,8 @@
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityMain"
             android:screenOrientation="portrait" />
+
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn"></activity>
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivitySignUp"
             android:fitsSystemWindows="true"

@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
-import com.finwin.brahmagiri.fooddelivery.Utilities.LocalPreferences;
+import com.finwin.brahmagiri.fooddelivery.Activity.Changepassword;
+import com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -89,6 +91,23 @@ public class ActivityMain extends AppCompatActivity {
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;
+
+
+            case R.id.tv_nav_changepassword:
+                /*Fragment frCart = new FragCart();
+                FragmentManager fmCart = getSupportFragmentManager();
+                FragmentTransaction fragTransCart = fmCart.beginTransaction();
+                fragTransCart.replace(R.id.frame_layout, frCart);
+                fragTransCart.addToBackStack(null);
+                fragTransCart.commit();*/
+                startActivity(new Intent(getApplicationContext(), ChangepasswordLoggedIn.class));
+
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                break;
+
+
 
             case R.id.tv_nav_myordr:
                 Fragment frMyOrder = new FragMyOrder();
