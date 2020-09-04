@@ -3,21 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.finwin.brahmagiri.fooddelivery.fooddelivery">
 
-
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:hardwareAccelerated="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon,android:allowBackup">
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.OtpVerify"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ProductListActivity"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.OtpVerify" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.Changepassword" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.SplashScreen">
@@ -27,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.OrderDetails"></activity>
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.DemoSplash"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.OrderDetails" />
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.DemoSplash" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentSuccess" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentSuccessActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity" />
@@ -36,17 +35,16 @@
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CartActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity" />
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.StatusActivity"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.StatusActivity" />
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityInitial"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentFailureActivity"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentFailureActivity" />
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityMain"
             android:screenOrientation="portrait" />
-
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn"></activity>
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn" />
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivitySignUp"
             android:fitsSystemWindows="true"
@@ -59,9 +57,9 @@
             android:name="mid"
             android:value="WL0000000065439" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
 </manifest>

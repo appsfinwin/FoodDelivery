@@ -74,32 +74,12 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
                 .into(holder.image);
 
 
-       /* String addedq=   db.getFromDb(result.getProductId().toString());
-        if(!addedq.equals("0")){
-            holder.btnAdd.setVisibility(View.INVISIBLE);
-            holder.btnElgntCount.setNumber(addedq, true);
-            mshowhide.show("show");
-        }
-      //  holder.btnElgntCount.setNumber(addedq, true);
-        Log.d("fetchquantity", ": "+addedq);*/
 
-       // Glide.with(context).load("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500").into(holder.image);
-        //  itemVH.imageLike.setImageResource(result.get(position).getImageLike());
-        //  itemVH.tvOffer.setText(itemListModelArrayList.get(position).getItemoffer());
         holder.tvPrice.setText(""+result.getPrice());
         holder.tvName.setText(result.getProductName());
+        Log.e("onBindViewHolder", "onBindViewHolder: "+result.getProductName() );
         holder.tv_description.setText("Available Quantity :"+result.getAvlQty());
-      // holder.tv_description.setText(result.get);
-      //  holder.cutprice.setText(""+result.getMRP());
 
-        /*int mcartvalue=result.getCartValue();
-        if (mcartvalue!=0){
-            holder.btnAdd.setVisibility(View.INVISIBLE);
-            itemVH.btnElgntCount.setNumber(String.valueOf(mcartvalue), true);
-            mshowhide.show("show");
-
-
-        }*/
 
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override

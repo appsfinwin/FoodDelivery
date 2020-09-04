@@ -5,45 +5,88 @@ import com.google.gson.annotations.SerializedName;
 
 public class Outlet {
 
+    @SerializedName("outlet_address")
+    @Expose
+    private String outletAddress;
+    @SerializedName("outlet_mobile")
+    @Expose
+    private String outletMobile;
+    @SerializedName("zone_id")
+    @Expose
+    private Integer zoneId;
+    @SerializedName("cluster")
+    @Expose
+    private Integer cluster;
+    @SerializedName("outlet")
+    @Expose
+    private Integer outlet;
+    @SerializedName("outlet_street")
+    @Expose
+    private String outletStreet;
+    @SerializedName("outlet_image")
+    @Expose
+    private String outletImage;
     @SerializedName("outlet_name")
     @Expose
     private String outletName;
-     @SerializedName("cluster")
-     @Expose
-     private Integer cluster;
-     @SerializedName("outlet")
-     @Expose
-     private Integer outlet;
-     @SerializedName("zone_id")
-     @Expose
-     private Integer zoneId;
+    @SerializedName("outlet_landmark")
+    @Expose
+    private String outletLandmark;
 
-     public Integer getCluster() {
-         return cluster;
-     }
+    public String getOutletAddress() {
+        return outletAddress;
+    }
 
-     public void setCluster(Integer cluster) {
-         this.cluster = cluster;
-     }
+    public void setOutletAddress(String outletAddress) {
+        this.outletAddress = outletAddress;
+    }
 
-     public Integer getOutlet() {
-         return outlet;
-     }
+    public String getOutletMobile() {
+        return outletMobile;
+    }
 
-     public void setOutlet(Integer outlet) {
-         this.outlet = outlet;
-     }
+    public void setOutletMobile(String outletMobile) {
+        this.outletMobile = outletMobile;
+    }
 
-     public Integer getZoneId() {
-         return zoneId;
-     }
+    public Integer getZoneId() {
+        return zoneId;
+    }
 
-     public void setZoneId(Integer zoneId) {
-         this.zoneId = zoneId;
-     }
-    @Override
-    public String toString() {
-        return outletName;
+    public void setZoneId(Integer zoneId) {
+        this.zoneId = zoneId;
+    }
+
+    public Integer getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(Integer cluster) {
+        this.cluster = cluster;
+    }
+
+    public Integer getOutlet() {
+        return outlet;
+    }
+
+    public void setOutlet(Integer outlet) {
+        this.outlet = outlet;
+    }
+
+    public String getOutletStreet() {
+        return outletStreet;
+    }
+
+    public void setOutletStreet(String outletStreet) {
+        this.outletStreet = outletStreet;
+    }
+
+    public String getOutletImage() {
+        return outletImage;
+    }
+
+    public void setOutletImage(String outletImage) {
+        this.outletImage = outletImage;
     }
 
     public String getOutletName() {
@@ -52,5 +95,13 @@ public class Outlet {
 
     public void setOutletName(String outletName) {
         this.outletName = outletName;
+    }
+
+    public String getOutletLandmark() {
+        return outletLandmark;
+    }
+
+    public void setOutletLandmark(String outletLandmark) {
+        this.outletLandmark = outletLandmark;
     }
 }

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.finwin.brahmagiri.fooddelivery.Adapter.OutletAdapter;
+import com.finwin.brahmagiri.fooddelivery.Adapter.OutofstockAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.Outlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
@@ -93,12 +95,12 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private RecyclerView recyclerView1;
     private BestSellingAdapter rAdapter;
     ViewPager mPager;
-    TextView total, count;
+    TextView total, count,custname;
     ItemlistingBrahmaAdapter adapter;
     int selectedindex;
     String outletid;
     FrameLayout mprogres;
-
+    OutletAdapter outletAdapter;
 
     List<Zone> dataset;
     List<Outlet> datasetout;
@@ -125,6 +127,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         frameLayout = rootview.findViewById(R.id.empty_layout);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
+        custname=rootview.findViewById(R.id.tvname);
 
 
         String pos = LocalPreferences.retrieveStringPreferences(getActivity(), "zonepos");
@@ -170,7 +173,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                 if (i != -1) {
                     // Your code goes gere
                     String outid = datasetout.get(i).getOutlet().toString();
-                    doFetchProducts(outid);
+               //   doFetchProducts(outid);
                     //spinneroutlet.setSelection(i);
                     LocalPreferences.storeStringPreference(getActivity(), "outletpos", String.valueOf(i));
 
@@ -239,7 +242,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         ///==========================================================================
 
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
 
 
@@ -293,20 +296,34 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     }
 
     private void fechoutletbumyZOne(String firstzone) {
+        mprogres.setVisibility(View.VISIBLE);
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, database, firstzone);
         call.enqueue(new Callback<ResponseFetchOutlet>() {
             @Override
             public void onResponse(Call<ResponseFetchOutlet> call, Response<ResponseFetchOutlet> response) {
+                mprogres.setVisibility(View.GONE);
+
                 if (response.body() != null && response.code() == 200) {
                     ResponseFetchOutlet responseFetchOutlet = response.body();
                     datasetout = responseFetchOutlet.getOutlets();
-                    adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
-                    adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinneroutlet.setAdapter(adapteroutlet);
+                    outletAdapter=new OutletAdapter(getActivity(),datasetout);
+                    recyclerView.setAdapter(outletAdapter);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    frameLayout.setVisibility(View.GONE);
+                //    adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
+                //    adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                  //  spinneroutlet.setAdapter(adapteroutlet);
                     String posout = LocalPreferences.retrieveStringPreferences(getActivity(), "outletpos");
                     Log.d("onResponse", "outletposition: " + posout);
+               if (outletAdapter.getItemCount()==0){
+                   Toast.makeText(getActivity(), "No Outlets in the Selected Zone ...Please Try Another Zone", Toast.LENGTH_LONG).show();
+
+               }
+
+
+
                     if (posout != null && !posout.equals("")) {
                         // spinneroutlet.setSelection(Integer.parseInt(posout));
                     } else {
@@ -315,18 +332,18 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     }
 
                 } else {
-                    spinneroutlet.setError("Invalid id");
+                    /*spinneroutlet.setError("Invalid id");
                     Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
                    LocalPreferences.clearPreferences(getActivity());
                     startActivity(new Intent(getActivity(), ActivityInitial.class));
-                    getActivity().finishAffinity();
+                    getActivity().finishAffinity();*/
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseFetchOutlet> call, Throwable t) {
-                Toast.makeText(getActivity(), "Invalid Selection", Toast.LENGTH_SHORT).show();
 
+                mprogres.setVisibility(View.GONE);
             }
         });
 
@@ -557,8 +574,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
                 if (response.body() != null && response.code() == 200) {
                     String name = response.body().getName();
+                    LocalPreferences.storeStringPreference(getActivity(),"custname",name);
                     String mobile = response.body().getMobile();
                     String email = response.body().getEmail();
+                    custname.setText("Hi, "+name);
 
                     String address = name + " \n " + mobile + " , " + email + "\n" + response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
                             + response.body().getDistrict() + " ,"

@@ -37,6 +37,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="-4dp"
                 android:orientation="horizontal">
 
@@ -44,8 +45,7 @@
                     android:layout_margin="5dp"
                     android:id="@+id/spinner"
                     app:ms_hintTextSize="9sp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     app:ms_hint="Select Zone"
                     android:layout_height="wrap_content"
                     app:ms_multiline="false"
@@ -63,9 +63,9 @@
                     app:ms_floatingLabelColor="@color/white" />
 
                 <fr.ganfra.materialspinner.MaterialSpinner
+                    android:visibility="gone"
                     android:layout_margin="5dp"
                     android:id="@+id/spinner2"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:ms_multiline="false"
