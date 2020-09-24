@@ -32,6 +32,16 @@ public class Outlet {
     @SerializedName("outlet_landmark")
     @Expose
     private String outletLandmark;
+    @SerializedName("holiday_status")
+    @Expose
+    private String holiday_status;
+
+    @SerializedName("distance")
+    @Expose
+    private Double distance;
+
+
+
 
     public String getOutletAddress() {
         return outletAddress;
@@ -103,5 +113,21 @@ public class Outlet {
 
     public void setOutletLandmark(String outletLandmark) {
         this.outletLandmark = outletLandmark;
+    }
+
+    public String getHoliday_status() {
+        return holiday_status;
+    }
+
+    public void setHoliday_status(String holiday_status) {
+        this.holiday_status = holiday_status;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

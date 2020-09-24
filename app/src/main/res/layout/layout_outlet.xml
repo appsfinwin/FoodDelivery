@@ -5,71 +5,147 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:elevation="6dp"
-        app:cardCornerRadius="4dp"
+        android:layout_marginBottom="2dp"
+
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
         app:cardUseCompatPadding="true"
-        android:layout_marginLeft="8dp"
-        android:layout_margin="1dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_marginBottom="2dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:src="@drawable/noimage"
-                android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="130dp"></ImageView>
+
+                <ImageView
+                    android:scaleType="fitXY"
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"></ImageView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:alpha=".9"
+                    android:id="@+id/tv_holiday"
+                    android:textStyle="bold"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textColor="#FFF"
+                    android:background="#99000000"
+                    android:layout_centerInParent="true"
+                    android:text="We are Closed Today"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+            </RelativeLayout>
 
 
             <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                 android:layout_width="wrap_content"
-                android:text="Outlet name"
+                android:text=""
+                android:drawableLeft="@drawable/ic_shop"
                 android:layout_marginLeft="15dp"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:id="@+id/tvoutname"
                 android:textColor="@color/textColor"
                 android:layout_marginTop="8dp"
+                android:drawablePadding="5dp"
+
                 android:layout_height="wrap_content">
 
             </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:text=""
+                    android:textSize="15sp"
+                    android:id="@+id/tvdistance"
+                    android:drawableLeft="@drawable/ic_distance"
+
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="5dp"
+                    android:drawablePadding="5dp"
+
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:text=""
+
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:textSize="15sp"
+                    android:id="@+id/mobile"
+                    android:drawableLeft="@drawable/ic_baseline_call_24"
+
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="5dp"
+                    android:drawablePadding="5dp"
+
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+
+            </RelativeLayout>
+
+
             <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                 android:layout_width="wrap_content"
-                android:text="Outlet name"
-                android:textSize="15sp"
+
+                android:textSize="14sp"
                 android:id="@+id/tv_address"
                 android:textColor="@color/textColor"
 
                 android:drawableLeft="@drawable/ic_baseline_location_on_24"
                 android:layout_marginLeft="15dp"
                 android:drawablePadding="5dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_height="wrap_content">
 
             </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
             <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                 android:layout_width="wrap_content"
-                android:text="Outlet name"
+                android:text=""
+                android:visibility="gone"
                 android:textSize="15sp"
                 android:id="@+id/tvstreet"
+                android:drawableLeft="@drawable/ic_baseline_location_on_24"
 
                 android:textColor="@color/textColor"
-                android:layout_marginBottom="5dp"
+
+                android:drawablePadding="5dp"
 
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:layout_height="wrap_content">
 
             </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
-
-
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
+        android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -16,11 +17,13 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:background="#FFF"
 
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                     android:id="@+id/tv_custname"
 
                     android:textColor="#1e1e1e"
@@ -31,15 +34,86 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                </TextView>
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+                    android:id="@+id/tvoutname"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
 
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+                    android:id="@+id/tvoutmobile"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+                    android:id="@+id/paymentmode"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+                    android:id="@+id/collection"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+                    android:id="@+id/date"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#1e1e1e"
+
+                    android:visibility="gone"
+                    android:drawableLeft="@drawable/ic_baseline_cancel_24"
+                    android:id="@+id/cancelorder"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
 
 
                 <androidx.recyclerview.widget.RecyclerView
-
-
+                    android:nestedScrollingEnabled="false"
 
                     android:id="@+id/recyvmyorderdetails"
                     android:layout_width="match_parent"
@@ -47,6 +121,7 @@
                     android:layout_marginTop="20dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,16 +132,16 @@
                     android:layout_marginBottom="8dp"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Invoice Details"
                         android:textColor="#2d2d2d"
                         android:textStyle="bold">
 
-                    </TextView>
+                    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
-                    <TextView
+                    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                         android:id="@+id/invoice_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -74,7 +149,7 @@
                         android:textColor="#2d2d2d"
                         android:textStyle="bold">
 
-                    </TextView>
+                    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
                     <View
                         android:layout_width="match_parent"
@@ -91,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
-                        <TextView
+                        <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -99,7 +174,7 @@
                             android:text="Subtotal"
                             android:textColor="#2d2d2d">
 
-                        </TextView>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
                         <TextView
                             android:id="@+id/tv_subtotal"
@@ -118,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
-                        <TextView
+                        <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -126,7 +201,7 @@
                             android:text="Tax"
                             android:textColor="#2d2d2d">
 
-                        </TextView>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
                         <TextView
                             android:id="@+id/tv_taxamt"
@@ -139,6 +214,7 @@
 
                         </TextView>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -166,6 +242,7 @@
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -302,7 +379,7 @@
 
                         </TextView>
 
-                        <TextView
+                        <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -310,7 +387,7 @@
                             android:text="0.0"
                             android:textColor="#2d2d2d">
 
-                        </TextView>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
                     </LinearLayout>
 
@@ -331,7 +408,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp">
 
-                        <TextView
+                        <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                             android:layout_width="100dp"
 
                             android:layout_height="wrap_content"
@@ -342,9 +419,9 @@
 
                             android:textColor="#2d2d2d">
 
-                        </TextView>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
-                        <TextView
+                        <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
                             android:id="@+id/total_amt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -357,7 +434,7 @@
                             android:text="0.0"
                             android:textColor="#2d2d2d">
 
-                        </TextView>
+                        </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 
                     </RelativeLayout>
 
@@ -395,21 +472,6 @@
                         </TextView>
 
                     </RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 </LinearLayout>

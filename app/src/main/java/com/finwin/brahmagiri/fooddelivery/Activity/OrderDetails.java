@@ -93,6 +93,10 @@ public class OrderDetails extends AppCompatActivity  {
                     binding.totalAmt.setText("₹ " + response.body().getTotalAmount());
                     binding.tvTaxamt.setText("₹ " + response.body().getTaxAmount());
                     binding.invoiceId.setText("Invoice Id : " + response.body().getInvoiceNumber());
+                    binding.tvoutname.setText("Outlet Name :"+response.body().getOutletName());
+                    binding.tvoutmobile.setText("Outlet Mobile No. :"+response.body().getOutletMobile());
+                    binding.tvCustname.setText("Customer Name : "+response.body().getConsumer_name());
+                    binding.date.setText("Date and Time : "+response.body().getDate_time());
 
                     if (response.body().getDelivery_charges().equals("")){
                         binding.tvDeliverychargess.setText("₹ 0");
@@ -100,7 +104,9 @@ public class OrderDetails extends AppCompatActivity  {
                         binding.tvDeliverychargess.setText("₹ "+response.body().getDelivery_charges());
                     }
                     String paymode = response.body().getPayment_mode();
+                    binding.paymentmode.setText("Payment Mode: "+paymode);
                     String collectionmode = response.body().getCollecting_option();
+                    binding.collection.setText("Collection Option : "+collectionmode);
                     binding.recyvmyorderdetails.setAdapter(new OrderdetailAdapter(getApplicationContext(), dataset));
 
 

@@ -21,6 +21,7 @@
 
 
         <LinearLayout
+
             android:layout_below="@id/toolbar"
             android:layout_above="@id/summary_layout"
             android:layout_marginBottom="20dp"
@@ -28,6 +29,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/locationpicker"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edborder"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/currentlocation"
+                    android:layout_marginRight="8dp"
+                    android:minLines="2"
+                    android:maxLines="3"
+                    android:gravity="center"
+
+                    android:text="Set current location"
+                    android:drawablePadding="10dp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginLeft="0dp"
+                    android:drawableLeft="@drawable/ic_location_"
+                    android:layout_height="wrap_content">
+
+                </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
 
@@ -35,7 +65,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:visibility="visible">
 

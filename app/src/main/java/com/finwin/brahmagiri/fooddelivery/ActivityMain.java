@@ -2,22 +2,40 @@ package com.finwin.brahmagiri.fooddelivery;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
 import com.finwin.brahmagiri.fooddelivery.Activity.Changepassword;
 import com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseToken;
+import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
+import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.gson.JsonObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class ActivityMain extends AppCompatActivity {
 
@@ -51,6 +69,32 @@ public class ActivityMain extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fr);
         fragmentTransaction.commit();
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+
+                        String token  = task.getResult().getToken();
+                        doUpdateToken(token);
+
+                        // Log and toast
+                        //  String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("TAG", token);
+                        // Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
     }
 
     //===================================================================================================
@@ -167,7 +211,45 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
-//===================================================================================================
+    private void doUpdateToken(String ftoken) {
+
+
+
+        String AccessToekn = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+
+        String outid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+        //   String json = "{\"outlet_id\":" + Integer.parseInt(outid) + ",\"token\":" + ftoken + "}";
+
+        // String json = "{\"outlet_id\":" + Integer.parseInt(outid) + ",\"token\":" + ftoken + "}";
+        //   JsonParser parser = new JsonParser();
+
+        //  JsonObject jsonObject = (JsonObject) parser.parse(json);
+        JsonObject student1 = new JsonObject();
+
+        student1.addProperty("outlet_id", Integer.parseInt(outid));
+        student1.addProperty("token", ftoken);
+
+
+
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseToken> call = apiService.dupushToken(AccessToekn,database, student1);
+        call.enqueue(new Callback<ResponseToken>() {
+            @Override
+            public void onResponse(Call<ResponseToken> call, Response<ResponseToken> response) {
+                if (response.body() != null && response.code() == 200) {
+
+                } else {
+                                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseToken> call, Throwable t) {
+
+            }
+        });
+    }
 
 
 }

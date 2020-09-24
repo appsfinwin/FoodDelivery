@@ -107,6 +107,7 @@
                     android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
+
                 <LinearLayout
                     android:id="@+id/layout_totalamt"
                     android:layout_width="match_parent"
@@ -144,6 +145,7 @@
                         android:textSize="13dp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/laytdeliverycharge"
                     android:layout_width="match_parent"
@@ -331,7 +333,7 @@
                             android:checked="true"
                             android:id="@+id/collectionfromoutlet"
                             android:layout_width="wrap_content"
-                            android:text="Collect from outlet"
+                            android:text="Pay at Outlet "
                             android:layout_height="wrap_content">
 
                         </androidx.appcompat.widget.AppCompatRadioButton>
@@ -347,49 +349,71 @@
 
                     </RadioGroup>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="17.7dp"
-                        android:text="Delivery Address"
-                        android:textColor="@color/textColor"
-                        android:textSize="13.3sp" />
-
-                    <TextView
+                    <Button
                         android:visibility="gone"
-                        android:id="@+id/tv_addressName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
-                        android:text=""
-                        android:textColor="#ec5a31"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:id="@+id/tv_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8.3dp"
+                        android:id="@+id/selectdelocation"
+                        android:layout_marginTop="15dp"
                         android:layout_marginRight="20dp"
-                        android:text=""
-                        android:textColor="#7c7b7b"
-                        android:textSize="12dp" />
+                        android:textColor="#FFF"
+                        android:text="Choose Delivery Location"
+                        android:background="@drawable/green_rect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:visibility="visible"
-                        android:id="@+id/tv_edit_addrs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center"
-                        android:paddingStart="30dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="30dp"
-                        android:paddingBottom="10dp"
-                        android:text="Change Address"
-                        android:textColor="#999999"
-                        android:textSize="12.7sp" />
+                    </Button>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/addresslayt"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="17.7dp"
+                            android:text="Delivery Address"
+                            android:textColor="@color/textColor"
+                            android:textSize="13.3sp" />
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/tv_addressName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:text=""
+                            android:textColor="#ec5a31"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8.3dp"
+                            android:layout_marginRight="20dp"
+                            android:text=""
+                            android:textColor="#7c7b7b"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:visibility="visible"
+                            android:id="@+id/tv_edit_addrs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:paddingStart="30dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="30dp"
+                            android:paddingBottom="10dp"
+                            android:text="Change Address"
+                            android:textColor="#999999"
+                            android:textSize="12.7sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <View

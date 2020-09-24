@@ -40,6 +40,19 @@ public class ResponseOrderDetails {
     @SerializedName("delivery_charges")
     @Expose
     private Double   delivery_charges;
+    @SerializedName("Outlet_name")
+    @Expose
+    private String outletName;
+
+    @SerializedName("Outlet_mobile")
+    @Expose
+    private String outletMobile;
+    @SerializedName("consumer_name")
+    @Expose
+    private String consumer_name;
+    @SerializedName("date_time")
+    @Expose
+    private String date_time;
 
 
     public String getStatus() {
@@ -132,5 +145,37 @@ public class ResponseOrderDetails {
 
     public void setDelivery_charges(Double delivery_charges) {
         this.delivery_charges = delivery_charges;
+    }
+
+    public String getOutletName() {
+        return outletName;
+    }
+
+    public void setOutletName(String outletName) {
+        this.outletName = outletName;
+    }
+
+    public String getOutletMobile() {
+        return outletMobile;
+    }
+
+    public void setOutletMobile(String outletMobile) {
+        this.outletMobile = outletMobile;
+    }
+
+    public String getConsumer_name() {
+        return consumer_name;
+    }
+
+    public void setConsumer_name(String consumer_name) {
+        this.consumer_name = consumer_name;
+    }
+
+    public String getDate_time() {
+        return date_time;
+    }
+
+    public void setDate_time(String date_time) {
+        this.date_time = date_time;
     }
 }

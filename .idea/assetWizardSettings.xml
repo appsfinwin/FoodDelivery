@@ -300,7 +300,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/location_on/baseline_location_on_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/cancel/baseline_cancel_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -310,8 +310,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_location_on_24" />
-                            <entry key="sourceFile" value="C:\Users\ADSS\Downloads\interface.svg" />
+                            <entry key="outputName" value="ic_baseline_cancel_24" />
+                            <entry key="sourceFile" value="C:\Users\Sky_Walker\Downloads\location (2).svg" />
                           </map>
                         </option>
                       </PersistentState>

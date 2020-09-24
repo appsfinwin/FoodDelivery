@@ -21,4 +21,6 @@
     <string name="Roboto_Thin">Roboto-Thin</string>
     <string name="Roboto_Italic">Roboto-Italic</string>
     <string name="hint_resource">Select Zone</string>
+    <string name="default_notification_channel_id">abc</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

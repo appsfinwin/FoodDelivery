@@ -52,10 +52,10 @@ public class FragProfile extends Fragment {
         // View view= rootview = inflater.inflate(R.layout.frag_profile, container, false);
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.frag_profile, container, false);
-progressDialog=new ProgressDialog(getActivity());
-progressDialog.setMessage("Loading...");
-progressDialog.setCancelable(false);
-progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
 
         binding.ibtnBackProf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ progressDialog.setCanceledOnTouchOutside(false);
         binding.imgvHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangePayment("Home");
+                ChangeAdress("Home");
             }
         });
 
@@ -76,7 +76,7 @@ progressDialog.setCanceledOnTouchOutside(false);
         binding.imgvOfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangePayment("Office");
+                ChangeAdress("Office");
             }
         });
         doFetch();
@@ -96,7 +96,7 @@ progressDialog.setCanceledOnTouchOutside(false);
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
-               progressDialog.dismiss();
+                progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     name = response.body().getName();
                     mobile = response.body().getMobile();
@@ -109,6 +109,7 @@ progressDialog.setCanceledOnTouchOutside(false);
                     binding.tvname.setText(name);
                     binding.tvEmail.setText(email);
                     binding.tvMobile.setText(mobile);
+                    binding.tvZone.setText(response.body().getZone());
                     String address = response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
                             + response.body().getDistrict() + " ,"
                             + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
@@ -132,7 +133,7 @@ progressDialog.setCanceledOnTouchOutside(false);
 
     }
 
-    private void ChangePayment(String addrsType) {
+    private void ChangeAdress(String addrsType) {
         AlertDialog.Builder b = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         String addTest = "Change " + addrsType + " Address";
         b.setTitle(addTest);

@@ -22,12 +22,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="26dp"
-            android:text="Cash On Delivery"
+            android:text="Cash"
             android:textColor="@color/textColor"
             android:textSize="13.3sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/linr_paytm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

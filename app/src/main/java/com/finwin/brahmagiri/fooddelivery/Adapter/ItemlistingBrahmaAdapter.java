@@ -2,8 +2,10 @@ package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,7 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView image, imageLike;
-        TextView tvOffer, tvPrice, tvName,cutprice,tv_description;
+        TextView tvOffer, tvPrice, tvName, cutprice, tv_description;
         TextView btnAdd;
         ElegantNumberButton btnElgntCount;
 
@@ -41,8 +43,8 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
             tvOffer = itemView.findViewById(R.id.tv_offer);
             tvPrice = itemView.findViewById(R.id.tv_price);
             tvName = itemView.findViewById(R.id.tvName);
-            tv_description=itemView.findViewById(R.id.tvdesc);
-            cutprice=itemView.findViewById(R.id.textcutprice);
+            tv_description = itemView.findViewById(R.id.tvdesc);
+            cutprice = itemView.findViewById(R.id.textcutprice);
             btnAdd = (TextView) itemView.findViewById(R.id.btn_add_ofr);
             btnElgntCount = (ElegantNumberButton) itemView.findViewById(R.id.btn_elgnt_count_ofr);
         }
@@ -51,8 +53,8 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     public ItemlistingBrahmaAdapter(Context context, List<Product> dataset, showhide mshowhide) {
         this.dataset = dataset;
         this.context = context;
-        this.mshowhide=mshowhide;
-        db=new DatabaseHandler(context);
+        this.mshowhide = mshowhide;
+        db = new DatabaseHandler(context);
 
     }
 
@@ -67,18 +69,17 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
     @Override
     public void onBindViewHolder(final ItemlistingBrahmaAdapter.MyViewHolder holder, final int position) {
         //  holder1.image.setImageResource(result.get(position).getImage());
-        Product result=dataset.get(position);
+        Product result = dataset.get(position);
         Glide.with(context)
                 .load(result.getProduct_image_url())
                 .placeholder(R.drawable.noimage)
                 .into(holder.image);
 
 
-
-        holder.tvPrice.setText(""+result.getPrice());
+        holder.tvPrice.setText("" + result.getPrice());
         holder.tvName.setText(result.getProductName());
-        Log.e("onBindViewHolder", "onBindViewHolder: "+result.getProductName() );
-        holder.tv_description.setText("Available Quantity :"+result.getAvlQty());
+        Log.e("onBindViewHolder", "onBindViewHolder: " + result.getProductName());
+        holder.tv_description.setText("Available Quantity :" + result.getAvlQty());
 
 
         holder.btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -89,29 +90,26 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
 
             }
         });
-        int avq=(int) Math.round(dataset.get(position).getAvlQty());  ;
-        holder.btnElgntCount.setRange(0,avq);
+        int avq = (int) Math.round(dataset.get(position).getAvlQty());
+        ;
+        holder.btnElgntCount.setRange(0, avq);
         holder.btnElgntCount.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
             @Override
             public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
-           Log.e("Count", "onValueChange: "+newValue );
-                Log.e("Count", "onValueChange: "+oldValue );
-                LocalPreferences.storeStringPreference(context,"cartoutid",dataset.get(position).getOutId());
-             String itemcode=dataset.get(position).getProductId().toString();
-                String price=dataset.get(position).getOutId();
-                String pname=dataset.get(position).getProductName().toString();
-                Double avq=dataset.get(position).getAvlQty();
-                if (newValue>avq){
+                Log.e("Count", "onValueChange: " + newValue);
+                Log.e("Count", "onValueChange: " + oldValue);
+                LocalPreferences.storeStringPreference(context, "cartoutid", dataset.get(position).getOutId());
+                String itemcode = dataset.get(position).getProductId().toString();
+                String price = dataset.get(position).getOutId();
+                String pname = dataset.get(position).getProductName().toString();
+                Double avq = dataset.get(position).getAvlQty();
+                if (newValue > avq) {
                     Toast.makeText(context, "Quantity not available", Toast.LENGTH_SHORT).show();
 
-                }else{
-                    mshowhide.clickedpdct(newValue,itemcode,pname,price);
+                } else {
+                    mshowhide.clickedpdct(newValue, itemcode, pname, price);
 
                 }
-
-
-
-
 
 
                 if (newValue < 1) {

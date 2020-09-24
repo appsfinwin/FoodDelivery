@@ -1,6 +1,11 @@
 package com.finwin.brahmagiri.fooddelivery;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -11,6 +16,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.MapsActivity;
 import com.finwin.brahmagiri.fooddelivery.Adapter.OutletAdapter;
 import com.finwin.brahmagiri.fooddelivery.Adapter.OutofstockAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
@@ -19,9 +25,22 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBar;
@@ -59,7 +78,13 @@ import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +92,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +101,9 @@ import retrofit2.Response;
 import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragHome extends Fragment implements NavigationView.OnNavigationItemSelectedListener, showhide {
-
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Location mLastKnownLocation;
+    private LocationCallback locationCallback;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     private DrawerLayout drawer;
@@ -95,7 +123,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     private RecyclerView recyclerView1;
     private BestSellingAdapter rAdapter;
     ViewPager mPager;
-    TextView total, count,custname;
+    private PlacesClient placesClient;
+
+    TextView total, count, custname;
     ItemlistingBrahmaAdapter adapter;
     int selectedindex;
     String outletid;
@@ -110,13 +140,29 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     MaterialSpinner spinneroutlet;
     private Boolean mIsZoneSpinnerFirstCall = true;
     private Boolean mIsOutletSpinnerFirstCall = true;
+    LinearLayout locationpicker;
+    String defaultzone;
+    TextView TvCurrentlocation;
 
-
+    @SuppressLint("MissingPermission")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.home_fragment, container, false);
         mprogres = rootview.findViewById(R.id.progressbars);
+        locationpicker = rootview.findViewById(R.id.locationpicker);
+        TvCurrentlocation = rootview.findViewById(R.id.currentlocation);
+
+
+        locationpicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getActivity(), MapsActivity.class).putExtra("isfromcheckout", "NO"));
+
+            }
+        });
+
         LoadZone();
         doFetch();
         ///==========================================================================
@@ -127,21 +173,23 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         frameLayout = rootview.findViewById(R.id.empty_layout);
         dataset = new ArrayList<>();
         datasetout = new ArrayList<>();
-        custname=rootview.findViewById(R.id.tvname);
+        custname = rootview.findViewById(R.id.tvname);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
 
         String pos = LocalPreferences.retrieveStringPreferences(getActivity(), "zonepos");
-        if (pos != null && !pos.equals("")) {
+       /* if (pos != null && !pos.equals("")) {
             spinnerzone.setSelection(Integer.parseInt(pos));
-        }
+        }*/
 
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != -1) {
-                    fechoutletbumyZOne(dataset.get(position).getId().toString());
+                if (position != 0) {
+                    defaultzone = dataset.get(position).getId().toString();
+                    fechoutletbumyZOne(defaultzone);
                     LocalPreferences.storeStringPreference(getActivity(), "zonepos", String.valueOf(position));
-
+                    Log.d("executingggg", "onItemSelected: " + position);
 
                     // spinnerzone.setSelection(3);
                 }
@@ -173,7 +221,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                 if (i != -1) {
                     // Your code goes gere
                     String outid = datasetout.get(i).getOutlet().toString();
-               //   doFetchProducts(outid);
+                    //   doFetchProducts(outid);
                     //spinneroutlet.setSelection(i);
                     LocalPreferences.storeStringPreference(getActivity(), "outletpos", String.valueOf(i));
 
@@ -242,9 +290,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         ///==========================================================================
 
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recyclerView1);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         return rootview;
@@ -274,8 +320,9 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                         int id = dataset.get(i).getId();
                         if (id == Integer.parseInt(zones)) {
                             Log.e("zoneindex", "onCreateView: " + i + zones);
-                            spinnerzone.setSelection(i + 1);
-                            fechoutletbumyZOne(dataset.get(i).getId().toString());
+                            spinnerzone.setSelection(i);
+                            defaultzone = dataset.get(i).getId().toString();
+                            // fechoutletbumyZOne(defaultzone);
                         }
                     }
 
@@ -296,10 +343,13 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     }
 
     private void fechoutletbumyZOne(String firstzone) {
+
+        String lat = LocalPreferences.retrieveStringPreferences(getActivity(), "latitude");
+        String longi = LocalPreferences.retrieveStringPreferences(getActivity(), "longitude");
         mprogres.setVisibility(View.VISIBLE);
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, database, firstzone);
+        Call<ResponseFetchOutlet> call = apiService.fetchoutletbuzone(mAccesstoken, database, firstzone, longi, lat);
         call.enqueue(new Callback<ResponseFetchOutlet>() {
             @Override
             public void onResponse(Call<ResponseFetchOutlet> call, Response<ResponseFetchOutlet> response) {
@@ -308,41 +358,42 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                 if (response.body() != null && response.code() == 200) {
                     ResponseFetchOutlet responseFetchOutlet = response.body();
                     datasetout = responseFetchOutlet.getOutlets();
-                    outletAdapter=new OutletAdapter(getActivity(),datasetout);
+                    outletAdapter = new OutletAdapter(getActivity(), datasetout);
                     recyclerView.setAdapter(outletAdapter);
                     recyclerView.setVisibility(View.VISIBLE);
                     frameLayout.setVisibility(View.GONE);
-                //    adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
-                //    adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                  //  spinneroutlet.setAdapter(adapteroutlet);
+                    //    adapteroutlet = new ArrayAdapter<Outlet>(getActivity(), R.layout.zone_spinner_items, datasetout);
+                    //    adapteroutlet.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    //  spinneroutlet.setAdapter(adapteroutlet);
                     String posout = LocalPreferences.retrieveStringPreferences(getActivity(), "outletpos");
                     Log.d("onResponse", "outletposition: " + posout);
-               if (outletAdapter.getItemCount()==0){
-                   Toast.makeText(getActivity(), "No Outlets in the Selected Zone ...Please Try Another Zone", Toast.LENGTH_LONG).show();
+                    if (outletAdapter.getItemCount() == 0) {
+                        new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("No Outlet Found !")
+                                .setContentText("No Outlets in the Selected Zone ...Please Try Another Zone")
+                                .show();
 
-               }
-
-
-
-                    if (posout != null && !posout.equals("")) {
-                        // spinneroutlet.setSelection(Integer.parseInt(posout));
-                    } else {
-                        //  spinneroutlet.setSelection(1);
+                        //    Toast.makeText(getActivity(), "", Toast.LENGTH_LONG).show();
 
                     }
 
+
                 } else {
-                    /*spinneroutlet.setError("Invalid id");
-                    Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
-                   LocalPreferences.clearPreferences(getActivity());
+                    /*Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
+                    LocalPreferences.clearPreferences(getActivity());
                     startActivity(new Intent(getActivity(), ActivityInitial.class));
                     getActivity().finishAffinity();*/
+                    /*spinneroutlet.setError("Invalid id");
+                     */
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseFetchOutlet> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
+                LocalPreferences.clearPreferences(getActivity());
+                startActivity(new Intent(getActivity(), ActivityInitial.class));
+                getActivity().finishAffinity();
                 mprogres.setVisibility(View.GONE);
             }
         });
@@ -430,7 +481,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             @Override
             public void onResponse(Call<ResponseAddcart> call, Response<ResponseAddcart> response) {
                 if (response.body() != null && response.code() == 200) {
-                    fetchCartfromServer(outletid);
+                    //fetchCartfromServer(outletid);
 
                 }
             }
@@ -574,10 +625,10 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
                 if (response.body() != null && response.code() == 200) {
                     String name = response.body().getName();
-                    LocalPreferences.storeStringPreference(getActivity(),"custname",name);
+                    LocalPreferences.storeStringPreference(getActivity(), "custname", name);
                     String mobile = response.body().getMobile();
                     String email = response.body().getEmail();
-                    custname.setText("Hi, "+name);
+                    custname.setText("Hi, " + name);
 
                     String address = name + " \n " + mobile + " , " + email + "\n" + response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
                             + response.body().getDistrict() + " ,"
@@ -598,10 +649,66 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
     @Override
     public void onResume() {
         super.onResume();
-        if (outletid != null) {
-            fetchCartfromServer(outletid);
+        Places.initialize(getActivity(), "AIzaSyDUn0IgHk7yyYvKurogimrb9IpP4hrayac");
+        placesClient = Places.createClient(getActivity());
+        String currentlocation = LocalPreferences.retrieveStringPreferences(getActivity(), "currentlocation");
+
+        if (currentlocation != null && !currentlocation.equals("")) {
+            TvCurrentlocation.setText(currentlocation);
+        } else {
+            TvCurrentlocation.setText("Set Location");
+            //  getDeviceLocation();
+
         }
+        fechoutletbumyZOne(defaultzone);
 
 
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getDeviceLocation() {
+
+
+        mFusedLocationProviderClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            Log.d("onLocationResult", "onLocationResult: " + location.getLatitude());
+
+                            Geocoder geocoder;
+                            List<Address> addresses;
+                            geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+                            try {
+                                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                String city = addresses.get(0).getLocality();
+                                String state = addresses.get(0).getAdminArea();
+                                String country = addresses.get(0).getCountryName();
+                                String postalCode = addresses.get(0).getPostalCode();
+                                String knownName = addresses.get(0).getFeatureName();
+
+
+                                LocalPreferences.storeStringPreference(getActivity(), "currentlocation", address + "," + city + " " + state);
+                                LocalPreferences.storeStringPreference(getActivity(), "latitude", String.valueOf(location.getLatitude()));
+                                LocalPreferences.storeStringPreference(getActivity(), "longitude", String.valueOf(location.getLongitude()));
+
+                                LocalPreferences.storeStringPreference(getActivity(), "dellatitude", String.valueOf(location.getLatitude()));
+                                LocalPreferences.storeStringPreference(getActivity(), "dellongitude",String.valueOf(location.getLongitude()));
+
+
+                                TvCurrentlocation.setText("" + address + "," + city + " " + state);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                });
     }
 }

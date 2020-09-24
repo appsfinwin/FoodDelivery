@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,7 +37,9 @@ import com.finwin.brahmagiri.fooddelivery.Responses.CartItem;
 import com.finwin.brahmagiri.fooddelivery.Responses.OutStockProduct;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchAddress;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseOrderDetails;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
@@ -91,6 +94,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     TextView header, delcharges, totamamount;
     String paymentmode = "cod";
     ProgressDialog progressDialog;
+    LinearLayout mAddrsslayout;
+    Button selectlocation;
+    RadioButton rdbtnhomedelvry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +109,15 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         delcharges = findViewById(R.id.tv_delivery_charge);
         totamamount = findViewById(R.id.tv_totalamt);
         collection = (RadioGroup) findViewById(R.id.radiogrp);
+        mAddrsslayout = findViewById(R.id.addresslayt);
+        selectlocation = findViewById(R.id.selectdelocation);
+        rdbtnhomedelvry = findViewById(R.id.homedelivery);
 
 
         laytdelcharge = findViewById(R.id.laytdeliverycharge);
         layttotamt = findViewById(R.id.layout_totalamt);
 
-        progressDialog=new ProgressDialog(PaymentActivity.this);
+        progressDialog = new ProgressDialog(PaymentActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -125,7 +134,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         getewaytotal = String.valueOf(roundOff);
         datasetcartlist = new ArrayList<>();
         db = new DatabaseHandler(getApplicationContext());
-
+        //FetchAddress();
         tvTotal_co.setText("" + total);
         delcharges.setText("0");
         deliveryoption = "by_customer";
@@ -134,25 +143,37 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 int selectedId = collection.getCheckedRadioButtonId();
                 radioButton = (RadioButton) findViewById(selectedId);
-                if (radioButton.getText().equals("Collect from outlet")) {
-                    Log.d("onCheckedChanged", "out: ");
-                    deliveryoption = "by_customer";
-                    tvTotal_co.setText("" + total);
-                    delcharges.setText("0");
+                switch (selectedId) {
+                    case R.id.collectionfromoutlet:
+                        Log.d("onCheckedChanged", "out: ");
+                        deliveryoption = "by_customer";
+                        tvTotal_co.setText("" + total);
+                        delcharges.setText("0");
+                        mAddrsslayout.setVisibility(View.GONE);
+                        break;
+                    case R.id.homedelivery:
+                        deliveryoption = "take_away";
+                        Log.d("onCheckedChanged", "home: ");
+                        FetchAddress();
+                      //  mAddrsslayout.setVisibility(View.VISIBLE);
+                        break;
 
-                } else if (radioButton.getText().equals("Home Delivery")) {
-                    deliveryoption = "take_away";
-                    tvTotal_co.setText("" + totalamtwithdelcharge);
-                    delcharges.setText("" + deliverycharge);
-                    Log.d("onCheckedChanged", "home: ");
+                    default:
+                        deliveryoption = "by_customer";
 
-                } else {
-                    deliveryoption = "by_customer";
                 }
+
+
             }
         });
 
-
+        selectlocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class).putExtra("isfromcheckout", "YES"));
+                //changedeladdress();
+            }
+        });
         menuRecycler = (RecyclerView) findViewById(R.id.menuRecycler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         menuRecycler.setLayoutManager(layoutManager);
@@ -197,7 +218,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvEditAddrs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ChangeAddresses("Address");
+              // ChangeAddresses("Address");
+            startActivity(new Intent(getApplicationContext(), MapsActivity.class).putExtra("isfromcheckout", "YES"));
+
 
             }
         });
@@ -217,10 +240,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
-        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
-        JsonParser parser = new JsonParser();
+        String latitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "latitude");
+        String longitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "longitude");
 
-        JsonObject jsonObject = (JsonObject) parser.parse(json);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_id", Integer.parseInt(userid));
+        jsonObject.addProperty("outlet", Integer.parseInt(cartoutid));
+        jsonObject.addProperty("longitude", longitude);
+        jsonObject.addProperty("latitude", latitude);
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
@@ -229,7 +256,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 if (response.body() != null && response.code() == 200) {
                     ResponseBrahmaCart responseBrahmaCart = response.body();
                     totalamtwithdelcharge = String.valueOf(response.body().getTotalAmnt());
-                    deliverycharge = String.valueOf(response.body().getDeliveryCharge());
+                   // deliverycharge = String.valueOf(response.body().getDeliveryCharge());
                     //   delcharges.setText(""+deliverycharge);
 
                     datasetcartlist = responseBrahmaCart.getCartItems();
@@ -300,12 +327,10 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     //========
 
 
-
     private void setAddress(String head, String address) {
         tvAddressName.setText(head);
         tvAddress.setText(address);
     }
-
 
 
     @Override
@@ -329,11 +354,18 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     private void Load(List<CartItem> datasetAdd, int billid) {
+        String delcharge;
         String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+        if (rdbtnhomedelvry.isChecked()) {
+            delcharge = deliverycharge;
 
+        } else {
+            delcharge = "0.0";
+        }
         String json = "{\"outlet_id\":" + cartoutid +
                 ",\"consumer_id\":" + partnerid +
                 ",\"collecting_option\":" + deliveryoption +
+                ",\"delivery_cost\":" + Double.parseDouble(delcharge) +
                 ",\"payment_mode\":" + paymentmode +
                 " ,\"productlist\": [";
 
@@ -384,14 +416,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                         }
                         // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
-                    }else{
+                    } else {
 
 
-                        ResponseCreateBill responseCreateBill=response.body();
+                        ResponseCreateBill responseCreateBill = response.body();
 
-                        List <OutStockProduct>dataset=responseCreateBill.getProducts();
+                        List<OutStockProduct> dataset = responseCreateBill.getProducts();
                         showpopup(dataset);
-                        Toast.makeText(getApplicationContext(),""+response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -412,8 +444,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
         final RecyclerView recyclerView = alertLayout.findViewById(R.id.recyvoutstock);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(new OutofstockAdapter(getApplicationContext(),dataset));
-
+        recyclerView.setAdapter(new OutofstockAdapter(getApplicationContext(), dataset));
 
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -468,8 +499,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.e("onClick: ", "+++++");
-                doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
-                        edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
+             //   doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
+                     ///   edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
             }
         });
 
@@ -536,7 +567,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     }
 
     private void doFetch() {
-        progressDialog.show();
+        //    progressDialog.show();
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
@@ -548,7 +579,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         call.enqueue(new Callback<ResponseFetchProfile>() {
             @Override
             public void onResponse(Call<ResponseFetchProfile> call, Response<ResponseFetchProfile> response) {
-                progressDialog.dismiss();
+                //  progressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     name = response.body().getName();
                     mobile = response.body().getMobile();
@@ -563,14 +594,14 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             + response.body().getDistrict() + " ,"
                             + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
                     LocalPreferences.storeStringPreference(getApplicationContext(), "Address", address);
-                    // binding.address1.setText(address);
-                    tvAddress.setText(address);
+                  //  tvAddress.setText(address);
+
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseFetchProfile> call, Throwable t) {
-                progressDialog.dismiss();
+                // progressDialog.dismiss();
             }
         });
 
@@ -580,8 +611,12 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
     protected void onResume() {
         super.onResume();
         Log.e("onResumepayment", ": onResumepayment");
-        doFetch();
+
         String address = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Address");
+        doFetch();
+        if (rdbtnhomedelvry.isChecked()) {
+            FetchAddress();
+        }
 
     }
 
@@ -601,7 +636,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         call.enqueue(new Callback<ResponsePay>() {
             @Override
             public void onResponse(Call<ResponsePay> call, Response<ResponsePay> response) {
-              SampleCallBack objSampleCallBack = new SampleCallBack();
+                SampleCallBack objSampleCallBack = new SampleCallBack();
                 Intent sdkIntent = new Intent(getApplicationContext(), PaymentOptions.class);
                 String strPGMsg = response.body().getStringStrPGMsg();
                 sdkIntent.putExtra("msg", strPGMsg);
@@ -664,6 +699,62 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         char c[] = {arr[(x & 0xF0) >> 4], arr[x & 0x0F]};
 
         return (new String(c));
+
+    }
+
+
+    public void FetchAddress() {
+        progressDialog.show();
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+        String cartid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
+        String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+        String latitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "dellatitude");
+        String longitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "dellongitude");
+        JsonObject student1 = new JsonObject();
+    /*  student1.addProperty("delivery_location", "testtt");
+        student1.addProperty("landmark", "test");*/
+        student1.addProperty("longitude", longitude);
+        student1.addProperty("latitude", latitude);
+        student1.addProperty("partner_id", Integer.parseInt(partnerid));
+        student1.addProperty("user_id", Integer.parseInt(userid));
+        student1.addProperty("outlet", Integer.parseInt(cartid));
+
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<ResponseFetchAddress> call = apiService.doUpdatedeliverycost(mAccesstoken, database, student1);
+        call.enqueue(new Callback<ResponseFetchAddress>() {
+            @Override
+            public void onResponse(Call<ResponseFetchAddress> call, Response<ResponseFetchAddress> response) {
+                progressDialog.dismiss();
+                if (response.body() != null && response.code() == 200) {
+                    if (!response.body().getDeliveryLocation().equalsIgnoreCase("not set")) {
+                        //  selectlocation.setVisibility(View.VISIBLE);
+                        deliverycharge = String.valueOf(response.body().getDeliveryCharge());
+                        String deladdress = name + " \n " + response.body().getDeliveryLocation();
+                        tvAddress.setText(deladdress);
+                        mAddrsslayout.setVisibility(View.VISIBLE);
+                        selectlocation.setVisibility(View.GONE);
+                        delcharges.setText("" + response.body().getDeliveryCharge());
+                        tvTotal_co.setText("" + response.body().getTotalAmnt());
+
+
+                    } else {
+                        //  selectlocation.setVisibility(View.GONE);
+                        selectlocation.setVisibility(View.VISIBLE);
+
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseFetchAddress> call, Throwable t) {
+                progressDialog.dismiss();
+            }
+        });
+
 
     }
 

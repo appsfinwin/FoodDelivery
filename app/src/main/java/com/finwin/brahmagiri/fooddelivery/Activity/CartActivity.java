@@ -52,6 +52,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
     double totalsum = 0.0;
     String cartoutid;
     ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class CartActivity extends AppCompatActivity implements showhide {
         binding.cartRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         binding.toolbarLayout.toolbartext.setText("Cart");
         totallist = new ArrayList<>();
-        progressDialog=new ProgressDialog(CartActivity.this);
+        progressDialog = new ProgressDialog(CartActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -92,8 +93,15 @@ public class CartActivity extends AppCompatActivity implements showhide {
 
         String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
         JsonParser parser = new JsonParser();
+        String latitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "latitude");
+        String longitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "longitude");
 
-        JsonObject jsonObject = (JsonObject) parser.parse(json);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_id", Integer.parseInt(userid));
+        jsonObject.addProperty("outlet", Integer.parseInt(cartoutid));
+        jsonObject.addProperty("longitude", longitude);
+        jsonObject.addProperty("latitude", latitude);
+
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
@@ -135,7 +143,6 @@ public class CartActivity extends AppCompatActivity implements showhide {
         });
 
     }
-
 
 
     public void GotoPayment(View view) {

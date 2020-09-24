@@ -1,12 +1,16 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +31,12 @@ import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,11 +66,26 @@ public class ProductListActivity extends AppCompatActivity implements showhide {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_list);
         totallist = new ArrayList<>();
         String outletid = getIntent().getStringExtra("outletid");
-        binding.recyvprdcts.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-progressDialog=new ProgressDialog(ProductListActivity.this);
-progressDialog.setCancelable(false);
-progressDialog.setCanceledOnTouchOutside(false);
-progressDialog.setMessage("Please wait...");
+        String outletmobile = getIntent().getStringExtra("outletmobile");
+        if (outletmobile != null && !outletmobile.equals("")) {
+            binding.tvcontact.setText("Do You Want to Talk to us . Call us on " + outletmobile);
+
+        } else {
+            binding.helplayt.setVisibility(View.GONE);
+
+            binding.horizntalline.setVisibility(View.GONE);
+        }
+        binding.tvcontact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             doCAlloutlet(outletmobile);
+            }
+        });
+        binding.recyvprdcts.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        progressDialog = new ProgressDialog(ProductListActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Please wait...");
         doFetchProducts(outletid);
 
         binding.tvViewcart.setOnClickListener(new View.OnClickListener() {
@@ -71,8 +96,40 @@ progressDialog.setMessage("Please wait...");
         });
     }
 
+    private void doCAlloutlet(String outletmobile) {
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.CALL_PHONE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:"+outletmobile));
+
+                        if (ActivityCompat.checkSelfPermission(ProductListActivity.this,
+                                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        startActivity(callIntent);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        // check for permanent denial of permission
+                        if (response.isPermanentlyDenied()) {
+                            // navigate user to app settings
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+    }
+
     private void doFetchProducts(String outlet_id) {
-      binding.  progressbars.setVisibility(View.VISIBLE);
+        binding.progressbars.setVisibility(View.VISIBLE);
 
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
@@ -143,24 +200,28 @@ progressDialog.setMessage("Please wait...");
 
 
     private void fetchCartfromServer(String cartoutid) {
-    if(!  progressDialog.isShowing()){
+        if (!progressDialog.isShowing()) {
             progressDialog.show();
         }
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
         Log.d("fetchCartfromServer", "fetchCartfromServer: " + cartoutid);
 
-        String json = "{\"user_id\":" + Integer.parseInt(userid) + ",\"outlet\":" + Integer.parseInt(cartoutid) + "}";
-        JsonParser parser = new JsonParser();
+        String latitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "latitude");
+        String longitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "longitude");
 
-        JsonObject jsonObject = (JsonObject) parser.parse(json);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_id", Integer.parseInt(userid));
+        jsonObject.addProperty("outlet", Integer.parseInt(cartoutid));
+        jsonObject.addProperty("longitude", longitude);
+        jsonObject.addProperty("latitude", latitude);
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseBrahmaCart> cartCall = apiService.FetchCart(mAccesstoken, database, jsonObject);
         cartCall.enqueue(new Callback<ResponseBrahmaCart>() {
             @Override
             public void onResponse(Call<ResponseBrahmaCart> call, Response<ResponseBrahmaCart> response) {
-                if(  progressDialog.isShowing()){
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
 
@@ -168,9 +229,9 @@ progressDialog.setMessage("Please wait...");
                     ResponseBrahmaCart responseBrahmaCart = response.body();
 
                     List<CartItem> cartItemList = responseBrahmaCart.getCartItems();
-                    if(cartItemList.size()==0){
+                    if (cartItemList.size() == 0) {
                         binding.summaryLayout.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         binding.summaryLayout.setVisibility(View.VISIBLE);
 
                     }
@@ -185,7 +246,7 @@ progressDialog.setMessage("Please wait...");
 
             @Override
             public void onFailure(Call<ResponseBrahmaCart> call, Throwable t) {
-                if( progressDialog.isShowing()){
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
             }
@@ -220,26 +281,25 @@ progressDialog.setMessage("Please wait...");
     public void clickedpdct(int value, String code, String pname, String outid) {
         Log.d("TAG", "clickedpdct: " + value + code + pname + outid);
 
-           // binding.summaryLayout.setVisibility(View.VISIBLE);
-        if(value==0){
-            deletefromServer(outid,Integer.parseInt(code));
+        // binding.summaryLayout.setVisibility(View.VISIBLE);
+        if (value == 0) {
+            deletefromServer(outid, Integer.parseInt(code));
         }
 
-            if (value > 0) {
-                doAddmyCart(value, code, pname, outid);
-                outletid = outid;
+        if (value > 0) {
+            doAddmyCart(value, code, pname, outid);
+            outletid = outid;
 
 
-                //  db.rowIdExists(Integer.parseInt(code));
+            //  db.rowIdExists(Integer.parseInt(code));
 
 
-                //  doUpdateCart(value, code, "INSERT");
+            //  doUpdateCart(value, code, "INSERT");
 
-            } else {
+        } else {
 
-                // doUpdateCart(0, code, "DELETE");
-            }
-
+            // doUpdateCart(0, code, "DELETE");
+        }
 
 
     }

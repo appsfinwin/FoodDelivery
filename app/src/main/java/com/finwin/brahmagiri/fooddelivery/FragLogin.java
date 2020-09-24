@@ -35,7 +35,7 @@ import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 public class FragLogin extends Fragment {
 
     View rootview;
-    LinearLayout linSignup;
+    TextView linSignup;
     Button btnLogin;
     RequestQueue requestQueue;
     EditText edUsername, edPass;
@@ -104,7 +104,7 @@ public class FragLogin extends Fragment {
 
     private void doLogin(String username, String password) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseLogin> call = apiService.dologinoutlet(database, username, password, "consumer");
+        Call<ResponseLogin> call = apiService.dologin(database, username, password, "consumer");
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {

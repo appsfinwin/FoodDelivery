@@ -8,9 +8,11 @@ import com.finwin.brahmagiri.fooddelivery.Responses.HomePage.ResponseHomePage;
 import com.finwin.brahmagiri.fooddelivery.Responses.Itemlisting.ResponseFetchitem;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseAddcart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCancelOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCheckVersion;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCreateBill;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchAddress;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchOutlet;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
@@ -22,6 +24,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseOrderDetails;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponseToken;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.gson.JsonObject;
@@ -97,7 +100,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("authtoken/get_token")
-    Call<ResponseLogin> dologinoutlet(@Field("db") String db, @Field("login") String login, @Field("password") String password, @Field("app_type") String app_type);
+    Call<ResponseLogin> dologin(@Field("db") String db, @Field("login") String login, @Field("password") String password, @Field("app_type") String app_type);
 
     @FormUrlEncoded
     @POST("outlet_stock/stock_available")
@@ -118,7 +121,8 @@ public interface ApiService {
 
 
     @GET("zone/outlets?")
-    Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database, @Query("zone_id") String zone_id);
+    Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database,
+                                                @Query("zone_id") String zone_id,@Query("longitude")String longitude,@Query("latitude")String lattitude);
 
     @GET("all_zone/get_zone")
     Call<ResponseFetchZone> fetchzone(@Header("Access-Token") String auth, @Header("database") String database);
@@ -201,5 +205,26 @@ public interface ApiService {
     @POST("invoice/get_details")
     Call<ResponseOrderDetails> dofetchorderdetails(@Header("Access-Token") String Access_Token,
                                                    @Header("database") String database, @Body JsonObject locationPost);
+
+
+
+    @POST("firebase/token_save")
+    Call<ResponseToken> dupushToken(@Header("Access-Token") String Access_Token,
+                                    @Header("database") String database, @Body JsonObject locationPost);
+
+
+
+    @POST("get_cost/delivery_cost")
+    Call<ResponseFetchAddress> doUpdatedeliverycost(@Header("Access-Token") String Access_Token,
+                                                    @Header("database") String database, @Body JsonObject locationPost);
+
+
+
+    @Headers({"Content-type: application/json",
+            "Accept: */*"})
+    @POST("outlet_cancel/cancel_order")
+    Call<ResponseCancelOrder> docancelOrder(@Header("Access-Token") String Access_Token,
+                                            @Header("database") String database, @Body JsonObject locationPost);
+
 }
 

@@ -6,8 +6,8 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:background="#f5f5f5"
         android:orientation="horizontal"
         app:cardCornerRadius="5dp">
@@ -24,19 +24,14 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center"
                     android:id="@+id/img_bg"
                     android:src="@drawable/b1"
                     android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY" />
+                    android:layout_height="150dp"
+                    android:adjustViewBounds="true" />
 
-                <LinearLayout
-                    android:layout_width="190dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/black_shadow"
-                    android:gravity="bottom" />
 
                 <ImageView
                     android:visibility="gone"
@@ -73,20 +68,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:ellipsize="end"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:minLines="2"
+
                 android:text="Item"
                 android:textStyle="bold"
 
                 android:textColor="#2d2d2d"
                 android:textSize="15sp" />
+
             <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                 android:id="@+id/tvdesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:ellipsize="end"
 
                 android:maxLines="1"

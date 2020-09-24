@@ -21,7 +21,7 @@ public class CartItem {
     private Integer quantity;
     @SerializedName("product_image_url")
     @Expose
-    private Boolean productImageUrl;
+    private String productImageUrl;
     @SerializedName("product_name")
     @Expose
     private String productName;
@@ -72,11 +72,11 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public Boolean getProductImageUrl() {
+    public String getProductImageUrl() {
         return productImageUrl;
     }
 
-    public void setProductImageUrl(Boolean productImageUrl) {
+    public void setProductImageUrl(String productImageUrl) {
         this.productImageUrl = productImageUrl;
     }
 
