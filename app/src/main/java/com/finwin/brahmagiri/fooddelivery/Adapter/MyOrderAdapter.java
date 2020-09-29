@@ -36,7 +36,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyViewHo
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    String id = OfferList.get(pos).getInvoice_id().toString();
+                    String id = OfferList.get(pos).getInvoiceId().toString();
                     String status = OfferList.get(pos).getStatus();
                     context.startActivity(new Intent(context, OrderDetails.class).putExtra("id", id)
 

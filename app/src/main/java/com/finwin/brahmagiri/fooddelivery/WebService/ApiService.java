@@ -41,14 +41,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    @FormUrlEncoded
-    @POST("MobileApp_Item_Api")
-    Call<ResponseFetchitem> doFetchItembyCategory(@Field("ZoneId") String ZoneId,
-                                                  @Field("AuthKey") String AuthKey,
-                                                  @Field("Flag") String Flag,
-                                                  @Field("Category") String Category,
-                                                  @Field("PageNumber") int PageNumber, @Field("CustId") String CustId,
-                                                  @Field("SearchKey") String SearchKey);
+
 
     @FormUrlEncoded
     @POST("MobileApp_Item_Api")
@@ -100,11 +93,18 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("authtoken/get_token")
-    Call<ResponseLogin> dologin(@Field("db") String db, @Field("login") String login, @Field("password") String password, @Field("app_type") String app_type);
+    Call<ResponseLogin> dologin
+            (@Field("db") String db,
+             @Field("login") String login,
+             @Field("password") String password,
+             @Field("app_type") String app_type);
 
     @FormUrlEncoded
     @POST("outlet_stock/stock_available")
-    Call<ResponseFetchProducts> fetchproducts(@Field("outlet_id") String outlet_id, @Header("Access-Token") String auth, @Header("database") String database);
+    Call<ResponseFetchProducts> fetchproducts
+            (@Field("outlet_id") String outlet_id,
+             @Header("Access-Token") String auth,
+             @Header("database") String database);
 
 
     @Headers({"Content-type: application/json",
@@ -145,7 +145,6 @@ public interface ApiService {
                                    @Field("state") int stateid,
                                    @Field("district") int districtid,
                                    @Field("email") String email,
-
                                    @Field("zone") String zoneid);
 
 
@@ -167,11 +166,11 @@ public interface ApiService {
                                   @Header("database") String database,
                                   @Body JsonObject cartbody);
 
-    @FormUrlEncoded
-    @POST("consumer_sales/get_order")
+
+    @POST("consumer_sales_new/get_order_new")
     Call<ResponseMyOrder> doFetchMyOrder(@Header("Access-Token") String Access_Token,
                                          @Header("database") String database,
-                                         @Field("consumer_id") String cartbody);
+                                        @Body JsonObject jsonObject);
 
     @POST("send/otp")
     Call<JsonObject> doSendOtp(@Header("database") String database,
@@ -225,6 +224,13 @@ public interface ApiService {
     @POST("outlet_cancel/cancel_order")
     Call<ResponseCancelOrder> docancelOrder(@Header("Access-Token") String Access_Token,
                                             @Header("database") String database, @Body JsonObject locationPost);
+    @POST("mobile_otp/updation_otp")
+    Call<JsonObject> doSendOtpforUpdation(@Header("Access-Token") String Access_Token,@Header("database") String database,
+                               @Body JsonObject cartbody);
 
+
+    @POST("number/verification")
+    Call<JsonObject> Verifyotpformobilenum(@Header("Access-Token") String Access_Token,@Header("database") String database,
+                               @Body JsonObject cartbody);
 }
 

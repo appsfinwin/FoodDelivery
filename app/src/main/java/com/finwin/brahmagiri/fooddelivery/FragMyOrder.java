@@ -8,46 +8,61 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrderAdapter;
+import com.finwin.brahmagiri.fooddelivery.Adapter.MyOrdersAdapter;
 import com.finwin.brahmagiri.fooddelivery.Responses.PreviousSale;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.finwin.brahmagiri.fooddelivery.utilities.PaginationScrollListener;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Field;
 
 import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
 public class FragMyOrder extends Fragment {
 
 
-    private RecyclerView menuRecycler;
-    private MyOrderAdapter bAdapter;
+    private RecyclerView OrderRecycler;
+    private MyOrdersAdapter bAdapter;
+    LinearLayoutManager linearLayoutManager;
     FrameLayout frameLayout;
 
-
+    private static final int PAGE_START = 1;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    // limiting to 5 for this tutorial, since total pages in actual API is very large. Feel free to modify.
+    private int TOTAL_PAGES;
+    private int currentPage = PAGE_START;
     ImageButton ibtn_back;
     View rootview;
     TextView tvOK;
-    ProgressDialog progressDialog;
+    ProgressBar progressBar;
+    String partnerid;
+    String mAccesstoken;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,55 +74,51 @@ public class FragMyOrder extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         frameLayout = rootview.findViewById(R.id.emptyorder);
-        menuRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        menuRecycler.setLayoutManager(layoutManager);
-        //   menuRecycler.setItemAnimator(new DefaultItemAnimator());
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(menuRecycler.getContext(),
-                layoutManager.getOrientation());
-        menuRecycler.addItemDecoration(dividerItemDecoration);
-        String partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
-        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, partnerid);
-        call.enqueue(new Callback<ResponseMyOrder>() {
+        OrderRecycler = (RecyclerView) rootview.findViewById(R.id.menuRecycler);
+        progressBar = rootview.findViewById(R.id.progressbars);
+        bAdapter = new MyOrdersAdapter(getActivity());
+        partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
+        mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        OrderRecycler.setLayoutManager(linearLayoutManager);
+
+        OrderRecycler.setItemAnimator(new DefaultItemAnimator());
+
+        OrderRecycler.setAdapter(bAdapter);
+
+
+        OrderRecycler.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
             @Override
-            public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
-                progressDialog.dismiss();
-                if (response.body() != null && response.code() == 200) {
-                    ResponseMyOrder responseMyOrder = response.body();
-                    List<PreviousSale> dataset = responseMyOrder.getPreviousSales();
-                    bAdapter = new MyOrderAdapter(getContext(), dataset);
-                    menuRecycler.setAdapter(bAdapter);
-                    if (bAdapter.getItemCount() == 0) {
-                        frameLayout.setVisibility(View.VISIBLE);
-                        menuRecycler.setVisibility(View.GONE);
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += 1;
+
+                // mocking network delay for API call
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNextPage();
                     }
-                    frameLayout.setVisibility(View.GONE);
-                    menuRecycler.setVisibility(View.VISIBLE);
-
-
-                } else {
-                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
-
-                }
+                }, 1000);
             }
 
             @Override
-            public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
-                progressDialog.dismiss();
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
             }
         });
 
-//        for (int i = 0; i < foodName.length; i++) {
-//            MyOrderModel beanClassForRecyclerView_contacts = new MyOrderModel(foodName[i], quantity[i], rupees[i]);
-//            homeListModelClassArrayList1.add(beanClassForRecyclerView_contacts);
-//        }
+        loadFirstPage();
 
 
         ibtn_back = rootview.findViewById(R.id.ibtn_back_mordr);
@@ -121,30 +132,93 @@ public class FragMyOrder extends Fragment {
 
     }
 
-    public void clearStack() {
-//        //Here we are clearing back stack fragment entries
-//        int backStackEntry = Objects.requireNonNull(getFragmentManager()).getBackStackEntryCount();
-//        if (backStackEntry > 0) {
-//            for (int i = 0; i < backStackEntry; i++) {
-//                getFragmentManager().popBackStackImmediate();
-//            }
-//        }
+    private void loadNextPage() {
 
-        //Here we are removing all the fragment that are shown here
-        if (getFragmentManager().getFragments() != null && getFragmentManager().getFragments().size() > 0) {
-            for (int i = 0; i < getFragmentManager().getFragments().size(); i++) {
-                Fragment mFragment = getFragmentManager().getFragments().get(i);
-                if (mFragment != null) {
-                    getFragmentManager().beginTransaction().remove(mFragment).commit();
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("consumer_id", Integer.parseInt(partnerid));
+        jsonObject.addProperty("page", currentPage);
+
+        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, jsonObject);
+        call.enqueue(new Callback<ResponseMyOrder>() {
+            @Override
+            public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
+
+                if (response.body() != null && response.code() == 200) {
+                    ResponseMyOrder responseMyOrder = response.body();
+                    bAdapter.removeLoadingFooter();
+                    isLoading = false;
+                    List<PreviousSale> dataset = responseMyOrder.getPreviousSales();
+                    bAdapter.addAll(dataset);
+                    if (currentPage != TOTAL_PAGES) bAdapter.addLoadingFooter();
+                    else isLastPage = true;
+
+                    if (bAdapter.getItemCount() == 0) {
+                        frameLayout.setVisibility(View.VISIBLE);
+                        OrderRecycler.setVisibility(View.GONE);
+                    }
+
+
+                } else {
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+
                 }
             }
-        }
 
-        Fragment fr = new FragHome();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fr);
-        fragmentTransaction.commit();
+            @Override
+            public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
+
+            }
+        });
+
+
     }
+
+    private void loadFirstPage() {
+        progressBar.setVisibility(View.VISIBLE);
+        String partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("consumer_id", Integer.parseInt(partnerid));
+        jsonObject.addProperty("page", PAGE_START);
+
+        Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, jsonObject);
+        call.enqueue(new Callback<ResponseMyOrder>() {
+            @Override
+            public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
+                progressBar.setVisibility(View.GONE);
+
+                if (response.body() != null && response.code() == 200) {
+                    ResponseMyOrder responseMyOrder = response.body();
+                    TOTAL_PAGES = response.body().getTotalPage();
+                    List<PreviousSale> dataset = responseMyOrder.getPreviousSales();
+                    bAdapter.addAll(dataset);
+                    if (currentPage < TOTAL_PAGES) bAdapter.addLoadingFooter();
+                    else isLastPage = true;
+
+                    if (bAdapter.getItemCount() == 0) {
+                        frameLayout.setVisibility(View.VISIBLE);
+                        OrderRecycler.setVisibility(View.GONE);
+                    }
+
+
+                } else {
+                    Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+
+    }
+
 
 }

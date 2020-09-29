@@ -1,17 +1,18 @@
 package com.finwin.brahmagiri.fooddelivery.Activity;
 
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
+import androidx.databinding.DataBindingUtil;
+
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityEnterMobBinding;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -24,7 +25,7 @@ import retrofit2.Response;
 
 import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
-public class EnterMobActivity extends BaseActivity {
+public class UpdateMobActivity extends BaseActivity {
     ActivityEnterMobBinding binding;
 
     @Override
@@ -37,8 +38,8 @@ public class EnterMobActivity extends BaseActivity {
             public void onClick(View view) {
                 String mob = binding.edUsername.getText().toString();
                 if (mob.equals("")) {
-                    Toast.makeText(EnterMobActivity.this, "Field Empty", Toast.LENGTH_SHORT).show();
-                } else if (!new AppUtility(EnterMobActivity.this).isValidMobile(mob)) {
+                    Toast.makeText(UpdateMobActivity.this, "Field Empty", Toast.LENGTH_SHORT).show();
+                } else if (!new AppUtility(UpdateMobActivity.this).isValidMobile(mob)) {
 
                 } else {
                     doSend(mob);
@@ -49,23 +50,30 @@ public class EnterMobActivity extends BaseActivity {
     }
 
     private void doSend(final String mob) {
+        String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+
         showdialog();
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("partner_id", Integer.parseInt(partnerid));
         jsonObject.addProperty("mobile", mob);
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<JsonObject> call = apiService.doSendOtp(database, jsonObject);
+        Call<JsonObject> call = apiService.doSendOtpforUpdation(mAccesstoken, database, jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 dismissdialog();
                 if (response.body() != null && response.code() == 200) {
+                    // startActivity(new Intent(getApplicationContext(), OtpVerify.class).putExtra("isfromupdate", "yes").putExtra("mob", mob));
+
                     try {
                         JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                         String msg = jsonObject.getString("user_id");
                         startActivity(new Intent(getApplicationContext(), OtpVerify.class)
-                                .putExtra("isfromupdate", "no")
-
-                                .putExtra("user_id", msg).putExtra("mob", mob));
+                                .putExtra("isfromupdate", "yes")
+                                .putExtra("user_id", msg)
+                                .putExtra("mob", mob));
+                        finish();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

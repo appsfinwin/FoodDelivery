@@ -41,6 +41,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchAddress;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseOrderDetails;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
+import com.finwin.brahmagiri.fooddelivery.utilities.BottomSheetDialog;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -219,8 +220,10 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             @Override
             public void onClick(View view) {
               // ChangeAddresses("Address");
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class).putExtra("isfromcheckout", "YES"));
-
+       //
+                BottomSheetDialog bottomSheet = new BottomSheetDialog();
+                bottomSheet.show(getSupportFragmentManager(),
+                        "ModalBottomSheet");
 
             }
         });

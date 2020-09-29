@@ -378,11 +378,11 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
                     }
 
 
-                } else {
-                    /*Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
+                } else if (response.code()==401){
+                  Toast.makeText(getActivity(), "Session Expired logging out", Toast.LENGTH_LONG).show();
                     LocalPreferences.clearPreferences(getActivity());
                     startActivity(new Intent(getActivity(), ActivityInitial.class));
-                    getActivity().finishAffinity();*/
+                    getActivity().finishAffinity();
                     /*spinneroutlet.setError("Invalid id");
                      */
                 }

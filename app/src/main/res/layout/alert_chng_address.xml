@@ -129,6 +129,123 @@
                     android:textStyle="normal" />
             </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26.3dp"
+            android:layout_marginRight="26.3dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10.3dp"
+                android:fontFamily="sans-serif"
+                android:padding="5dp"
+                android:text="State"
+                android:textColor="@color/black"
+                android:textSize="11.7sp"
+                android:textStyle="normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@drawable/rect_grayoutline"
+
+                android:layout_height="50dp">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:spinnerMode="dialog"
+                    android:prompt="@string/hint_resource"
+
+
+                    android:id="@+id/ed_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="District"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/rect_grayoutline"
+
+                    android:layout_height="50dp">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:spinnerMode="dialog"
+                        android:prompt="@string/hint_resource"
+
+
+                        android:id="@+id/ed_district"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26.3dp"
+                android:layout_marginRight="26.3dp"
+                android:orientation="vertical"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10.3dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="5dp"
+                    android:text="Zone"
+                    android:textColor="@color/black"
+                    android:textSize="11.7sp"
+                    android:textStyle="normal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/rect_grayoutline"
+
+                    android:layout_height="50dp">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:spinnerMode="dialog"
+                        android:prompt="@string/hint_resource"
+
+
+                        android:id="@+id/ed_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"></androidx.appcompat.widget.AppCompatSpinner>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

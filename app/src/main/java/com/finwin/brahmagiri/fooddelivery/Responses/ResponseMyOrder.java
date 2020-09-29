@@ -13,6 +13,12 @@ public class ResponseMyOrder {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("no_of_orders")
+    @Expose
+    private Integer noOfOrders;
+    @SerializedName("total_page")
+    @Expose
+    private Integer totalPage;
 
     public List<PreviousSale> getPreviousSales() {
         return previousSales;
@@ -28,5 +34,21 @@ public class ResponseMyOrder {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Integer getNoOfOrders() {
+        return noOfOrders;
+    }
+
+    public void setNoOfOrders(Integer noOfOrders) {
+        this.noOfOrders = noOfOrders;
+    }
+
+    public Integer getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(Integer totalPage) {
+        this.totalPage = totalPage;
     }
 }

@@ -48,31 +48,23 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.model.LocationBias;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.gson.JsonObject;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
-import java.util.Arrays;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -100,6 +92,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private final float DEFAULT_ZOOM = 15;
     String Flag;
     EditText additionainfo;
+    Serializable values;
+    double lats, longi;
+    LatLng fromPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +108,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Initialize the SDK
         // Initialize the AutocompleteSupportFragment.
         Flag = getIntent().getStringExtra("isfromcheckout");
+        //   lats = Double.parseDouble(getIntent().getStringExtra("lat"));
+        //  longi = Double.parseDouble(getIntent().getStringExtra("long"));
+        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        //   fromPosition = bundle.getParcelable("lat");
 
+        fromPosition = getIntent().getExtras().getParcelable("Latlng");
+
+
+        //   LatLng toPosition = bundle.getParcelable("to_position");
+        Log.d("onCreate", "onCreate: " + fromPosition);
+        //values = getIntent().getSerializableExtra("location");
         additionainfo = findViewById(R.id.btndeliveryinfo);
 
         if (Flag.equalsIgnoreCase("YES")) {
-            additionainfo.setVisibility(View.VISIBLE);
+            additionainfo.setVisibility(View.GONE);
 
         } else {
             additionainfo.setVisibility(View.GONE);
@@ -148,6 +153,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Places.initialize(MapsActivity.this, "AIzaSyADTX6MqUTZYV3kox7HEOEhHEpTlXP3ouA");
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+        //  remit(token);
 
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -157,7 +163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onSearchConfirmed(CharSequence text) {
-                startSearch(text.toString(), true, null, true);
+                startSearch(text.toString(), true, null, false);
             }
 
             @Override
@@ -308,7 +314,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 finish();
                                             } else if (Flag.equalsIgnoreCase("YES")) {
                                                 Log.d("TAG", "onClick: " + "yes");
-                                                LocalPreferences.storeStringPreference(getApplicationContext(), "delcurrentlocation", address + "," + city + " ");
+                                                //   LocalPreferences.storeStringPreference(getApplicationContext(), "delcurrentlocation", address + "," + city + " ");
                                                 LocalPreferences.storeStringPreference(getApplicationContext(), "dellatitude", String.valueOf(currentMarkerLocation.latitude));
                                                 LocalPreferences.storeStringPreference(getApplicationContext(), "dellongitude", String.valueOf(currentMarkerLocation.longitude));
 
@@ -426,7 +432,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (task.isSuccessful()) {
                             mLastKnownLocation = task.getResult();
                             if (mLastKnownLocation != null) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                                if (fromPosition != null) {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fromPosition, DEFAULT_ZOOM));
+
+                                } else {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                                }
+
+
                             } else {
                                 final LocationRequest locationRequest = LocationRequest.create();
                                 locationRequest.setInterval(10000);
@@ -440,7 +455,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             return;
                                         }
                                         mLastKnownLocation = locationResult.getLastLocation();
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                        if (fromPosition != null) {
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(fromPosition, DEFAULT_ZOOM));
+                                        } else {
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+                                        }
+
+
                                         mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
                                     }
                                 };
@@ -492,5 +514,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
 
 }

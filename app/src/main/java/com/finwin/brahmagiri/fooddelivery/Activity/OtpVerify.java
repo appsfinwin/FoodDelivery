@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mukesh.OtpView;
@@ -28,6 +29,7 @@ public class OtpVerify extends BaseActivity {
     private OtpView otpView;
     Button btnext, Rsend;
     TextView mTextField;
+    String flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class OtpVerify extends BaseActivity {
         btnext = findViewById(R.id.btn_next);
         Rsend = findViewById(R.id.btndresend);
         final String mob = getIntent().getStringExtra("mob");
+        flag = getIntent().getStringExtra("isfromupdate");
         Rsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +56,8 @@ public class OtpVerify extends BaseActivity {
                 String otp = otpView.getText().toString();
                 if (otp.equals("")) {
                     Toast.makeText(OtpVerify.this, "Please Enter Otp", Toast.LENGTH_SHORT).show();
+                } else if (flag.equalsIgnoreCase("yes")) {
+                    Validateotpmob(otp, id, mob);
                 } else {
                     Validateotp(otp, id);
                 }
@@ -76,6 +81,54 @@ public class OtpVerify extends BaseActivity {
 
         }.start();
     }
+
+
+    private void Validateotpmob(String otp, String id, String mob) {
+        showdialog();
+        String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
+
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
+
+        JsonObject jsonObjects = new JsonObject();
+        jsonObjects.addProperty("partner_id", Integer.parseInt(partnerid));
+        jsonObjects.addProperty("user_id", Integer.parseInt(id));
+        jsonObjects.addProperty("otp", otp);
+        jsonObjects.addProperty("mobile", mob);
+
+        ApiService apiService = APIClient.getClient().create(ApiService.class);
+        Call<JsonObject> call = apiService.Verifyotpformobilenum(mAccesstoken, database, jsonObjects);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                dismissdialog();
+                if (response.body() != null && response.code() == 200) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        String msg = jsonObject.getString("message");
+                        String id = jsonObject.getString("user_id");
+
+                        if (msg.equalsIgnoreCase("Mobile Number Updated Successfully")) {
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "" + msg, Toast.LENGTH_SHORT).show();
+
+                        }
+//
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                dismissdialog();
+
+            }
+        });
+    }
+
 
     private void Validateotp(String otp, String id) {
         showdialog();

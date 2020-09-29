@@ -116,7 +116,13 @@
                 android:textColor="#0ca21a"
                 android:textSize="11.3sp" />
         </LinearLayout>
-
+        <ImageView
+            android:id="@+id/imgv_mobedit"
+            android:layout_width="85dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_pencil_edit_button" />
         <View
             android:layout_width="match_parent"
             android:layout_height="0.7dp"

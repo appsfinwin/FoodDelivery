@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class FragSignUpDetails extends Fragment {
     List<Zone> dataset;
     List<States> datasetstates;
     List<District> datasetdistrict;
-
+    ProgressBar mprogress;
     ArrayAdapter<Zone> adapters;
     ArrayAdapter<District> adapterdistrict;
     ArrayAdapter<States> adapterstate;
@@ -71,7 +72,7 @@ public class FragSignUpDetails extends Fragment {
         dataset = new ArrayList<>();
         LoadZone();
         LoadStates();
-
+        mprogress = rootview.findViewById(R.id.progressbr);
         spinner = rootview.findViewById(R.id.ed_spinner);
         spinnerdistrict = rootview.findViewById(R.id.ed_district);
         spinnerstate = rootview.findViewById(R.id.ed_state);
@@ -217,17 +218,27 @@ public class FragSignUpDetails extends Fragment {
     }
 
     private void doSignup(String vaname, String vaMobile, String vaemail, String vaPin, String vaaddress, String vausername, String vapassword, String vaLandmark, String vastreet, String vaCity) {
-
+mprogress.setVisibility(View.VISIBLE);
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<Response_Signup> call = apiService.dosignup(database, vaname, vaMobile, vaaddress, Integer.parseInt(vaPin), vausername, vapassword, vastreet, vaCity, vaLandmark, Integer.parseInt(selecteditemstate), Integer.parseInt(selecteditemdistrict), vaemail, selecteditem);
         call.enqueue(new Callback<Response_Signup>() {
             @Override
             public void onResponse(Call<Response_Signup> call, Response<Response_Signup> response) {
+
+                mprogress.setVisibility(View.GONE);
+
                 if (response.body() != null && response.code() == 200) {
-                    Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), ActivityInitial.class));
-                    getActivity().finishAffinity();
+
+
+                    if (response.body().getMessage().equalsIgnoreCase("Registration Done Successfully")) {
+                        startActivity(new Intent(getActivity(), ActivityInitial.class));
+                        getActivity().finishAffinity();
+                    } else {
+                        Toast.makeText(getActivity(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+
 
                 } else {
                     Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
@@ -238,7 +249,7 @@ public class FragSignUpDetails extends Fragment {
 
             @Override
             public void onFailure(Call<Response_Signup> call, Throwable t) {
-
+                mprogress.setVisibility(View.GONE);
             }
         });
 
