@@ -660,7 +660,7 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
             //  getDeviceLocation();
 
         }
-        fechoutletbumyZOne(defaultzone);
+        //fechoutletbumyZOne(defaultzone);
 
 
     }
