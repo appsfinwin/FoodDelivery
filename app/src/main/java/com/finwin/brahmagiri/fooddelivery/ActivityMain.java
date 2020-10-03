@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.finwin.brahmagiri.fooddelivery.Activity.CartActivity;
 import com.finwin.brahmagiri.fooddelivery.Activity.Changepassword;
 import com.finwin.brahmagiri.fooddelivery.Activity.ChangepasswordLoggedIn;
+import com.finwin.brahmagiri.fooddelivery.Activity.MyOrderActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseToken;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -154,12 +155,13 @@ public class ActivityMain extends AppCompatActivity {
 
 
             case R.id.tv_nav_myordr:
-                Fragment frMyOrder = new FragMyOrder();
+             /*   Fragment frMyOrder = new FragMyOrder();
                 FragmentManager fmMyOrder = getSupportFragmentManager();
                 FragmentTransaction fragMyOrder = fmMyOrder.beginTransaction();
                 fragMyOrder.replace(R.id.frame_layout, frMyOrder);
                 fragMyOrder.addToBackStack(null);
-                fragMyOrder.commit();
+                fragMyOrder.commit();*/
+             startActivity(new Intent(getApplicationContext(), MyOrderActivity.class));
 
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);

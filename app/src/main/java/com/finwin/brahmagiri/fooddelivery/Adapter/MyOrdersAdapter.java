@@ -186,7 +186,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     context.startActivity(new Intent(context, OrderDetails.class).putExtra("id", id)
 
                             //  .putExtra("custname",OfferList.get(pos).getc)
-                            .putExtra("status", status));
+                            .putExtra("status", status).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
         }

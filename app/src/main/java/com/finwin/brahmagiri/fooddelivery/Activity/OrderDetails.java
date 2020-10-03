@@ -45,7 +45,7 @@ public class OrderDetails extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_details);
         binding.recyvmyorderdetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         String orderid = getIntent().getStringExtra("id");
-
+        binding.progress.setVisibility(View.VISIBLE);
         status = getIntent().getStringExtra("status");
         Log.e("TAG", "onCreate: " + status);
         String custname = getIntent().getStringExtra("custname");
@@ -98,7 +98,9 @@ public class OrderDetails extends AppCompatActivity {
         call.enqueue(new Callback<ResponseOrderDetails>() {
             @Override
             public void onResponse(Call<ResponseOrderDetails> call, Response<ResponseOrderDetails> response) {
+                binding.progress.setVisibility(View.GONE);
                 if (response.body() != null && response.code() == 200) {
+                    binding.parentlayt.setVisibility(View.VISIBLE);
                     ResponseOrderDetails responseOrderDetails = response.body();
                     List<LineItem> dataset = responseOrderDetails.getLineItems();
                     binding.tvSubtotal.setText("₹ " + response.body().getSubtotal());
@@ -120,7 +122,7 @@ public class OrderDetails extends AppCompatActivity {
                     String collectionmode = response.body().getCollecting_option();
                     binding.collection.setText("Collection Option : " + collectionmode);
                     binding.recyvmyorderdetails.setAdapter(new OrderdetailAdapter(getApplicationContext(), dataset));
-                    if (!response.body().getStatus().equalsIgnoreCase("cancel")&&!response.body().getRemaining_time().equalsIgnoreCase("0")) {
+                    if (!response.body().getStatus().equalsIgnoreCase("cancel") && !response.body().getRemaining_time().equalsIgnoreCase("0")) {
                         binding.tvTimer.setVisibility(View.VISIBLE);
                     }
                     long remainingtime = Long.parseLong(response.body().getRemaining_time());
@@ -144,6 +146,7 @@ public class OrderDetails extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseOrderDetails> call, Throwable t) {
+                binding.progress.setVisibility(View.GONE);
 
             }
         });

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.finwin.brahmagiri.fooddelivery.FragForYouItemView;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 
 import java.util.List;
@@ -63,15 +62,7 @@ public class FoodForYouRecyAdapter extends RecyclerView.Adapter<FoodForYouRecyAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                Log.e("onClick: ", "oooooooo");
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                Fragment myFragment = new FragForYouItemView();
-//                    bundle.putString(mstrType, "MOB");
-//                    myFragment.setArguments(bundle);
-                activity.getSupportFragmentManager().beginTransaction().replace(
-                        R.id.frame_layout,
-                        myFragment).addToBackStack(null).commit();
+//
             }
         });
     }

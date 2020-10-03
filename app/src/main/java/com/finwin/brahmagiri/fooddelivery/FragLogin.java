@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
+import com.finwin.brahmagiri.fooddelivery.Activity.FetchCurrentLocation;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
@@ -118,8 +119,19 @@ public class FragLogin extends Fragment {
 
                         LocalPreferences.storeBooleanPreference(getActivity(), "isLoggedin", true);
                         LocalPreferences.storeStringPreference(getActivity(), "userid", response.body().getUid().toString());
-                        startActivity(new Intent(getContext(), ActivityMain.class));
-                        Objects.requireNonNull(getActivity()).finish();
+                       String lat= LocalPreferences.retrieveStringPreferences(getActivity(), "latitude");
+                        String longi=   LocalPreferences.retrieveStringPreferences(getActivity(), "longitude");
+                        if (lat!=null&&!lat.equalsIgnoreCase("")){
+                            startActivity(new Intent(getContext(), ActivityMain.class));
+                            Objects.requireNonNull(getActivity()).finish();
+                        }else{
+                            startActivity(new Intent(getContext(), FetchCurrentLocation.class));
+                            Objects.requireNonNull(getActivity()).finish();
+
+
+                        }
+
+
 
 
                 }else{
