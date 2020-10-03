@@ -185,14 +185,14 @@ public class FragHome extends Fragment implements NavigationView.OnNavigationIte
         spinnerzone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
+              /*  if (position != 0) {*/
                     defaultzone = dataset.get(position).getId().toString();
                     fechoutletbumyZOne(defaultzone);
                     LocalPreferences.storeStringPreference(getActivity(), "zonepos", String.valueOf(position));
                     Log.d("executingggg", "onItemSelected: " + position);
 
                     // spinnerzone.setSelection(3);
-                }
+              //  }
                 mIsZoneSpinnerFirstCall = false;
                 //    Zone user = (Zone) parent.getSelectedItem();
                 // displayUserData(user);

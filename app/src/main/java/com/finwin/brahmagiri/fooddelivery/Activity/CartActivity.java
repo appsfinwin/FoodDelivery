@@ -149,80 +149,8 @@ public class CartActivity extends AppCompatActivity implements showhide {
         startActivity(new Intent(getApplicationContext(), PaymentActivity.class).putExtra("total", Double.toString(totalsum)));
     }
 
-    private void dofetchcartSummary(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchCart> call = apiService.doCartSummary("", "", flag, 0, "string", code, String.valueOf(value), "44402");
-        call.enqueue(new Callback<ResponseFetchCart>() {
-            @Override
-            public void onResponse(Call<ResponseFetchCart> call, Response<ResponseFetchCart> response) {
-                if (response.body() != null && response.code() == 200) {
-
-                    ResponseFetchCart responseAddtoCart = response.body();
-                    List<TableSummaryCart> dataset = responseAddtoCart.getData().getTable1();
-                    List<TableFetchCart> datasetcartlist = responseAddtoCart.getData().getTable();
-                    //  mCartAdapter=new CartAdapter(getApplication(), datasetcartlist, CartActivity.this,true);
-
-                    binding.cartRecycler.setAdapter(mCartAdapter);
-                    Log.d("cartsummary", "onFailure: " + mCartAdapter.getItemCount());
-                    if (mCartAdapter.getItemCount() == 0) {
-                        binding.emptyCart.setVisibility(View.VISIBLE);
-                        binding.parent.setVisibility(View.GONE);
-                        binding.lnrlayConfmpay.setVisibility(View.GONE);
 
 
-                    } else {
-                        binding.emptyCart.setVisibility(View.GONE);
-                        binding.parent.setVisibility(View.VISIBLE);
-                        binding.lnrlayConfmpay.setVisibility(View.VISIBLE);
-                    }
-
-                    binding.tvCartChrg.setText("" + dataset.get(0).getDeliveryCharge());
-                    binding.tvCartGst.setText("" + dataset.get(0).getTax());
-                    binding.tvCartSubtotal.setText("" + dataset.get(0).getTotal());
-                    binding.tvCartTotal.setText("₹ " + dataset.get(0).getGrandTotal());
-                       /* binding.parent.setVisibility(View.GONE);
-                        binding.lnrlayConfmpay.setVisibility(View.GONE);
-                        Toast.makeText(CartActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();*/
-
-
-                    //Double total = dataset.get(0).getTotal();
-                    // int count=dataset.get(0).getQuantity();
-                    //   Log.d("cartsummary", "onFailure: "+count);
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseFetchCart> call, Throwable t) {
-
-
-            }
-        });
-    }
-
-    private void doUpdateCart(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddtoCart> call = apiService.doCartManagment("", "", flag, 0, "", code, String.valueOf(value), "44402", "");
-        call.enqueue(new Callback<ResponseAddtoCart>() {
-            @Override
-            public void onResponse(Call<ResponseAddtoCart> call, Response<ResponseAddtoCart> response) {
-                if (response.body() != null && response.code() == 200) {
-                    ResponseAddtoCart responseAddtoCart = response.body();
-                    List<TableCart> dataset = responseAddtoCart.getData().getTable1();
-                    String status = dataset.get(0).getReturnStatus();
-                    Toast.makeText(CartActivity.this, "" + dataset.get(0).getReturnMessage(), Toast.LENGTH_SHORT).show();
-                    dofetchcartSummary(0, "", "CART_SUMMARY");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseAddtoCart> call, Throwable t) {
-                Log.d("cartsummary", "onFailure: " + t.getMessage());
-
-            }
-        });
-    }
 
     @Override
     public void clicked(int value, String code) {

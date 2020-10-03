@@ -29,6 +29,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +47,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     private PlacesClient placesClient;
     LatLng latLng;
     List<String> countries;
+    TextInputLayout laddress, lstrret;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable
@@ -55,6 +57,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         Places.initialize(getActivity(), "AIzaSyADTX6MqUTZYV3kox7HEOEhHEpTlXP3ouA");
         placesClient = Places.createClient(getActivity());
         countries = new ArrayList<>();
+        lstrret = v.findViewById(R.id.laytstreet);
+        laddress = v.findViewById(R.id.laytaddress);
 
         // Initialize the AutocompleteSupportFragment.
     /*    AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
@@ -104,15 +108,27 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                laddress.setError(null);
+                lstrret.setError(null);
+                String vaAdderss = Edaddress.getText().toString();
+                String vaArea = Edlocality.getText().toString();
+                if (vaAdderss.equalsIgnoreCase("")) {
 
-                LocalPreferences.storeStringPreference(getActivity(), "delcurrentlocation", EdFloor.getText().toString() + " " + Edaddress.getText().toString() + "," + Edlocality.getText().toString() + " ");
+                    laddress.setError("Field Required");
+                } else if (vaArea.equalsIgnoreCase("")) {
 
-                startActivity(new Intent(getActivity(), MapsActivity.class)
-                        .putExtra("isfromcheckout", "YES")
-                        .putExtra("Latlng", latLng));
+                    lstrret.setError("Field Required");
+                } else {
+                    LocalPreferences.storeStringPreference(getActivity(), "delcurrentlocation", EdFloor.getText().toString() + " " + Edaddress.getText().toString() + "," + Edlocality.getText().toString() + " ");
+
+                    startActivity(new Intent(getActivity(), MapsActivity.class)
+                            .putExtra("isfromcheckout", "YES")
+                            .putExtra("Latlng", latLng));
 
 
-               dismiss();
+                    dismiss();
+                }
+
 
             }
         });

@@ -138,7 +138,7 @@ public class FragMyOrder extends Fragment {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("consumer_id", Integer.parseInt(partnerid));
-        jsonObject.addProperty("page", currentPage);
+            jsonObject.addProperty("page", currentPage);
 
         Call<ResponseMyOrder> call = apiService.doFetchMyOrder(mAccesstoken, database, jsonObject);
         call.enqueue(new Callback<ResponseMyOrder>() {

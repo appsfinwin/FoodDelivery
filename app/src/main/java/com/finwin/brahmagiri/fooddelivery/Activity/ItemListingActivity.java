@@ -257,71 +257,7 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
     }
 
-    private void dofetchcartSummary(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseFetchCart> call = apiService.doCartSummary("", "", flag, 0, "string", code, String.valueOf(value), "44402");
-        call.enqueue(new Callback<ResponseFetchCart>() {
-            @Override
-            public void onResponse(Call<ResponseFetchCart> call, Response<ResponseFetchCart> response) {
-                if (response.body() != null && response.code() == 200) {
-                    Log.d("cartsummary", "onFailure: " + new Gson().toJson(response.body()));
 
-                    ResponseFetchCart responseAddtoCart = response.body();
-                    List<TableSummaryCart> dataset = responseAddtoCart.getData().getTable1();
-                    //Double total = dataset.get(0).getTotal();
-                    // int count=dataset.get(0).getQuantity();
-                    //   Log.d("cartsummary", "onFailure: "+count);
-
-                    if (dataset.get(0).getQuantity() != null) {
-                        if (dataset.get(0).getQuantity() > 0) {
-                            msummarylayout.setVisibility(View.VISIBLE);
-
-                        }
-
-
-                    }else{
-                        msummarylayout.setVisibility(View.GONE);
-
-                    }
-
-
-                    mtotalcount.setText("" + dataset.get(0).getQuantity() + " Items");
-                    mrupee.setText("₹ " + dataset.get(0).getTotal());
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseFetchCart> call, Throwable t) {
-
-
-            }
-        });
-    }
-
-    private void doUpdateCart(int value, String code, String flag) {
-        ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseAddtoCart> call = apiService.doCartManagment("", "", flag, 0, "", code, String.valueOf(value), "44402", "");
-        call.enqueue(new Callback<ResponseAddtoCart>() {
-            @Override
-            public void onResponse(Call<ResponseAddtoCart> call, Response<ResponseAddtoCart> response) {
-                if (response.body() != null && response.code() == 200) {
-                    ResponseAddtoCart responseAddtoCart = response.body();
-                    List<TableCart> dataset = responseAddtoCart.getData().getTable1();
-                    String status = dataset.get(0).getReturnStatus();
-                    Toast.makeText(ItemListingActivity.this, "" + dataset.get(0).getReturnMessage(), Toast.LENGTH_SHORT).show();
-                    //dofetchcartSummary(0, "", "CART_SUMMARY");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseAddtoCart> call, Throwable t) {
-                Log.d("cartsummary", "onFailure: " + t.getMessage());
-
-            }
-        });
-    }
 
     public void gotocart(View view) {
         startActivity(new Intent(getApplicationContext(), CartActivity.class));

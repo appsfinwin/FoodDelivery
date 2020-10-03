@@ -53,7 +53,6 @@
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PayMentGateWay" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CartActivity" />
-        <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.CategoryListAll" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.StatusActivity" />
         <activity

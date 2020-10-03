@@ -1,94 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#FFF"
+
     android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Name "
-        android:visibility="gone"
+    <LinearLayout
+        android:layout_alignParentBottom="false"
         android:layout_width="match_parent"
+        android:background="#FFF"
+        android:orientation="vertical"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Name "
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:id="@+id/edname"
-            android:layout_height="55dp">
+            android:layout_height="wrap_content">
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/edname"
+                android:layout_height="55dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="House Name, Building Name etc *"
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edAddress"
-            android:layout_width="match_parent"
-
-            android:layout_height="55dp">
-
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Area / Street / Locality *"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edArea"
-            android:clickable="false"
-            android:editable="false"
-            android:focusableInTouchMode="false"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/laytaddress"
+            android:layout_marginRight="20dp"
+            android:hint="House Name, Building Name etc *"
 
             android:layout_width="match_parent"
-            android:layout_height="55dp">
+            android:layout_height="wrap_content">
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edAddress"
+                android:layout_width="match_parent"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Floor (Optional )"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                android:layout_height="55dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edfloor"
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/laytstreet"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Area / Street / Locality *"
+
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            android:layout_height="55dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edArea"
+                android:clickable="false"
+                android:editable="false"
+                android:focusableInTouchMode="false"
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+                android:layout_width="match_parent"
+                android:layout_height="55dp">
 
-    <Button
-        android:background="@color/black"
-         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="#FFF"
-        android:id="@+id/btn_update"
-        android:text="Confirm  Delivery Address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </Button>
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Floor (Optional )"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edfloor"
+                android:layout_width="match_parent"
+
+                android:layout_height="55dp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:background="@color/black"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="#FFF"
+            android:id="@+id/btn_update"
+            android:text="Confirm  Delivery Address"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+</RelativeLayout>
