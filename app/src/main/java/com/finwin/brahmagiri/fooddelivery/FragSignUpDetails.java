@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.ItemListingActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.District;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
@@ -250,6 +251,12 @@ mprogress.setVisibility(View.VISIBLE);
             @Override
             public void onFailure(Call<Response_Signup> call, Throwable t) {
                 mprogress.setVisibility(View.GONE);
+                if (new AppUtility(getActivity()).checkInternet()) {
+
+                } else {
+                    Toast.makeText(getActivity(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -276,7 +283,12 @@ mprogress.setVisibility(View.VISIBLE);
 
             @Override
             public void onFailure(Call<Signup_Zone> call, Throwable t) {
+                if (new AppUtility(getActivity()).checkInternet()) {
 
+                } else {
+                    Toast.makeText(getActivity(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -302,7 +314,12 @@ mprogress.setVisibility(View.VISIBLE);
 
             @Override
             public void onFailure(Call<ResponseStates> call, Throwable t) {
+                if (new AppUtility(getActivity()).checkInternet()) {
 
+                } else {
+                    Toast.makeText(getActivity(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -330,7 +347,12 @@ mprogress.setVisibility(View.VISIBLE);
 
             @Override
             public void onFailure(Call<ResponseDistricts> call, Throwable t) {
+                if (new AppUtility(getActivity()).checkInternet()) {
 
+                } else {
+                    Toast.makeText(getActivity(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

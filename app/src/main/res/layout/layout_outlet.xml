@@ -16,6 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <RelativeLayout
+            android:id="@+id/alphalayt"
+            android:layout_width="match_parent"
+            android:background="#000000"
+            android:alpha=".2"
+            android:layout_height="match_parent"></RelativeLayout>
+
+
         <LinearLayout
             android:layout_marginBottom="2dp"
             android:orientation="vertical"
@@ -30,6 +38,7 @@
                 <ImageView
                     android:scaleType="fitXY"
                     android:id="@+id/image"
+
                     android:layout_width="match_parent"
                     android:layout_height="130dp"></ImageView>
 

@@ -2,7 +2,9 @@
 package com.finwin.brahmagiri.fooddelivery.Adapter;
 
 import android.content.Context;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,18 +54,19 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         //getting the product of the specified position
         Products product = productList.get(position);
-        if (position==0){
+        if (position == 0) {
             holder.header.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.header.setVisibility(View.GONE);
         }
 
         //binding the data with the viewholder views
         holder.textViewTitle.setText(product.getProductName());
-        holder.textViewPrice.setText("₹ " + product.getPrice());
+        holder.textViewPrice.setText("₹ " + String.format("%.02f", product.getPrice()));
         holder.textViewQnty.setText("" + product.getQuantity());
         Double subtotal = product.getPrice() * product.getQuantity();
-        holder.textViewSubtotal.setText("₹ " + subtotal);
+        String total = String.format("%.02f", subtotal);
+        holder.textViewSubtotal.setText("₹ " + total);
         //holder.textViewRating.setText(String.valueOf(product.getRating()));
         // holder.textViewPrice.setText(String.valueOf(product.getPrice()));
 
@@ -91,7 +94,7 @@ public class FinalbillAdapter extends RecyclerView.Adapter<FinalbillAdapter.Prod
             textViewSubtotal = itemView.findViewById(R.id.tv_subtotal);
             textViewPrice = itemView.findViewById(R.id.tv_cost);
             textViewDelete = itemView.findViewById(R.id.tv_delete);
-            header=itemView.findViewById(R.id.billheader);
+            header = itemView.findViewById(R.id.billheader);
 
             // imageView = itemView.findViewById(R.id.imageView);
         }

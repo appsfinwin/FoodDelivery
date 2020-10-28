@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.finwin.brahmagiri.fooddelivery.ActivityMain;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchAddress;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -150,7 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapView = mapFragment.getView();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
-        Places.initialize(MapsActivity.this, "AIzaSyADTX6MqUTZYV3kox7HEOEhHEpTlXP3ouA");
+        Places.initialize(MapsActivity.this, "AIzaSyCbC3NoQAKrMUj-h6IclKNC9mzaLJtNl_o");
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
         //  remit(token);
@@ -311,6 +312,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 LocalPreferences.storeStringPreference(getApplicationContext(), "currentlocation", address + "," + city + " ");
                                                 LocalPreferences.storeStringPreference(getApplicationContext(), "latitude", String.valueOf(currentMarkerLocation.latitude));
                                                 LocalPreferences.storeStringPreference(getApplicationContext(), "longitude", String.valueOf(currentMarkerLocation.longitude));
+                                                startActivity(new Intent(getApplicationContext(), ActivityMain.class));
+
                                                 finish();
                                             } else if (Flag.equalsIgnoreCase("YES")) {
                                                 Log.d("TAG", "onClick: " + "yes");

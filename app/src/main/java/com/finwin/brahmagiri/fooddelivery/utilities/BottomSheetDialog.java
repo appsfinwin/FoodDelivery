@@ -110,14 +110,18 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
             public void onClick(View view) {
                 laddress.setError(null);
                 lstrret.setError(null);
+                EdFloor.setError(null);
                 String vaAdderss = Edaddress.getText().toString();
                 String vaArea = Edlocality.getText().toString();
+             String landmark=   EdFloor.getText().toString();
                 if (vaAdderss.equalsIgnoreCase("")) {
 
                     laddress.setError("Field Required");
                 } else if (vaArea.equalsIgnoreCase("")) {
 
                     lstrret.setError("Field Required");
+                } else  if(landmark.equalsIgnoreCase("")){
+                    EdFloor.setError("Field Required");
                 } else {
                     LocalPreferences.storeStringPreference(getActivity(), "delcurrentlocation", EdFloor.getText().toString() + " " + Edaddress.getText().toString() + "," + Edlocality.getText().toString() + " ");
 

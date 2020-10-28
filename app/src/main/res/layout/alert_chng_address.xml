@@ -156,7 +156,7 @@
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:spinnerMode="dialog"
-                    android:prompt="@string/hint_resource"
+                    android:prompt="@string/hint_state"
 
 
                     android:id="@+id/ed_state"
@@ -195,7 +195,7 @@
 
                     <androidx.appcompat.widget.AppCompatSpinner
                         android:spinnerMode="dialog"
-                        android:prompt="@string/hint_resource"
+                        android:prompt="@string/hint_district"
 
 
                         android:id="@+id/ed_district"

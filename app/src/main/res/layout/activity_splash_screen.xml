@@ -7,12 +7,28 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/logoapp"
         android:src="@drawable/logoapp"
         android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
 
     </ImageView>
+    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+        android:layout_width="wrap_content"
+        android:layout_below="@id/logoapp"
+        android:textSize="20sp"
+        android:textColor="#1e1e1e"
+        android:text="FTM ONLINE"
+
+
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+
+    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
     <TextView
         android:layout_width="wrap_content"
         android:id="@+id/tvversion"

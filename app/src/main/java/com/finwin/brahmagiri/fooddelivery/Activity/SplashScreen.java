@@ -2,29 +2,45 @@ package com.finwin.brahmagiri.fooddelivery.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finwin.brahmagiri.fooddelivery.ActivityInitial;
 import com.finwin.brahmagiri.fooddelivery.ActivityMain;
+import com.finwin.brahmagiri.fooddelivery.FragProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCheckVersion;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.BuildConfig;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -56,9 +72,6 @@ public class SplashScreen extends AppCompatActivity {
         TextView tvver = findViewById(R.id.tvversion);
         tvver.setText("" + versionName);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-
-        dofetchVersion();
-
 
     }
 
@@ -112,23 +125,20 @@ public class SplashScreen extends AppCompatActivity {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
+
                         if (report.areAllPermissionsGranted()) {
-                            String currentlocation = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "currentlocation");
+                            dologin();
 
-                            if (currentlocation != null && !currentlocation.equals("")) {
-                                //dologin();
-                                getDeviceLocation();
-                            } else {
 
-                                getDeviceLocation();
-
-                            }
-
+                        }else{
+                            showSettingsDialog();
                         }
 
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             // permission is denied permenantly, navigate user to app settings
+
+
                         }
                     }
 
@@ -141,6 +151,37 @@ public class SplashScreen extends AppCompatActivity {
                 .check();
     }
 
+    private void showSettingsDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SplashScreen.this);
+        builder.setTitle("Need Permissions");
+        builder.setCancelable(false);
+
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+
+
+    }
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
+    }
 
     @SuppressLint("MissingPermission")
     private void getDeviceLocation() {
@@ -174,8 +215,8 @@ public class SplashScreen extends AppCompatActivity {
                                 LocalPreferences.storeStringPreference(getApplicationContext(), "latitude", String.valueOf(location.getLatitude()));
                                 LocalPreferences.storeStringPreference(getApplicationContext(), "longitude", String.valueOf(location.getLongitude()));
                                 LocalPreferences.storeStringPreference(getApplicationContext(), "dellatitude", String.valueOf(location.getLatitude()));
-                                LocalPreferences.storeStringPreference(getApplicationContext(), "dellongitude",String.valueOf(location.getLongitude()));
-                                dologin();
+                                LocalPreferences.storeStringPreference(getApplicationContext(), "dellongitude", String.valueOf(location.getLongitude()));
+
 
 
                             } catch (IOException e) {
@@ -189,25 +230,69 @@ public class SplashScreen extends AppCompatActivity {
 
     public void dologin() {
         final boolean islooged = LocalPreferences.retrieveBooleanPreferences(getApplicationContext(), "isLoggedin");
-
         if (islooged) {
             Intent i = new Intent(getApplicationContext(),
-                    ActivityMain.class);
-            //Intent is used to switch from one activity to another.
-
+                    FetchCurrentLocation.class);
             startActivity(i);
-            //invoke the SecondActivity.
-
             finish();
         } else {
             Intent i = new Intent(getApplicationContext(),
                     ActivityInitial.class);
-            //Intent is used to switch from one activity to another.
-
             startActivity(i);
-            //invoke the SecondActivity.
-
             finish();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (new AppUtility(SplashScreen.this).checkInternet()) {
+            dofetchVersion();
+        } else {
+            Toast.makeText(getApplicationContext(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+    private void checkWhetherLocationSettingsAreSatisfied() {
+
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        final LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest);
+        builder.setAlwaysShow(true);
+        builder.setNeedBle(true);
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                Log.d("Loc", "onSuccess() called with: locationSettingsResponse = [" + locationSettingsResponse + "]");
+                // hasLocationPermission();
+
+            }
+        });
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Loc", "onSuccess --> onFailure() called with: e = [" + e.getMessage() + "]");
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(SplashScreen.this,
+                                51);
+                    } catch (IntentSender.SendIntentException es) {
+
+                        es.printStackTrace();
+                    }
+                }
+
+            }
+        });
     }
 }

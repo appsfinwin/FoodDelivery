@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#FFF"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:visibility="gone"
+        android:gravity="center"
+        android:background="@drawable/green_rect"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:textSize="17sp"
+
+            android:text="OUR POLICIES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+        android:layout_width="match_parent"
+        android:textColor="#2d2d2d"
+        android:layout_marginTop="18dp"
+        android:textStyle="bold"
+
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="If you want to cancel, you can do it within 180 seconds \n[3 minutes] in the invoice screen. "
+        android:layout_height="wrap_content">
+
+    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:textColor="#2d2d2d"
+        android:layout_marginLeft="15dp"
+        android:textStyle="bold"
+        android:layout_marginRight="15dp"
+        android:text="For the Pre-Paid orders, the refunding may take up to a weeks time [7 days]."
+        android:layout_height="wrap_content">
+
+    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:text="PROCEED"
+        android:background="#1e1e1e"
+
+        android:id="@+id/btn_proceed"
+        android:textColor="#FFF"
+        android:layout_marginRight="15dp"
+
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </Button>
+    <Button
+        android:layout_marginTop="15dp"
+        android:text="CANCEL"
+        android:background="#1e1e1e"
+        android:id="@+id/btn_cancel"
+        android:textColor="#FFF"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </Button>
+</LinearLayout>

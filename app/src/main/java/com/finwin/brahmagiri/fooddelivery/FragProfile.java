@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Activity.UpdateMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Responses.District;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseDistricts;
@@ -32,6 +34,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.finwin.brahmagiri.fooddelivery.Responses.States;
 import com.finwin.brahmagiri.fooddelivery.Responses.Zone;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -49,7 +52,7 @@ import retrofit2.Response;
 
 import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 
-public class FragProfile extends Fragment {
+public class FragProfile extends AppCompatActivity {
     FragProfileBinding binding;
     View rootview;
     Button btnLogin;
@@ -66,16 +69,16 @@ public class FragProfile extends Fragment {
     ArrayAdapter<Zone> adapters;
     ArrayAdapter<District> adapterdistrict;
     ArrayAdapter<States> adapterstate;
-    String selecteditem,selecteditemdistrict;
+    String selecteditem, selecteditemdistrict;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         // View view= rootview = inflater.inflate(R.layout.frag_profile, container, false);
+        binding = DataBindingUtil.setContentView(this, R.layout.frag_profile);
 
-        binding = DataBindingUtil.inflate(
-                inflater, R.layout.frag_profile, container, false);
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(FragProfile.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -83,7 +86,7 @@ public class FragProfile extends Fragment {
         binding.imgvMobedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), UpdateMobActivity.class));
+                startActivity(new Intent(getApplicationContext(), UpdateMobActivity.class).putExtra("data",binding.tvMobile.getText().toString()));
             }
         });
         dataset = new ArrayList<>();
@@ -92,8 +95,10 @@ public class FragProfile extends Fragment {
         binding.ibtnBackProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                assert getFragmentManager() != null;
-                getFragmentManager().popBackStack();
+               /* assert getFragmentManager() != null;
+                getFragmentManager().popBackStack();*/
+                startActivity(new Intent(getApplicationContext(), ActivityMain.class));
+                finish();
             }
         });
 
@@ -112,16 +117,15 @@ public class FragProfile extends Fragment {
             }
         });
 
-        return binding.getRoot();
     }
 
     private void doFetch() {
         progressDialog.show();
-        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("partner_id", Integer.parseInt(userid));
-        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<ResponseFetchProfile> call = apiService.doFetchProfile(database, mAccesstoken, jsonObject);
@@ -142,6 +146,9 @@ public class FragProfile extends Fragment {
                     binding.tvEmail.setText(email);
                     binding.tvMobile.setText(mobile);
                     binding.tvZone.setText(response.body().getZone());
+                    LocalPreferences.storeStringPreference(getApplicationContext(), "localzone", response.body().getZone());
+                    LocalPreferences.storeStringPreference(getApplicationContext(), "localdist", response.body().getDistrict());
+
                     String address = response.body().getHouseNo() + " ," + response.body().getStreet() + " ," + response.body().getCity() + "  ,"
                             + response.body().getDistrict() + " ,"
                             + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
@@ -158,12 +165,6 @@ public class FragProfile extends Fragment {
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-    }
 
     private void LoadZone() {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
@@ -174,12 +175,26 @@ public class FragProfile extends Fragment {
                 if (response.body() != null && response.code() == 200) {
                     Signup_Zone signup_zone = response.body();
                     dataset = signup_zone.getZones();
-                    adapters = new ArrayAdapter<Zone>(getActivity(), android.R.layout.simple_spinner_item, dataset);
+                    adapters = new ArrayAdapter<Zone>(getApplicationContext(), android.R.layout.simple_spinner_item, dataset);
                     adapters.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(adapters);
 
+                    String zone = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "localzone");
+
+                    for (int i = 0; i < dataset.size(); i++) {
+                        String id = dataset.get(i).getName();
+                        if (id .equalsIgnoreCase(zone)) {
+                            Log.e("zoneindex", "onCreateView: " + i + zone);
+                            spinner.setSelection(i, false);
+
+
+                            //  fechoutletbumyZOne(defaultzone);
+                        }
+                    }
+
+
                 } else {
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -192,8 +207,8 @@ public class FragProfile extends Fragment {
 
     private void ChangeAdress(String addrsType) {
 
-        AlertDialog.Builder b = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        String addTest = "Change " + addrsType + " Address";
+        AlertDialog.Builder b = new AlertDialog.Builder(FragProfile.this);
+        String addTest = "Edit Profile";
         b.setTitle(addTest);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_chng_address, null);
@@ -229,7 +244,7 @@ public class FragProfile extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != -1) {
-                String    selecteditemstate = Objects.requireNonNull(adapterstate.getItem(i)).getId().toString();
+                    String selecteditemstate = Objects.requireNonNull(adapterstate.getItem(i)).getId().toString();
                     String las = adapterstate.getItem(i).getId().toString();
                     Log.d("onItemSelected", "onItemSelected: " + i);
                     LoadDistricts(selecteditemstate);
@@ -273,7 +288,7 @@ public class FragProfile extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Log.e("onClick: ", "+++++");
                 doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
-                        edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString(), selecteditem,selecteditemdistrict);
+                        edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString(), selecteditem, selecteditemdistrict);
             }
         });
 
@@ -305,8 +320,8 @@ public class FragProfile extends Fragment {
     }
 
     private void doUpdateProfile(String edname, String edmobile, String edlandmark,
-                                 String edaddress, String edstreet, String edcity, String edemail, String edpin, String selecteditem,String selecteditemdistrict) {
-        String userid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
+                                 String edaddress, String edstreet, String edcity, String edemail, String edpin, String selecteditem, String selecteditemdistrict) {
+        String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("partner_id", Integer.parseInt(userid));
@@ -321,13 +336,15 @@ public class FragProfile extends Fragment {
         jsonObject.addProperty("zone", Integer.parseInt(selecteditem));
         jsonObject.addProperty("district", Integer.parseInt(selecteditemdistrict));
 
-        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
+        String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         Call<JsonObject> call = apiService.doUpdateProfile(database, mAccesstoken, jsonObject);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.body() != null && response.code() == 200) {
+                    LocalPreferences.storeStringPreference(getApplicationContext(), "zone", selecteditem.toString());
+
                     doFetch();
 
                 }
@@ -335,7 +352,13 @@ public class FragProfile extends Fragment {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                if (new AppUtility(FragProfile.this).checkInternet()) {
 
+                } else {
+
+                    Toast.makeText(FragProfile.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -345,6 +368,7 @@ public class FragProfile extends Fragment {
         super.onResume();
         doFetch();
     }
+
     private void LoadStates() {
 
         ApiService apiService = APIClient.getClient().create(ApiService.class);
@@ -355,21 +379,28 @@ public class FragProfile extends Fragment {
                 if (response.body() != null && response.code() == 200) {
                     ResponseStates signup_zone = response.body();
                     datasetstates = signup_zone.getStates();
-                    adapterstate = new ArrayAdapter<States>(getActivity(), android.R.layout.simple_spinner_item, datasetstates);
+                    adapterstate = new ArrayAdapter<States>(getApplicationContext(), android.R.layout.simple_spinner_item, datasetstates);
                     adapterstate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerstate.setAdapter(adapterstate);
 
                 } else {
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseStates> call, Throwable t) {
+                if (new AppUtility(FragProfile.this).checkInternet()) {
 
+                } else {
+
+                    Toast.makeText(FragProfile.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
+
     private void LoadDistricts(String selecteditemstate) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("state", Integer.parseInt(selecteditemstate));
@@ -382,12 +413,28 @@ public class FragProfile extends Fragment {
                 if (response.body() != null && response.code() == 200) {
                     ResponseDistricts signup_zone = response.body();
                     datasetdistrict = signup_zone.getDistricts();
-                    adapterdistrict = new ArrayAdapter<District>(getActivity(), android.R.layout.simple_spinner_item, datasetdistrict);
+                    adapterdistrict = new ArrayAdapter<District>(getApplicationContext(), android.R.layout.simple_spinner_item, datasetdistrict);
                     adapterdistrict.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerdistrict.setAdapter(adapterdistrict);
+                    String dist = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "localdist");
+                    for (int i = 0; i < datasetdistrict.size(); i++) {
+                        String id = datasetdistrict.get(i).getName();
+                        if (id .equalsIgnoreCase(dist)) {
+                            Log.e("zoneindex", "onCreateView: " + i + dist);
+                            spinnerdistrict.setSelection(i, false);
+
+
+
+                        }
+                    }
+
+
+
+
+
 
                 } else {
-                    Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -396,5 +443,12 @@ public class FragProfile extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(), ActivityMain.class));
+        finish();
     }
 }

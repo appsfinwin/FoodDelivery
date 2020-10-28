@@ -12,6 +12,7 @@ import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityChangepasswordBinding;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -87,7 +88,13 @@ ActivityChangepasswordBinding binding;
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 dismissdialog();
+                if (new AppUtility(Changepassword.this).checkInternet()) {
 
+                } else {
+
+                    Toast.makeText(Changepassword.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

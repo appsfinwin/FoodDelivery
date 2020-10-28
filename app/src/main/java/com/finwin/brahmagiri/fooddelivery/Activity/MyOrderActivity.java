@@ -24,6 +24,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseMyOrder;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.utilities.PaginationScrollListener;
 import com.google.gson.JsonObject;
@@ -43,7 +44,6 @@ public class MyOrderActivity extends AppCompatActivity {
     private MyOrdersAdapter bAdapter;
     LinearLayoutManager linearLayoutManager;
     FrameLayout frameLayout;
-
     private static final int PAGE_START = 1;
     private boolean isLoading = false;
     private boolean isLastPage = false;
@@ -70,9 +70,7 @@ public class MyOrderActivity extends AppCompatActivity {
         mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         OrderRecycler.setLayoutManager(linearLayoutManager);
-
         OrderRecycler.setItemAnimator(new DefaultItemAnimator());
-
         OrderRecycler.setAdapter(bAdapter);
 
 
@@ -121,8 +119,6 @@ public class MyOrderActivity extends AppCompatActivity {
     }
 
     private void loadNextPage() {
-
-
         ApiService apiService = APIClient.getClient().create(ApiService.class);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("consumer_id", Integer.parseInt(partnerid));
@@ -132,7 +128,6 @@ public class MyOrderActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseMyOrder>() {
             @Override
             public void onResponse(Call<ResponseMyOrder> call, Response<ResponseMyOrder> response) {
-
                 if (response.body() != null && response.code() == 200) {
                     ResponseMyOrder responseMyOrder = response.body();
                     bAdapter.removeLoadingFooter();
@@ -156,7 +151,13 @@ public class MyOrderActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseMyOrder> call, Throwable t) {
+                if (new AppUtility(MyOrderActivity.this).checkInternet()) {
 
+                } else {
+
+                    Toast.makeText(MyOrderActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 

@@ -15,6 +15,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon,android:allowBackup">
+        <activity android:name="com.finwin.brahmagiri.fooddelivery.FragProfile"></activity>
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.FetchCurrentLocation"></activity>
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.MyOrderActivity" />
         <!--
@@ -52,6 +53,7 @@
         <activity
             android:name="com.finwin.brahmagiri.fooddelivery.ActivityInitial"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name="com.finwin.brahmagiri.fooddelivery.Activity.PaymentFailureActivity" />
         <activity

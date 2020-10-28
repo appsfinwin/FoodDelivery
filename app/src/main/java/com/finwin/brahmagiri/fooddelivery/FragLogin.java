@@ -20,7 +20,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.finwin.brahmagiri.fooddelivery.Activity.EnterMobActivity;
 import com.finwin.brahmagiri.fooddelivery.Activity.FetchCurrentLocation;
+import com.finwin.brahmagiri.fooddelivery.Activity.SplashScreen;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseLogin;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -105,7 +107,7 @@ public class FragLogin extends Fragment {
 
     private void doLogin(String username, String password) {
         ApiService apiService = APIClient.getClient().create(ApiService.class);
-        Call<ResponseLogin> call = apiService.dologin(database, username, password, "consumer");
+        Call<ResponseLogin> call = apiService.dologin(database,username, password, "consumer");
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, retrofit2.Response<ResponseLogin> response) {
@@ -119,10 +121,11 @@ public class FragLogin extends Fragment {
 
                         LocalPreferences.storeBooleanPreference(getActivity(), "isLoggedin", true);
                         LocalPreferences.storeStringPreference(getActivity(), "userid", response.body().getUid().toString());
-                       String lat= LocalPreferences.retrieveStringPreferences(getActivity(), "latitude");
+                        String lat= LocalPreferences.retrieveStringPreferences(getActivity(), "latitude");
                         String longi=   LocalPreferences.retrieveStringPreferences(getActivity(), "longitude");
                         if (lat!=null&&!lat.equalsIgnoreCase("")){
-                            startActivity(new Intent(getContext(), ActivityMain.class));
+                            //startActivity(new Intent(getContext(), ActivityMain.class));
+                            startActivity(new Intent(getContext(), FetchCurrentLocation.class));
                             Objects.requireNonNull(getActivity()).finish();
                         }else{
                             startActivity(new Intent(getContext(), FetchCurrentLocation.class));
@@ -146,7 +149,12 @@ public class FragLogin extends Fragment {
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
                 Toast.makeText(getActivity(), "Login Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                if (new AppUtility(getActivity()).checkInternet()) {
 
+                } else {
+                    Toast.makeText(getActivity(), "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });

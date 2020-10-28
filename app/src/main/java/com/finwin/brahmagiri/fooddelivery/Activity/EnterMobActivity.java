@@ -77,7 +77,13 @@ public class EnterMobActivity extends BaseActivity {
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 dismissdialog();
+                if (new AppUtility(EnterMobActivity.this).checkInternet()) {
 
+                } else {
+
+                    Toast.makeText(EnterMobActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }

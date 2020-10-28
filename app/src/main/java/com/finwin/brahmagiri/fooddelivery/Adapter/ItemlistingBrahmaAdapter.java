@@ -74,6 +74,19 @@ public class ItemlistingBrahmaAdapter extends RecyclerView.Adapter<ItemlistingBr
                 .load(result.getProduct_image_url())
                 .placeholder(R.drawable.noimage)
                 .into(holder.image);
+    /*  if (position==0||position==1||position==2||position==3||position==4){
+          Glide.with(context)
+                  .load("http://35.196.223.10:8084//assets/ItemImages/Aashirvaad%20Atta%20-%20Sugar%20Release%20Control%20Large-1.jpg")
+                  .placeholder(R.drawable.noimage)
+                  .into(holder.image);
+      }else{
+          Glide.with(context)
+                  .load("http://35.196.223.10:8084//assets/ItemImages/Safe%20Harvest%20Large-1.jpg")
+                  .placeholder(R.drawable.noimage)
+                  .into(holder.image);
+      }
+*/
+
 
 
         holder.tvPrice.setText("" + result.getPrice());

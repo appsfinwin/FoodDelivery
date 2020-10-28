@@ -25,6 +25,10 @@ public class ResponseFetchAddress {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("distance")
+    @Expose
+    private Double distance;
+
 
     public String getDeliveryLocation() {
         return deliveryLocation;
@@ -82,4 +86,11 @@ public class ResponseFetchAddress {
         this.message = message;
     }
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 }

@@ -333,7 +333,7 @@
                             android:checked="true"
                             android:id="@+id/collectionfromoutlet"
                             android:layout_width="wrap_content"
-                            android:text="Pay at Outlet "
+                            android:text="Collect from Outlet "
                             android:layout_height="wrap_content">
 
                         </androidx.appcompat.widget.AppCompatRadioButton>

@@ -58,6 +58,11 @@ public class ResponseOrderDetails {
     @Expose
     private String remaining_time;
 
+    @SerializedName("order_status")
+    @Expose
+    private String order_status;
+
+
 
     public String getStatus() {
         return status;
@@ -190,5 +195,13 @@ public class ResponseOrderDetails {
 
     public void setRemaining_time(String remaining_time) {
         this.remaining_time = remaining_time;
+    }
+
+    public String getOrder_status() {
+        return order_status;
+    }
+
+    public void setOrder_status(String order_status) {
+        this.order_status = order_status;
     }
 }

@@ -9,6 +9,12 @@ public class ResponseFetchOutlet {
     @SerializedName("message")
     @Expose
     private String message;
+
+    @SerializedName("total_page")
+    @Expose
+    private int total_page;
+
+
     @SerializedName("id")
     @Expose
     private String id;
@@ -40,4 +46,11 @@ public class ResponseFetchOutlet {
         this.outlets = outlets;
     }
 
+    public int getTotal_page() {
+        return total_page;
+    }
+
+    public void setTotal_page(int total_page) {
+        this.total_page = total_page;
+    }
 }

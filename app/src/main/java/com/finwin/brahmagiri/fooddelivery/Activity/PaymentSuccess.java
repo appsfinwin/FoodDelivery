@@ -28,6 +28,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseBrahmaCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseCancelOrder;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseInvoiceGen;
 import com.finwin.brahmagiri.fooddelivery.Responses.Tax;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -42,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,13 +60,15 @@ public class PaymentSuccess extends AppCompatActivity {
     ProgressDialog mProgressDialog;
     LinearLayout mainparent;
     String transactionid;
+    Double finalsum=0.0;
     String paymentmode;
     ProgressDialog progressDialog;
     final String[][] DATA_TO_SHOW = {{"This", "is", "a", "test"},
             {"and", "a", "second", "test"}};
     TextView tvadderss, tvtotalamount2, tvinvoicedate, tnxidno;
     NestedScrollView bills;
-    TextView outletname, outletphoneno, outletaddress, Tvtimer;
+    TextView outletname, outletphoneno, outletaddress;
+    Button Tvtimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +83,13 @@ public class PaymentSuccess extends AppCompatActivity {
         Textviewsgstname = findViewById(R.id.tv_gstname2);
         TextviewSgstvalue = findViewById(R.id.tv_gstvalue2);
         Tvtimer = findViewById(R.id.tvtimer);
-
         tvadderss = findViewById(R.id.tv_address);
         tvinvoicedate = findViewById(R.id.tv_invoicedate);
         tnxidno = findViewById(R.id.tnxn);
         bills = findViewById(R.id.billparent);
-
         outletaddress = findViewById(R.id.outletaddress);
         outletname = findViewById(R.id.outletname);
         outletphoneno = findViewById(R.id.outletphone);
-
-
         tvtotalamount2 = findViewById(R.id.total_amt2);
         TextViewDcharge = findViewById(R.id.tv_deliverycharges);
         mainparent = findViewById(R.id.mainparent);
@@ -108,9 +108,10 @@ public class PaymentSuccess extends AppCompatActivity {
         transactionid = getIntent().getStringExtra("trnxnid");
         paymentmode = getIntent().getStringExtra("paymode");
         if (!transactionid.equalsIgnoreCase("null")) {
+            tnxidno.setVisibility(View.VISIBLE);
             tnxidno.setText("Transaction Reference No ." + transactionid);
         } else {
-            tnxidno.setText("");
+            tnxidno.setVisibility(View.GONE);
         }
 
 
@@ -145,7 +146,29 @@ public class PaymentSuccess extends AppCompatActivity {
         Tvtimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doCancelOrder();
+
+
+                new SweetAlertDialog(PaymentSuccess.this, SweetAlertDialog.NORMAL_TYPE)
+                        .setTitleText("\nCancel Order!!")
+                        .setContentText("Are you sure want cancel ?")
+                        .setConfirmText("Yes")
+                        .showCancelButton(true)
+                        .setCancelText("No")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.dismiss();
+                                doCancelOrder();
+                            }
+                        })
+                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismiss();
+                            }
+                        }).show();
+
+
             }
         });
 
@@ -165,74 +188,70 @@ public class PaymentSuccess extends AppCompatActivity {
                 mProgressDialog.dismiss();
                 if (response.body() != null && response.code() == 200) {
                     ResponseInvoiceGen responseInvoiceGen = response.body();
-
                     String invoiceid = response.body().getInvoiceNo().toString();
                     if (invoiceid != null) {
                         List<Products> datasets = responseInvoiceGen.getProducts();
+
                         List<Tax> dataset = responseInvoiceGen.getTax();
                         if (!dataset.isEmpty() && dataset.size() != 0) {
                             FinalbillAdapter productAdapter = new FinalbillAdapter(PaymentSuccess.this, datasets);
                             recyclerView.setAdapter(productAdapter);
                             tvadderss.setText(response.body().getConsumer_delivery_loc());
                             bills.setVisibility(View.VISIBLE);
-                            Tvtimer.setVisibility(View.VISIBLE);
-                            long remainingtime = Long.parseLong(response.body().getRemaining_time());
-                            CountDownTimer countDownTimer = new CountDownTimer(remainingtime, 1000) {
-                                public void onTick(long millisUntilFinished) {
-                                    long millis = millisUntilFinished;
-                                    //Convert milliseconds into hour,minute and seconds
-                                    String hms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-                                    Tvtimer.setText("Click here to cancel your order in " + hms+ " mins");//set text
-                                }
 
-                                public void onFinish() {
-                                    Tvtimer.setVisibility(View.GONE); //On finish change timer text
-                                }
-                            }.start();
+                            if (paymentmode.equalsIgnoreCase("cod")) {
+                                Tvtimer.setVisibility(View.VISIBLE);
+                                long remainingtime = Long.parseLong(response.body().getRemaining_time());
+                                CountDownTimer countDownTimer = new CountDownTimer(remainingtime, 1000) {
+                                    public void onTick(long millisUntilFinished) {
+                                        long millis = millisUntilFinished;
+                                        //Convert milliseconds into hour,minute and seconds
+                                        String hms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                                        Tvtimer.setText(" CANCEL ORDER " + hms + " mins");//set text
+                                    }
+
+                                    public void onFinish() {
+                                        Tvtimer.setVisibility(View.GONE); //On finish change timer text
+                                    }
+                                }.start();
+                            }
 
 
                             Toast.makeText(getApplicationContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             String totalamt = response.body().getTotalAmount().toString();
+                            String vatotalamt = String.format("%.02f", response.body().getTotalAmount());
+
+
+
+
                             String sub_total = response.body().getSubtotal().toString();
-                            String delcharge = response.body().getDelivery_charge().toString();
+                            String delcharge = String.format("%.02f", response.body().getDelivery_charge());
+
+
+                            String vasubtotal = String.format("%.02f", response.body().getSubtotal());
+
+
                             if (dataset.size() == 1) {
                                 Textviewsgstname.setText(dataset.get(0).getTax());
-                                TextviewSgstvalue.setText("" + dataset.get(0).getTaxValue());
+                                TextviewSgstvalue.setText("" + String.format("%.02f", dataset.get(0).getTaxValue()));
                             }
                             if (dataset.size() == 2) {
                                 Textviewsgstname.setText(dataset.get(0).getTax());
-                                TextviewSgstvalue.setText("" + dataset.get(0).getTaxValue());
+                                TextviewSgstvalue.setText("" + String.format("%.02f", dataset.get(0).getTaxValue()));
                                 Textviewcgstname.setText(dataset.get(1).getTax());
-                                Textviewcgstvalue.setText("" + dataset.get(1).getTaxValue());
+                                Textviewcgstvalue.setText("" +String.format("%.02f", dataset.get(1).getTaxValue()));
                             }
-
-                  /*          for (int i = 0; i < dataset.size(); i++) {
-                                String taxname = dataset.get(i).getTax();
-                             *//*   if (taxname.equalsIgnoreCase("SGST@2.5%")) {*//*
-                                    Textviewsgstname.setText(dataset.get(i).getTax());
-                                    TextviewSgstvalue.setText("" + dataset.get(i).getTaxValue());
-                                  //  Textviewcgstname.setVisibility(View.GONE);
-                                  //  Textviewcgstvalue.setVisibility(View.GONE);
-                              *//*  } else if (taxname.equalsIgnoreCase("CGST@2.5%")) {*//*
-                                    Textviewcgstname.setText(dataset.get(i).getTax());
-                                    Textviewcgstvalue.setText("" + dataset.get(i).getTaxValue());
-                                   // Textviewsgstname.setVisibility(View.GONE);
-                                  //  TextviewSgstvalue.setVisibility(View.GONE);
-                              //  }
-
-
-                            }*/
 
 
                             tvinvoicedate.setText("Date & Time : " + response.body().getDate_time());
-                            tvtotalamount2.setText("₹ " + totalamt);
-                            TextViewsubtotal.setText("₹ " + sub_total);
-                            TextViewtotal.setText("₹ " + totalamt);
+                            tvtotalamount2.setText("₹ " + vatotalamt);
+                            TextViewsubtotal.setText("₹ " + vasubtotal);
+                            TextViewtotal.setText("₹ " + vatotalamt);
                             TextViewDcharge.setText("₹ " + delcharge);
                             TextViewinvoiceid.setText("Invoice No. : " + invoiceid);
-                            outletaddress.setText("Outlet address : " + response.body().getOutlet_addr());
-                            outletphoneno.setText("Outlet phone : " + response.body().getOutlet_mobile());
-                            outletname.setText("Outlet name : " + response.body().getOutlet_name());
+                            outletaddress.setText("" + response.body().getOutlet_addr());
+                            outletphoneno.setText("Phone : " + response.body().getOutlet_mobile());
+                            outletname.setText("Outlet : " + response.body().getOutlet_name());
 
 
                             //  LocalPreferences.clearPreferences(getApplicationContext());
@@ -245,7 +264,6 @@ public class PaymentSuccess extends AppCompatActivity {
 
                 } else {
                     mainparent.setVisibility(View.GONE);
-
                     Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_SHORT).show();
                 }
 
@@ -255,6 +273,14 @@ public class PaymentSuccess extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseInvoiceGen> call, Throwable t) {
                 mProgressDialog.dismiss();
+
+                if (new AppUtility(PaymentSuccess.this).checkInternet()) {
+
+                } else {
+                    Toast.makeText(PaymentSuccess.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
+
 
             }
         });
@@ -319,6 +345,7 @@ public class PaymentSuccess extends AppCompatActivity {
         Date date = new Date();
         return dateFormat.format(date);
     }
+
     public void doCancelOrder() {
         String mAccesstoken = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "Accesstoken");
         JsonObject assign = new JsonObject();
@@ -335,9 +362,9 @@ public class PaymentSuccess extends AppCompatActivity {
                 if (response.body() != null && response.code() == 200) {
                     Tvtimer.setVisibility(View.GONE);
                     String status = response.body().getStatus();
-                    if (status.equalsIgnoreCase("stock_return_main")) {
-                       /* startActivity(new Intent(getApplicationContext(), AllOrderActivity.class));
-                        finish()*/;
+                    if (status.equalsIgnoreCase("done")) {
+                        startActivity(new Intent(getApplicationContext(), ActivityMain.class));
+                        finish();
 
                     }
 

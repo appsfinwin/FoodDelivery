@@ -23,4 +23,8 @@
     <string name="hint_resource">Select Zone</string>
     <string name="default_notification_channel_id">abc</string>
     <string name="title_activity_maps">Map</string>
+    <string name="hint_district">Select District</string>
+    <string name="hint_state">Select State</string>
+    <string name="hint_Selectdistrict">Select District</string>
+    <string name="selectstate">Select State</string>
 </resources>

@@ -21,6 +21,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.ResponseFetchCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.FetchCart.TableSummaryCart;
 import com.finwin.brahmagiri.fooddelivery.Responses.ProductEntryModel;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProducts;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
 import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
@@ -293,7 +294,12 @@ public class ItemListingActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseFetchProducts> call, Throwable t) {
+                if (new AppUtility(ItemListingActivity.this).checkInternet()) {
 
+                } else {
+                    Toast.makeText(ItemListingActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 

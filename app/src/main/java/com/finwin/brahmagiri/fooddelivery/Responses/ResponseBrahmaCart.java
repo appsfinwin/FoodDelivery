@@ -19,6 +19,16 @@ public class ResponseBrahmaCart {
     @Expose
     private Double totalAmnt;
 
+    @SerializedName("distance")
+    @Expose
+    private Double distance;
+
+
+
+
+
+
+
     public String getMessage() {
         return message;
     }
@@ -52,4 +62,11 @@ public class ResponseBrahmaCart {
     }
 
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 }

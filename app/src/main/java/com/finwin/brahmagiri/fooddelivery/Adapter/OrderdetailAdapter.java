@@ -60,10 +60,10 @@ public class OrderdetailAdapter extends RecyclerView.Adapter<OrderdetailAdapter.
 
         //binding the data with the viewholder views
         holder.textViewTitle.setText(product.getProductName());
-        holder.textViewPrice.setText("₹ " + product.getPrice());
+        holder.textViewPrice.setText("₹ " + String.format("%.02f", product.getPrice()));
         holder.textViewQnty.setText("" +  Math.round(product.getQuantity()));
         Double subtotal = product.getPrice() * product.getQuantity();
-        holder.textViewSubtotal.setText("₹ " + (new DecimalFormat("##.##").format(subtotal)));
+        holder.textViewSubtotal.setText("₹ " + String.format("%.02f", subtotal));
 
 
     }

@@ -26,6 +26,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseRemove;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseStates;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseToken;
 import com.finwin.brahmagiri.fooddelivery.Responses.Response_Signup;
+import com.finwin.brahmagiri.fooddelivery.Responses.ResponsenumUpdate;
 import com.finwin.brahmagiri.fooddelivery.Responses.Signup_Zone;
 import com.google.gson.JsonObject;
 
@@ -83,9 +84,9 @@ public interface ApiService {
                                                @Header("database") String database, @Body JsonObject locationPost);
 
 
-    @GET("zone/outlets?")
+    @GET("zone_new/outlets_new?")
     Call<ResponseFetchOutlet> fetchoutletbuzone(@Header("Access-Token") String auth, @Header("database") String database,
-                                                @Query("zone_id") String zone_id,@Query("longitude")String longitude,@Query("latitude")String lattitude);
+                                                @Query("page") String page,@Query("longitude")String longitude,@Query("latitude")String lattitude);
 
     @GET("all_zone/get_zone")
     Call<ResponseFetchZone> fetchzone(@Header("Access-Token") String auth, @Header("database") String database);
@@ -164,7 +165,7 @@ public interface ApiService {
 
     @POST("payment/process")
     Call<ResponsePay> doFetchpayment(@Header("database") String database, @Header("Access-Token") String Access_Token, @Body JsonObject cartbody);
-    @POST("invoice/get_details")
+    @POST("invoice_customer/get_details_customer")
     Call<ResponseOrderDetails> dofetchorderdetails(@Header("Access-Token") String Access_Token,
                                                    @Header("database") String database, @Body JsonObject locationPost);
 
@@ -188,8 +189,8 @@ public interface ApiService {
     Call<ResponseCancelOrder> docancelOrder(@Header("Access-Token") String Access_Token,
                                             @Header("database") String database, @Body JsonObject locationPost);
     @POST("mobile_otp/updation_otp")
-    Call<JsonObject> doSendOtpforUpdation(@Header("Access-Token") String Access_Token,@Header("database") String database,
-                               @Body JsonObject cartbody);
+    Call<ResponsenumUpdate> doSendOtpforUpdation(@Header("Access-Token") String Access_Token, @Header("database") String database,
+                                                 @Body JsonObject cartbody);
 
 
     @POST("number/verification")

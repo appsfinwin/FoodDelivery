@@ -35,7 +35,7 @@ import static com.finwin.brahmagiri.fooddelivery.utilities.Constants.database;
 public class OrderDetails extends AppCompatActivity {
     ActivityOrderDetailsBinding binding;
 
-    String selectedid, billid, status;
+    String selectedid, billid, status,Orderstatus;
     ProgressDialog progressDialog;
 
     @Override
@@ -45,6 +45,7 @@ public class OrderDetails extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_details);
         binding.recyvmyorderdetails.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         String orderid = getIntent().getStringExtra("id");
+        Orderstatus=getIntent().getStringExtra("orderstatus");
         binding.progress.setVisibility(View.VISIBLE);
         status = getIntent().getStringExtra("status");
         Log.e("TAG", "onCreate: " + status);
@@ -103,24 +104,41 @@ public class OrderDetails extends AppCompatActivity {
                     binding.parentlayt.setVisibility(View.VISIBLE);
                     ResponseOrderDetails responseOrderDetails = response.body();
                     List<LineItem> dataset = responseOrderDetails.getLineItems();
-                    binding.tvSubtotal.setText("₹ " + response.body().getSubtotal());
-                    binding.totalAmt.setText("₹ " + response.body().getTotalAmount());
+                    binding.tvSubtotal.setText("₹ " +  String.format("%.02f", response.body().getSubtotal()));
+                    binding.totalAmt.setText("₹ " + String.format("%.02f", response.body().getTotalAmount()));
                     binding.tvTaxamt.setText("₹ " + response.body().getTaxAmount());
+
+
+
                     binding.invoiceId.setText("Invoice Id : " + response.body().getInvoiceNumber());
-                    binding.tvoutname.setText("Outlet Name :" + response.body().getOutletName());
-                    binding.tvoutmobile.setText("Outlet Mobile No. :" + response.body().getOutletMobile());
+                    binding.tvoutname.setText("Outlet :" + response.body().getOutletName());
+                    binding.tvoutmobile.setText("Phone:" + response.body().getOutletMobile());
                     binding.tvCustname.setText("Customer Name : " + response.body().getConsumer_name());
                     binding.date.setText("Date and Time : " + response.body().getDate_time());
+                    binding.Orderstats.setText("Order Status : "+Orderstatus);
 
                     if (response.body().getDelivery_charges().equals("")) {
                         binding.tvDeliverychargess.setText("₹ 0");
                     } else {
-                        binding.tvDeliverychargess.setText("₹ " + response.body().getDelivery_charges());
+                        binding.tvDeliverychargess.setText("₹ " + String.format("%.02f", response.body().getDelivery_charges()));
                     }
                     String paymode = response.body().getPayment_mode();
-                    binding.paymentmode.setText("Payment Mode: " + paymode);
+                    if(paymode.equalsIgnoreCase("cod")){
+                        binding.paymentmode.setText("Payment Mode: Cash on Delivery" );
+
+                    }else{
+                        binding.paymentmode.setText("Payment Mode: Online Payment" );
+
+                    }
                     String collectionmode = response.body().getCollecting_option();
-                    binding.collection.setText("Collection Option : " + collectionmode);
+                    if(collectionmode.equalsIgnoreCase("by_customer")){
+                        binding.collection.setText("Collection Option : Collect from Outlet" );
+
+                    }else{
+                        binding.collection.setText("Collection Option : Home Delivery" );
+
+                    }
+                    binding.outletaddress.setText("");
                     binding.recyvmyorderdetails.setAdapter(new OrderdetailAdapter(getApplicationContext(), dataset));
                     if (!response.body().getStatus().equalsIgnoreCase("cancel") && !response.body().getRemaining_time().equalsIgnoreCase("0")) {
                         binding.tvTimer.setVisibility(View.VISIBLE);

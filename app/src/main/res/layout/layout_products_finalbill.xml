@@ -7,8 +7,8 @@
 
     <ImageView
         android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:src="@drawable/dummychicken"
         android:layout_width="100dp"
         android:layout_height="100dp">
@@ -16,7 +16,9 @@
     </ImageView>
 
     <LinearLayout
-        android:padding="8dp"
+        android:padding="0dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -28,7 +30,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_marginLeft="3dp"
@@ -48,20 +50,9 @@
                     android:layout_weight="1"
 
                     android:text="Item"
+
                     android:textStyle="bold"
-                    android:textSize="14sp" />
-
-                <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
-                    android:textColor="#FFF"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight=".5"
-
-                    android:text="Qty"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
-
+                    android:textSize="11sp" />
 
                 <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                     android:textColor="#FFF"
@@ -70,10 +61,24 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight=".5"
                     android:paddingLeft="5dp"
+                    android:gravity="right"
+                    android:layout_marginBottom="4dp"
 
-                    android:text="Rate"
+                    android:text="Unit Rate"
                     android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:textSize="11sp" />
+                <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+                    android:textColor="#FFF"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight=".5"
+android:gravity="right"
+                    android:text="Qty"
+                    android:textStyle="bold"
+                    android:textSize="11sp" />
+
+
 
 
                 <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
@@ -83,10 +88,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="5dp"
-                   android:gravity="start"
+                    android:gravity="right"
                     android:text="Amount"
                     android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:textSize="11sp" />
 
             </LinearLayout>
 
@@ -95,10 +100,10 @@
 
 
         <LinearLayout
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="0dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -108,44 +113,44 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Beef Curry Cut"
+                android:textSize="15dp" />
+            <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
+                android:textColor="#1e1e1e"
+                android:layout_width="0dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/tv_cost"
+                android:gravity="right"
+
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+
                 android:textSize="15dp" />
 
             <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
                 android:textColor="#1e1e1e"
                 android:layout_width="0dp"
                 android:id="@+id/tv_quantity"
+                android:gravity="right"
 
                 android:layout_height="wrap_content"
 
                 android:layout_weight=".5"
 
-                android:text="10"
                 android:textSize="15dp"/>
 
 
+
+
             <com.finwin.brahmagiri.fooddelivery.utilities.Fontlight
-                android:textColor="#1e1e1e"
                 android:layout_width="0dp"
-                android:paddingLeft="5dp"
-                android:id="@+id/tv_cost"
-
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-
-                android:text="200"
-                android:textSize="15dp" />
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:gravity="start"
                 android:paddingLeft="5dp"
                 android:layout_weight=".7"
+                android:gravity="right"
+
                 android:id="@+id/tv_subtotal"
                 android:layout_height="wrap_content"
                 android:textColor="#1e1e1e"
-                android:text="sssss"
+                android:text=""
                 android:textSize="15dp" />
 
 

@@ -41,6 +41,7 @@ import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchAddress;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseFetchProfile;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponseOrderDetails;
 import com.finwin.brahmagiri.fooddelivery.Responses.ResponsePay;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.BottomSheetDialog;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.finwin.brahmagiri.fooddelivery.WebService.APIClient;
@@ -156,7 +157,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         deliveryoption = "take_away";
                         Log.d("onCheckedChanged", "home: ");
                         FetchAddress();
-                      //  mAddrsslayout.setVisibility(View.VISIBLE);
+                        //  mAddrsslayout.setVisibility(View.VISIBLE);
                         break;
 
                     default:
@@ -171,8 +172,9 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         selectlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MapsActivity.class).putExtra("isfromcheckout", "YES"));
-                //changedeladdress();
+                BottomSheetDialog bottomSheet = new BottomSheetDialog();
+                bottomSheet.show(getSupportFragmentManager(),
+                        "ModalBottomSheet");                //changedeladdress();
             }
         });
         menuRecycler = (RecyclerView) findViewById(R.id.menuRecycler);
@@ -198,13 +200,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cod) {
-                    Load(datasetcartlist, 0);
-
-                } else {
-                    Load(datasetcartlist, 0);
-
-                }
+                showpolicypopup();
 
             }
         });
@@ -219,8 +215,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         tvEditAddrs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              // ChangeAddresses("Address");
-       //
+                // ChangeAddresses("Address");
+                //
                 BottomSheetDialog bottomSheet = new BottomSheetDialog();
                 bottomSheet.show(getSupportFragmentManager(),
                         "ModalBottomSheet");
@@ -232,6 +228,45 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             @Override
             public void onClick(View view) {
                 ChangePayment();
+            }
+        });
+
+    }
+
+    private void showpolicypopup() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.layout_policy_dialog, null);
+        Button proceed = alertLayout.findViewById(R.id.btn_proceed);
+
+        proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cod) {
+
+
+                    Load(datasetcartlist, 0);
+
+                } else {
+                    Load(datasetcartlist, 0);
+
+                }
+            }
+        });
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        ;
+        AlertDialog dialog = alert.create();
+        dialog.show();
+        Button btncancel = alertLayout.findViewById(R.id.btn_cancel);
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
             }
         });
 
@@ -259,7 +294,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                 if (response.body() != null && response.code() == 200) {
                     ResponseBrahmaCart responseBrahmaCart = response.body();
                     totalamtwithdelcharge = String.valueOf(response.body().getTotalAmnt());
-                   // deliverycharge = String.valueOf(response.body().getDeliveryCharge());
+                    // deliverycharge = String.valueOf(response.body().getDeliveryCharge());
                     //   delcharges.setText(""+deliverycharge);
 
                     datasetcartlist = responseBrahmaCart.getCartItems();
@@ -406,16 +441,16 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
                     if (response.body().getBillId() != 0) {
                         String mbillid = response.body().getBillId().toString();
-                        if (cod) {
+                            if (cod) {
 
-                            LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
-                            startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", "null").putExtra("paymode", "cod"));
-                        } else {
-                            Log.e("onResponse", "onResponse: " + getewaytotal);
+                                LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
+                                startActivity(new Intent(getApplicationContext(), PaymentSuccess.class).putExtra("trnxnid", "null").putExtra("paymode", "cod"));
+                            } else {
+                                Log.e("onResponse", "onResponse: " + getewaytotal);
 
 
-                            payNowCalled(mbillid);
-                            LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
+                                payNowCalled(mbillid);
+                                LocalPreferences.storeStringPreference(getApplicationContext(), "billid", mbillid);
 
                         }
                         // LoadInvoice(datasetAdd,Integer.parseInt(mbillid));
@@ -437,7 +472,12 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseCreateBill> call, Throwable t) {
+                if (new AppUtility(PaymentActivity.this).checkInternet()) {
 
+                } else {
+                    Toast.makeText(PaymentActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -448,8 +488,6 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
         final RecyclerView recyclerView = alertLayout.findViewById(R.id.recyvoutstock);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(new OutofstockAdapter(getApplicationContext(), dataset));
-
-
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("Your cart has quantity less than available quantity please choose quantity less for below products");
         // this is set the view from XML inside AlertDialog
@@ -502,8 +540,8 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.e("onClick: ", "+++++");
-             //   doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
-                     ///   edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
+                //   doUpdateProfile(edname.getText().toString(), edmobile.getText().toString(), edlandmark.getText().toString(),
+                ///   edaddress.getText().toString(), edstreet.getText().toString(), edcity.getText().toString(), edemail.getText().toString(), edpin.getText().toString());
             }
         });
 
@@ -597,7 +635,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                             + response.body().getDistrict() + " ,"
                             + response.body().getState() + " ," + "\n" + "Landmark - " + response.body().getLandmark() + "\n" + "Pincode - " + response.body().getPincode();
                     LocalPreferences.storeStringPreference(getApplicationContext(), "Address", address);
-                  //  tvAddress.setText(address);
+                    //  tvAddress.setText(address);
 
                 }
             }
@@ -738,7 +776,7 @@ public class PaymentActivity extends AppCompatActivity implements showhide {
                         tvAddress.setText(deladdress);
                         mAddrsslayout.setVisibility(View.VISIBLE);
                         selectlocation.setVisibility(View.GONE);
-                        delcharges.setText("" + response.body().getDeliveryCharge());
+                        delcharges.setText("" + response.body().getDeliveryCharge() + "  (" + response.body().getDistance() + "Km )");
                         tvTotal_co.setText("" + response.body().getTotalAmnt());
 
 

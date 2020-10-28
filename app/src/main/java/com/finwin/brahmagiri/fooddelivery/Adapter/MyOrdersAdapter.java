@@ -33,7 +33,6 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -74,9 +73,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 orderVH.tvamt.setText("₹ " + lists.getTotalAmount());
                 orderVH.outletname.setText("Outlet name : " + lists.getOutletName());
                 String status = lists.getOrderStatus();
-                orderVH.tvOrderstats.setText("Order Status : "+status);
-
-
+                orderVH.tvOrderstats.setText("Order Status : " + status);
 
 
                 break;
@@ -184,7 +181,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     String id = mResults.get(pos).getInvoiceId().toString();
                     String status = mResults.get(pos).getStatus();
                     context.startActivity(new Intent(context, OrderDetails.class).putExtra("id", id)
-
+                            .putExtra("orderstatus", mResults.get(pos).getOrderStatus())
                             //  .putExtra("custname",OfferList.get(pos).getc)
                             .putExtra("status", status).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }

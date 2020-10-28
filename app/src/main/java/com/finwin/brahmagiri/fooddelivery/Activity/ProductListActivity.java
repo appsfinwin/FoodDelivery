@@ -28,6 +28,7 @@ import com.finwin.brahmagiri.fooddelivery.WebService.ApiService;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.R;
 import com.finwin.brahmagiri.fooddelivery.fooddelivery.databinding.ActivityProductListBinding;
 import com.finwin.brahmagiri.fooddelivery.interfaces.showhide;
+import com.finwin.brahmagiri.fooddelivery.utilities.AppUtility;
 import com.finwin.brahmagiri.fooddelivery.utilities.LocalPreferences;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -161,7 +162,12 @@ public class ProductListActivity extends AppCompatActivity implements showhide {
             @Override
             public void onFailure(Call<ResponseFetchProducts> call, Throwable t) {
                 binding.progressbars.setVisibility(View.GONE);
+                if (new AppUtility(ProductListActivity.this).checkInternet()) {
 
+                } else {
+                    Toast.makeText(ProductListActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -193,7 +199,12 @@ public class ProductListActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseAddcart> call, Throwable t) {
+                if (new AppUtility(ProductListActivity.this).checkInternet()) {
 
+                } else {
+                    Toast.makeText(ProductListActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -248,6 +259,12 @@ public class ProductListActivity extends AppCompatActivity implements showhide {
             public void onFailure(Call<ResponseBrahmaCart> call, Throwable t) {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
+                }
+                if (new AppUtility(ProductListActivity.this).checkInternet()) {
+
+                } else {
+                    Toast.makeText(ProductListActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -359,7 +376,12 @@ public class ProductListActivity extends AppCompatActivity implements showhide {
 
             @Override
             public void onFailure(Call<ResponseRemove> call, Throwable t) {
+                if (new AppUtility(ProductListActivity.this).checkInternet()) {
 
+                } else {
+                    Toast.makeText(ProductListActivity.this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 

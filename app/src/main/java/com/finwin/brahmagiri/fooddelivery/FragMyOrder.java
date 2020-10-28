@@ -80,10 +80,9 @@ public class FragMyOrder extends Fragment {
         partnerid = LocalPreferences.retrieveStringPreferences(getActivity(), "partnerid");
         mAccesstoken = LocalPreferences.retrieveStringPreferences(getActivity(), "Accesstoken");
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
         OrderRecycler.setLayoutManager(linearLayoutManager);
-
         OrderRecycler.setItemAnimator(new DefaultItemAnimator());
-
         OrderRecycler.setAdapter(bAdapter);
 
 

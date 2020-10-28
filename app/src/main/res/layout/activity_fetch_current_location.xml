@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.FetchCurrentLocation">
+
     <com.skyfishjy.library.RippleBackground
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,5 +25,14 @@
             android:src="@drawable/ic_placeholder" />
     </com.skyfishjy.library.RippleBackground>
 
+    <com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView
+        android:textSize="15sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:text="Turn on GPS for accurate Location"
+        android:layout_height="wrap_content">
 
+    </com.finwin.brahmagiri.fooddelivery.utilities.CustomFontTextView>
 </RelativeLayout>

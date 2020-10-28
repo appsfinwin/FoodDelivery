@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:text="Hi, Customer"
+                android:text=""
                 android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:textSize="12sp" />
