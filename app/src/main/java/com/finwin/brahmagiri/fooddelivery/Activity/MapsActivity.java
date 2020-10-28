@@ -486,11 +486,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String cartid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "cartoutid");
         String partnerid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "partnerid");
         String userid = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "userid");
+        String locality = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "locality");
+
         //  String latitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "dellatitude");
         //   String longitude = LocalPreferences.retrieveStringPreferences(getApplicationContext(), "dellongitude");
         JsonObject student1 = new JsonObject();
         student1.addProperty("delivery_location", address);
-        student1.addProperty("landmark", additionainfo.getText().toString());
+
+        student1.addProperty("landmark", locality);
         student1.addProperty("longitude", String.valueOf(longitude));
         student1.addProperty("latitude", String.valueOf(latitude));
         student1.addProperty("partner_id", Integer.parseInt(partnerid));

@@ -300,7 +300,6 @@ public class FetchCurrentLocation extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Toast.makeText(getApplicationContext(), "okstatus" + resultCode, Toast.LENGTH_SHORT).show();
         if (requestCode == 101) {
             getmylocation();
         }
@@ -324,8 +323,20 @@ public class FetchCurrentLocation extends AppCompatActivity {
                     if (location != null) {
                         //TODO: UI updates.
                       //  Toast.makeText(getApplicationContext(),"LocationFound",Toast.LENGTH_SHORT).show();
+                        Geocoder geocoder;
+                        List<Address> addresses;
+                        geocoder = new Geocoder(FetchCurrentLocation.this, Locale.getDefault());
 
-                       // LocalPreferences.storeStringPreference(getApplicationContext(), "currentlocation", address + "," + city + " " + state);
+                        try {
+                            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                         //   String city = addresses.get(0).getLocality();
+                           // String state = addresses.get(0).getAdminArea();
+                            String country = addresses.get(0).getCountryName();
+                            String postalCode = addresses.get(0).getPostalCode();
+                            String knownName = addresses.get(0).getFeatureName();
+                     LocalPreferences.storeStringPreference(getApplicationContext(), "currentlocation", address + ","  + " " );
                         LocalPreferences.storeStringPreference(getApplicationContext(), "latitude", String.valueOf(location.getLatitude()));
                         LocalPreferences.storeStringPreference(getApplicationContext(), "longitude", String.valueOf(location.getLongitude()));
                         LocalPreferences.storeStringPreference(getApplicationContext(), "dellatitude", String.valueOf(location.getLatitude()));
@@ -337,7 +348,9 @@ public class FetchCurrentLocation extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), ActivityMain.class));
                         finish();
 
-
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

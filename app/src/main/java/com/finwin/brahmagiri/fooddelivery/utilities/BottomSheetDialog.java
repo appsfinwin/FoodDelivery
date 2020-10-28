@@ -124,7 +124,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     EdFloor.setError("Field Required");
                 } else {
                     LocalPreferences.storeStringPreference(getActivity(), "delcurrentlocation", EdFloor.getText().toString() + " " + Edaddress.getText().toString() + "," + Edlocality.getText().toString() + " ");
-
+LocalPreferences.storeStringPreference(getActivity(),"locality", Edlocality.getText().toString());
                     startActivity(new Intent(getActivity(), MapsActivity.class)
                             .putExtra("isfromcheckout", "YES")
                             .putExtra("Latlng", latLng));
