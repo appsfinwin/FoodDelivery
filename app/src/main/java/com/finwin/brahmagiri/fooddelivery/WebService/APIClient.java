@@ -10,8 +10,8 @@ public class APIClient {
  // public  static String baseurl="http://bds.finwintechnologies.com:8069";//production
     private static Retrofit retrofit = null;
 
-    public  static String baseurl="http://45.114.245.117:8069";//production
- //   private static  String baseurl="http://45.114.245.117:7059/";
+   public  static String baseurl="http://45.114.245.117:8069";//production
+  // private static  String baseurl="http://45.114.245.117:7059/";
    /* "http://192.168.0.221:212/"*/
 
   public   static Retrofit getClient() {
